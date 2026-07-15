@@ -28,7 +28,7 @@
      CONFIG
   --------------------------------------------------------- */
   const RIG = {
-    totalFrames: 180,          // virtual shot count for the readout
+    totalFrames: 240,          // virtual shot count for the readout
     framePad: 4,
     frameDir: 'assets/frames/',
     frameExt: '.webp',

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>NOVA — All Collections</title>
+<meta name="description" content="Explore the full range of NOVA luxury performance footwear." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.cdnfonts.com" />
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============================= -->
+<!-- TOP PROMO BAR                 -->
+<!-- ============================= -->
+<div class="promo-bar">
+  <div class="promo-bar__inner">
+    <div class="promo-item">
+      <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="1" y="3" width="15" height="13"></rect>
+        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+      </svg>
+      <div class="promo-text">
+        <span class="promo-title">FREE SHIPPING</span>
+        <span class="promo-sub">On orders above ₹999</span>
+      </div>
+    </div>
+    <div class="promo-item">
+      <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01"></path>
+      </svg>
+      <div class="promo-text">
+        <span class="promo-title">EXTRA 10% OFF</span>
+        <span class="promo-sub">On prepaid orders</span>
+      </div>
+    </div>
+    <div class="promo-item">
+      <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+      </svg>
+      <div class="promo-text">
+        <span class="promo-title">7 DAYS RETURN</span>
+        <span class="promo-sub">Easy returns & exchanges</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= -->
+<!-- HEADER / NAVBAR               -->
+<!-- ============================= -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__logo" aria-label="NOVA home">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>NOVA</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="index.html" class="nav__link">Home</a>
+      <a href="collection.html" class="nav__link is-active">Collection</a>
+      <a href="men.html" class="nav__link">Men</a>
+      <a href="women.html" class="nav__link">Women</a>
+      <a href="index.html#technology" class="nav__link">Technology</a>
+      <a href="index.html#about" class="nav__link">About</a>
+      <a href="index.html#contact" class="nav__link">Contact</a>
+    </nav>
+
+    <div class="nav__right">
+      <button class="nav__icon-btn" aria-label="Search" data-magnetic>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+      <button class="nav__icon-btn" aria-label="Account" data-magnetic>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </button>
+      <a href="wishlist.html" class="nav__icon-btn nav__wish-btn" aria-label="Wishlist" data-magnetic>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <span class="nav__wish-count" id="wishlistCountGlobal">4</span>
+      </a>
+      <button class="nav__icon-btn nav__cart-btn" id="cartToggleBtn" aria-label="Cart" data-magnetic>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <span class="nav__cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+
+    <button class="nav__burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main class="collection-page">
+  <!-- Breadcrumbs & Title Banner -->
+  <div class="collection-header">
+    <div class="collection-header__inner">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="separator">/</span>
+        <span class="current">Collection</span>
+      </nav>
+      <h1 class="collection-title">ALL COLLECTIONS</h1>
+      <p class="collection-subtitle">Explore our complete range of performance footwear engineered for every move.</p>
+    </div>
+  </div>
+
+  <!-- Content Split Grid -->
+  <div class="collection-container">
+    <div class="collection-layout">
+      
+      <!-- ============================= -->
+      <!-- FILTERS SIDEBAR               -->
+      <!-- ============================= -->
+      <aside class="filters-sidebar" id="filtersSidebar">
+        <!-- Sidebar Header (Mobile Toggle Close) -->
+        <div class="filters-sidebar__header">
+          <h3>Filters</h3>
+          <button class="close-filters-btn" id="closeFiltersBtn" aria-label="Close filters">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+
+        <form id="filtersForm">
+          <!-- Categories Accordion -->
+          <div class="filter-group open">
+            <button type="button" class="filter-group__trigger">
+              <span>Categories</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="filter-group__content">
+              <label class="filter-checkbox">
+                <input type="checkbox" name="category" value="Running" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Running</span>
+                <span class="checkbox-count">(38)</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="category" value="Lifestyle" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Lifestyle</span>
+                <span class="checkbox-count">(26)</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="category" value="Training" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Training</span>
+                <span class="checkbox-count">(22)</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="category" value="Basketball" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Basketball</span>
+                <span class="checkbox-count">(18)</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="category" value="Hiking" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Outdoor / Hiking</span>
+                <span class="checkbox-count">(14)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Gender Accordion -->
+          <div class="filter-group open">
+            <button type="button" class="filter-group__trigger">
+              <span>Gender</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="filter-group__content">
+              <label class="filter-checkbox">
+                <input type="checkbox" name="gender" value="men" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Men</span>
+                <span class="checkbox-count">(72)</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="gender" value="women" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Women</span>
+                <span class="checkbox-count">(40)</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="gender" value="unisex" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Unisex</span>
+                <span class="checkbox-count">(16)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Size Accordion -->
+          <div class="filter-group open">
+            <button type="button" class="filter-group__trigger">
+              <span>Size (UK)</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="filter-group__content">
+              <div class="size-grid">
+                <label class="size-btn">
+                  <input type="checkbox" name="size" value="6" />
+                  <span>6</span>
+                </label>
+                <label class="size-btn">
+                  <input type="checkbox" name="size" value="7" />
+                  <span>7</span>
+                </label>
+                <label class="size-btn">
+                  <input type="checkbox" name="size" value="8" />
+                  <span>8</span>
+                </label>
+                <label class="size-btn">
+                  <input type="checkbox" name="size" value="9" />
+                  <span>9</span>
+                </label>
+                <label class="size-btn">
+                  <input type="checkbox" name="size" value="10" />
+                  <span>10</span>
+                </label>
+                <label class="size-btn">
+                  <input type="checkbox" name="size" value="11" />
+                  <span>11</span>
+                </label>
+                <label class="size-btn">
+                  <input type="checkbox" name="size" value="12" />
+                  <span>12</span>
+                </label>
+                <label class="size-btn">
+                  <input type="checkbox" name="size" value="13" />
+                  <span>13</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price Range Accordion -->
+          <div class="filter-group open">
+            <button type="button" class="filter-group__trigger">
+              <span>Price Range</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="filter-group__content">
+              <div class="price-slider-wrap">
+                <input type="range" id="priceRange" class="price-range-slider" min="999" max="12000" step="500" value="12000" />
+                <div class="price-labels">
+                  <span id="priceMin">₹999</span>
+                  <span id="priceVal">₹12,000+</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Accordion -->
+          <div class="filter-group open">
+            <button type="button" class="filter-group__trigger">
+              <span>Color</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="filter-group__content">
+              <div class="color-swatch-list">
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="black" />
+                  <span class="color-swatch-chip" style="background-color: #000; border: 1px solid #333;" title="Black"></span>
+                </label>
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="white" />
+                  <span class="color-swatch-chip" style="background-color: #fff; border: 1px solid #ccc;" title="White"></span>
+                </label>
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="gray" />
+                  <span class="color-swatch-chip" style="background-color: #888;" title="Gray"></span>
+                </label>
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="red" />
+                  <span class="color-swatch-chip" style="background-color: #e8442f;" title="Red"></span>
+                </label>
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="blue" />
+                  <span class="color-swatch-chip" style="background-color: #3f7cf0;" title="Blue"></span>
+                </label>
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="green" />
+                  <span class="color-swatch-chip" style="background-color: #2aa146;" title="Green"></span>
+                </label>
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="orange" />
+                  <span class="color-swatch-chip" style="background-color: #f79e1b;" title="Orange"></span>
+                </label>
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="purple" />
+                  <span class="color-swatch-chip" style="background-color: #8c43e6;" title="Purple"></span>
+                </label>
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="yellow" />
+                  <span class="color-swatch-chip" style="background-color: #ece13b;" title="Yellow"></span>
+                </label>
+                <label class="color-swatch-item">
+                  <input type="checkbox" name="color" value="multicolor" />
+                  <span class="color-swatch-chip" style="background: linear-gradient(45deg, red, orange, yellow, green, blue, purple);" title="Multicolor"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Features Accordion -->
+          <div class="filter-group open">
+            <button type="button" class="filter-group__trigger">
+              <span>Features</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="filter-group__content">
+              <label class="filter-checkbox">
+                <input type="checkbox" name="feature" value="air" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Air Cushion</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="feature" value="lightweight" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Lightweight</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="feature" value="breathable" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Breathable</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="feature" value="grip" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Slip Resistant</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="feature" value="waterproof" />
+                <span class="checkbox-box"></span>
+                <span class="checkbox-label">Water Resistant</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Apply / Clear buttons -->
+          <div class="filter-actions">
+            <button type="button" class="btn btn--solid filter-apply-btn" id="applyFiltersBtn">Apply Filters</button>
+            <button type="button" class="clear-all-link" id="clearFiltersBtn">Clear All</button>
+          </div>
+        </form>
+      </aside>
+
+      <!-- ============================= -->
+      <!-- CATALOG CONTENT AREA          -->
+      <!-- ============================= -->
+      <section class="catalog-main">
+        <!-- Toolbar -->
+        <div class="catalog-toolbar">
+          <div class="catalog-results-count">
+            Showing <span id="displayedCount">1–12</span> of <span id="totalCount">12</span> products
+          </div>
+          <div class="catalog-controls">
+            <!-- Mobile Filters Toggle -->
+            <button class="btn btn--ghost mobile-filters-toggle" id="mobileFiltersToggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-right:6px;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+              <span>Filters</span>
+            </button>
+            
+            <div class="sort-select-wrap">
+              <label for="sortBy" class="sort-label">Sort by:</label>
+              <select id="sortBy" class="sort-select">
+                <option value="featured">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Best Rating</option>
+              </select>
+            </div>
+
+            <div class="view-switchers">
+              <button class="view-btn active" id="viewGrid" aria-label="Grid view">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              </button>
+              <button class="view-btn" id="viewList" aria-label="List view">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Grid (Hydrated by JS) -->
+        <div class="catalog-grid" id="catalogGrid">
+          <!-- Hydrated dynamically -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="pagination__arrow disabled" aria-label="Previous page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="pagination__num active">1</button>
+          <button class="pagination__num">2</button>
+          <button class="pagination__num">3</button>
+          <span class="pagination__dots">...</span>
+          <button class="pagination__num">10</button>
+          <button class="pagination__arrow" aria-label="Next page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- TRUST BADGES SECTION          -->
+  <!-- ============================= -->
+  <section class="trust-banner">
+    <div class="trust-banner__inner">
+      <div class="trust-card">
+        <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="3" width="15" height="13"></rect>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
+        </svg>
+        <div class="trust-card__content">
+          <h3 class="trust-card__title">FREE DELIVERY</h3>
+          <p class="trust-card__sub">On orders above ₹999</p>
+        </div>
+      </div>
+      <div class="trust-card">
+        <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+        </svg>
+        <div class="trust-card__content">
+          <h3 class="trust-card__title">7 DAYS RETURN</h3>
+          <p class="trust-card__sub">Easy returns & exchanges</p>
+        </div>
+      </div>
+      <div class="trust-card">
+        <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <div class="trust-card__content">
+          <h3 class="trust-card__title">100% ORIGINAL</h3>
+          <p class="trust-card__sub">Genuine products</p>
+        </div>
+      </div>
+      <div class="trust-card">
+        <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <div class="trust-card__content">
+          <h3 class="trust-card__title">SECURE PAYMENT</h3>
+          <p class="trust-card__sub">Multiple safe payment options</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================= -->
+<!-- SHOPPING CART DRAWER          -->
+<!-- ============================= -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer__overlay" id="cartOverlay"></div>
+  <div class="cart-drawer__inner">
+    <div class="cart-drawer__header">
+      <h3>Your Bag (<span id="cartCountHeader">0</span>)</h3>
+      <button class="cart-close-btn" id="cartCloseBtn" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    
+    <div class="cart-drawer__content" id="cartItemsContainer">
+      <!-- Empty state -->
+      <div class="cart-empty-state" id="cartEmptyState">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <p>Your bag is empty.</p>
+        <a href="collection.html" class="btn btn--solid"><span>Shop Collection</span></a>
+      </div>
+      <!-- Items list -->
+      <ul class="cart-items-list" id="cartItemsList">
+        <!-- Dynamically rendered -->
+      </ul>
+    </div>
+
+    <div class="cart-drawer__footer" id="cartFooter">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span class="subtotal-amount" id="cartSubtotalAmount">₹0</span>
+      </div>
+      <p class="cart-tax-note">Shipping and taxes calculated at checkout.</p>
+      <button class="btn btn--solid checkout-btn" id="checkoutBtn">
+        <span>Proceed to Checkout</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= -->
+<!-- QUICK VIEW MODAL              -->
+<!-- ============================= -->
+<div class="quickview-modal" id="quickviewModal">
+  <div class="quickview-modal__overlay" id="modalOverlay"></div>
+  <div class="quickview-modal__inner">
+    <button class="quickview-close-btn" id="modalCloseBtn" aria-label="Close Quick View">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <div class="quickview-modal__content" id="modalContent">
+      <!-- Hydrated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ============================= -->
+<!-- FOOTER                        -->
+<!-- ============================= -->
+<footer class="footer" id="contact">
+  <div class="footer__inner">
+    <div class="footer-grid">
+      <!-- Description column -->
+      <div class="footer-col footer-col--brand">
+        <a href="index.html" class="nav__logo" style="margin-bottom:20px;">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;">
+            <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span style="font-size:18px;">NOVA</span>
+        </a>
+        <p class="footer-brand-text">Pushing boundaries. Redefining performance. Built for those who never slow down.</p>
+        <div class="social-links">
+          <a href="https://instagram.com" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+          <a href="https://facebook.com" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+          <a href="https://youtube.com" target="_blank" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+          <a href="https://twitter.com" target="_blank" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+        </div>
+      </div>
+
+      <!-- Shop links -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Shop</h4>
+        <ul class="footer-links">
+          <li><a href="collection.html">All Shoes</a></li>
+          <li><a href="collection.html?gender=men">Men</a></li>
+          <li><a href="collection.html?gender=women">Women</a></li>
+          <li><a href="collection.html?tag=new">New Arrivals</a></li>
+          <li><a href="collection.html?tag=bestseller">Best Sellers</a></li>
+        </ul>
+      </div>
+
+      <!-- Company links -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Company</h4>
+        <ul class="footer-links">
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#technology">Technology</a></li>
+          <li><a href="index.html#about">Sustainability</a></li>
+          <li><a href="index.html#about">Careers</a></li>
+          <li><a href="index.html#about">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Support links -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Support</h4>
+        <ul class="footer-links">
+          <li><a href="index.html#about">Help Center</a></li>
+          <li><a href="index.html#about">Shipping</a></li>
+          <li><a href="index.html#about">Returns</a></li>
+          <li><a href="index.html#about">Size Guide</a></li>
+          <li><a href="index.html#about">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Policies links -->
+      <div class="footer-col">
+        <h4 class="footer-heading">Policies</h4>
+        <ul class="footer-links">
+          <li><a href="index.html#about">Terms of Service</a></li>
+          <li><a href="index.html#about">Privacy Policy</a></li>
+          <li><a href="index.html#about">Refund Policy</a></li>
+          <li><a href="index.html#about">Warranty</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom copyrights and payment methods -->
+    <div class="footer-bottom">
+      <p class="copyright-text">© 2026 Nova Shoes. All rights reserved.</p>
+      <div class="payment-methods">
+        <span class="payment-title">Secure Payments</span>
+        <div class="payment-icons">
+          <!-- Visa -->
+          <svg class="payment-icon" viewBox="0 0 24 15" width="36" height="22"><rect width="24" height="15" fill="#1A1F71" rx="2"/><path d="M4 11.5L5.2 4h1.5l-1.2 7.5zM11.6 4.3c-.3-.2-.8-.4-1.3-.4c-1.3 0-2.3.7-2.3 1.8c0 .8.7 1.2 1.2 1.5c.5.2.7.4.7.6c0 .4-.5.5-.9.5c-.6 0-1-.1-1.5-.4l-.2-.1l-.2 1.3c.4.2 1 .3 1.6.3c1.4 0 2.3-.7 2.3-1.8c0-.7-.4-1.3-1.4-1.8c-.6-.3-.9-.5-.9-.8c0-.3.3-.6.9-.6c.5 0 .9.1 1.2.2l.1.1zm3.7-.3h-1.2c-.4 0-.7.2-.8.6l-2.4 6.9h1.6l.3-.9h2l.2.9h1.4zm-1.8 5.4l.8-2.3l.5 2.3zM21 4h-1.5L17.3 9c-.2-.4-1-2.2-1-2.2l-.7-3.3c-.1-.4-.4-.5-.8-.5H12v.7c.6.1 1.2.3 1.6.5c.3.1.4.3.3.6l-1.2 5.5H14.3l2.6-7.5z" fill="#FFF"/></svg>
+          <!-- Mastercard -->
+          <svg class="payment-icon" viewBox="0 0 24 15" width="36" height="22"><rect width="24" height="15" fill="#222" rx="2"/><circle cx="10" cy="7.5" r="5" fill="#EB001B" opacity="0.9"/><circle cx="14" cy="7.5" r="5" fill="#F79E1B" opacity="0.9"/></svg>
+          <!-- Stripe -->
+          <svg class="payment-icon" viewBox="0 0 24 15" width="36" height="22"><rect width="24" height="15" fill="#6772E5" rx="2"/><path d="M12 9.4c0-.7-.5-1-1.5-1.2l-1.2-.2c-.5-.1-.7-.3-.7-.6c0-.4.4-.5.9-.5c.6 0 1.2.2 1.7.5V6.1c-.5-.2-1.1-.3-1.7-.3c-1.4 0-2.3.8-2.3 2c0 .8.5 1.1 1.5 1.3l1.1.2c.6.1.8.3.8.7c0 .4-.4.6-1 .6c-.7 0-1.4-.2-2-.6v1.4c.6.3 1.3.4 2 .4c1.4-.1 2.3-.9 2.3-2.1z" fill="#FFF"/></svg>
+          <!-- Paypal -->
+          <svg class="payment-icon" viewBox="0 0 24 15" width="36" height="22"><rect width="24" height="15" fill="#003087" rx="2"/><path d="M8.5 11.5l1.2-5.5h2.2c1.2 0 1.9.5 1.7 1.6c-.2 1.1-.9 1.6-2.1 1.6H9.7l-.6 2.3zm5.2-3.8c.2-1.1-.4-1.6-1.6-1.6H9.9L8.7 11.5h1.2l.6-2.5h1.2c1.1 0 1.8-.5 2-1.6z" fill="#0079C1"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="collection.js"></script>
+<script src="wishlist-sync.js"></script>
+</body>
+</html>
