@@ -87,17 +87,9 @@
   }
 
   /* ---------------------------------------------------------
-     LOADER
+  /* ---------------------------------------------------------
+     LOADER / PRELOADER INTEGRATION
   --------------------------------------------------------- */
-  const loaderEl = document.getElementById('loader');
-  const loaderFill = document.getElementById('loaderFill');
-  const loaderPct = document.getElementById('loaderPct');
-
-  function setLoaderProgress(pct) {
-    loaderFill.style.width = pct + '%';
-    loaderPct.textContent = Math.round(pct);
-  }
-
   function probeFrameSequence() {
     return new Promise((resolve) => {
       const test = new Image();
@@ -109,51 +101,46 @@
     });
   }
 
-  function preloadSequence() {
-    return new Promise((resolve) => {
-      let loaded = 0;
-      const frames = new Array(RIG.totalFrames);
-      for (let i = 1; i <= RIG.totalFrames; i++) {
-        const img = new Image();
-        img.onload = img.onerror = () => {
-          loaded++;
-          setLoaderProgress((loaded / RIG.totalFrames) * 100);
-          if (loaded === RIG.totalFrames) resolve(frames);
-        };
-        img.src = `${RIG.frameDir}${pad(i, RIG.framePad)}${RIG.frameExt}`;
-        frames[i - 1] = img;
-      }
-    });
-  }
-
-  function fakeProceduralLoad() {
-    return new Promise((resolve) => {
-      let pct = 0;
-      const tick = () => {
-        pct += (100 - pct) * 0.14 + 1.4;
-        pct = Math.min(pct, 100);
-        setLoaderProgress(pct);
-        if (pct >= 100) { resolve(); return; }
-        requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    });
-  }
-
   async function boot() {
     const hasSequence = await probeFrameSequence();
+    const frameUrls = [];
     if (hasSequence) {
       RIG.mode = 'sequence';
-      RIG.frames = await preloadSequence();
+      RIG.frames = new Array(RIG.totalFrames);
+      for (let i = 1; i <= RIG.totalFrames; i++) {
+        frameUrls.push(`${RIG.frameDir}${pad(i, RIG.framePad)}${RIG.frameExt}`);
+      }
     } else {
       RIG.mode = 'procedural';
-      await fakeProceduralLoad();
     }
-    state.ready = true;
-    document.body.classList.add('is-loaded');
-    document.getElementById('frameTotal').textContent = RIG.totalFrames;
-    initReveal();
-    initScrollRig();
+
+    // Configure and trigger the universal preloader
+    window.preloaderInstance = new AssetPreloader({
+      autoStart: false,
+      debug: true,
+      customAssets: frameUrls,
+      onProgress: (pct, url, assetObj) => {
+        // If preloading the 3D frame sequence, capture the loaded images
+        if (hasSequence && url.includes(RIG.frameDir)) {
+          const match = url.match(/\/(\d+)\.webp/);
+          if (match) {
+            const idx = parseInt(match[1], 10) - 1;
+            if (idx >= 0 && idx < RIG.totalFrames) {
+              RIG.frames[idx] = assetObj;
+            }
+          }
+        }
+      },
+      onComplete: () => {
+        state.ready = true;
+        document.getElementById('frameTotal').textContent = RIG.totalFrames;
+        initReveal();
+        initScrollRig();
+      }
+    });
+
+    // Initialize the preloader manually
+    window.preloaderInstance.init();
   }
 
   /* ---------------------------------------------------------
