@@ -1,7 +1,35 @@
-/**
- * NOVA — Universal Asset Preloader
- * Preloads all page assets (images, background styles, custom fonts, etc.) before running the website.
- */
+// IIFE to immediately hide body and lock scroll before body parses.
+// This prevents FOUC (Flash of Unstyled Content) and ensures assets load first.
+(function() {
+  if (!document.getElementById('preloader-temp-style')) {
+    const tempStyle = document.createElement('style');
+    tempStyle.id = 'preloader-temp-style';
+    tempStyle.textContent = 'body { visibility: hidden !important; overflow: hidden !important; } html { overflow: hidden !important; }';
+    if (document.head) {
+      document.head.appendChild(tempStyle);
+    } else {
+      const observer = new MutationObserver(() => {
+        if (document.head) {
+          document.head.appendChild(tempStyle);
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.documentElement, { childList: true });
+    }
+
+    // Safety fallback: if preloader fails to initialize or complete in 8 seconds, reveal body anyway.
+    setTimeout(() => {
+      const temp = document.getElementById('preloader-temp-style');
+      if (temp) {
+        temp.remove();
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        console.warn('[Preloader] Safety timeout reached. Revealing body.');
+      }
+    }, 8000);
+  }
+})();
+
 class AssetPreloader {
   constructor(options = {}) {
     this.options = {
@@ -22,17 +50,9 @@ class AssetPreloader {
     this.hasCompleted = false;
     this.timer = null;
     this.progressAnimation = null;
+    this.scrollLockHandler = null;
 
-    // Cache elements or bind event
     if (this.options.autoStart) {
-      // Lock scroll immediately to prevent viewing un-rendered layout
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-      // Prevent scrolling by blocking touch/wheel events during load
-      this.scrollLockHandler = (e) => e.preventDefault();
-      window.addEventListener('wheel', this.scrollLockHandler, { passive: false });
-      window.addEventListener('touchmove', this.scrollLockHandler, { passive: false });
-
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => this.init());
       } else {
@@ -42,9 +62,22 @@ class AssetPreloader {
   }
 
   init() {
+    // 1. Remove the temporary body-hiding stylesheet to let loader render
+    const tempStyle = document.getElementById('preloader-temp-style');
+    if (tempStyle) tempStyle.remove();
+
+    // 2. Lock scrolling immediately to prevent user interaction during loading
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    if (!this.scrollLockHandler) {
+      this.scrollLockHandler = (e) => e.preventDefault();
+      window.addEventListener('wheel', this.scrollLockHandler, { passive: false });
+      window.addEventListener('touchmove', this.scrollLockHandler, { passive: false });
+    }
+
     this.loaderEl = document.getElementById('loader');
     
-    // Inject loader HTML and CSS dynamically if not present in the HTML markup
+    // Inject loader HTML and CSS dynamically if not present in the markup
     if (!this.loaderEl) {
       this.injectLoader();
     }
@@ -138,6 +171,7 @@ class AssetPreloader {
       }
     `;
     const styleEl = document.createElement('style');
+    styleEl.id = 'preloader-injected-styles';
     styleEl.textContent = styles;
     document.head.appendChild(styleEl);
 
@@ -170,7 +204,7 @@ class AssetPreloader {
   gatherAssets() {
     const urls = new Set();
 
-    // 1. Gather all <img> tags (including data-src or regular src)
+    // 1. Gather all <img> tags
     document.querySelectorAll('img').forEach(img => {
       const src = img.src || img.getAttribute('src');
       if (src && !src.startsWith('data:') && !src.includes('placeholder')) {
@@ -187,18 +221,32 @@ class AssetPreloader {
       }
     });
 
-    // 2. Gather inline background images
+    // 2. Gather background images from elements currently in the DOM using computed styles.
+    // This works under file:// protocol where stylesheet rule scanning is blocked by browser security.
     document.querySelectorAll('*').forEach(el => {
       const bg = el.style.backgroundImage;
-      if (bg && bg.startsWith('url(')) {
+      if (bg && bg !== 'none' && bg.startsWith('url(')) {
         const url = bg.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
         if (url && !url.startsWith('data:')) {
           urls.add(url);
         }
       }
+      
+      // Also check computed background-image (from stylesheets)
+      try {
+        const computedBg = window.getComputedStyle(el).backgroundImage;
+        if (computedBg && computedBg !== 'none' && computedBg.startsWith('url(')) {
+          const url = computedBg.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+          if (url && !url.startsWith('data:') && !url.startsWith('linear-gradient') && !url.startsWith('radial-gradient')) {
+            urls.add(url);
+          }
+        }
+      } catch (e) {
+        // ignore errors on pseudoelements or detached elements
+      }
     });
 
-    // 3. Scan stylesheets for background image URLs
+    // 3. Stylesheet scanning fallback (works on http/https servers)
     try {
       Array.from(document.styleSheets).forEach(sheet => {
         try {
@@ -210,7 +258,6 @@ class AssetPreloader {
                 if (bg && bg.startsWith('url(')) {
                   const url = bg.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
                   if (url && !url.startsWith('data:') && !url.startsWith('linear-gradient') && !url.startsWith('radial-gradient')) {
-                    // Resolve relative path relative to CSS file base url
                     const resolved = this.resolveUrl(url, sheet.href || window.location.href);
                     urls.add(resolved);
                   }
@@ -219,17 +266,21 @@ class AssetPreloader {
             });
           }
         } catch (e) {
-          // Cross-origin stylesheet rules might throw DOMException, skip them
+          // Cross-origin restrictions might prevent stylesheet rule access.
         }
       });
     } catch (e) {
       if (this.options.debug) console.warn('Could not read stylesheets:', e);
     }
 
-    // 4. Add custom registered assets (e.g. canvas frames)
+    // 4. Add custom registered assets (e.g. sequence frames)
     if (this.options.customAssets && this.options.customAssets.length > 0) {
       this.options.customAssets.forEach(url => {
-        if (url) urls.add(url);
+        if (url) {
+          // Ensure custom asset URLs are absolute
+          const absoluteUrl = this.resolveUrl(url, window.location.href);
+          urls.add(absoluteUrl);
+        }
       });
     }
 
@@ -372,7 +423,7 @@ class AssetPreloader {
         this.options.onComplete();
       }
 
-      // Dispatch global custom event for other scripts (e.g. app.js)
+      // Dispatch global custom event for other scripts
       window.dispatchEvent(new CustomEvent('assetsLoaded'));
 
       if (this.options.debug) console.log('[Preloader] Load complete, site running.');
