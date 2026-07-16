@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOVA Admin — Sign In</title>
+  <meta name="description" content="Sign in to the NOVA Admin Panel to manage your store, track performance, and grow your business." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================================================
+       CSS RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0c;
+      --surface: #111114;
+      --surface2: #1a1a1f;
+      --border: rgba(255,255,255,0.08);
+      --border-focus: rgba(189,252,36,0.5);
+      --text-primary: #f0f0f0;
+      --text-secondary: rgba(240,240,240,0.5);
+      --text-muted: rgba(240,240,240,0.3);
+      --accent: #bdfc24;
+      --accent-dim: rgba(189,252,36,0.12);
+      --accent-text: #0a0a0c;
+      --input-bg: rgba(255,255,255,0.04);
+      --input-bg-hover: rgba(255,255,255,0.07);
+      --danger: #ff5252;
+      --radius: 12px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg: #f0f0f5;
+      --surface: #ffffff;
+      --surface2: #f7f7fa;
+      --border: rgba(0,0,0,0.08);
+      --border-focus: rgba(80,180,0,0.5);
+      --text-primary: #0d0d0d;
+      --text-secondary: rgba(0,0,0,0.5);
+      --text-muted: rgba(0,0,0,0.3);
+      --accent: #5ab000;
+      --accent-dim: rgba(90,176,0,0.1);
+      --accent-text: #ffffff;
+      --input-bg: rgba(0,0,0,0.03);
+      --input-bg-hover: rgba(0,0,0,0.06);
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ============================================================
+       LAYOUT — SPLIT SCREEN
+    ============================================================ */
+    .admin-login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--bg);
+    }
+
+    .login-card {
+      display: flex;
+      width: 100%;
+      max-width: 980px;
+      min-height: 620px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+    }
+
+    /* ============================================================
+       LEFT — BRANDING PANEL
+    ============================================================ */
+    .login-left {
+      flex: 0 0 46%;
+      position: relative;
+      background: #050507;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 32px;
+      overflow: hidden;
+    }
+
+    .login-left__bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/images/login_page_bg.png');
+      background-size: cover;
+      background-position: center 30%;
+      opacity: 0.45;
+    }
+
+    .login-left__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(5,5,7,0.35) 0%,
+        rgba(5,5,7,0.1) 35%,
+        rgba(5,5,7,0.55) 70%,
+        rgba(5,5,7,0.92) 100%
+      );
+    }
+
+    .login-left > * { position: relative; z-index: 2; }
+
+    /* Logo */
+    .admin-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-logo__icon {
+      width: 36px;
+      height: 36px;
+      color: #bdfc24;
+    }
+
+    .admin-logo__name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f0f0f0;
+      letter-spacing: 0.06em;
+    }
+
+    /* Bottom content */
+    .login-left__bottom {}
+
+    .login-left__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(189,252,36,0.12);
+      border: 1px solid rgba(189,252,36,0.25);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #bdfc24;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .login-left__title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #f0f0f0;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .login-left__title span {
+      color: #bdfc24;
+    }
+
+    .login-left__desc {
+      font-size: 13.5px;
+      color: rgba(240,240,240,0.55);
+      line-height: 1.6;
+      margin-bottom: 28px;
+      max-width: 280px;
+    }
+
+    .login-left__badges {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 20px;
+    }
+
+    .lbadge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      padding: 0 16px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .lbadge:first-child { padding-left: 0; }
+    .lbadge:last-child { border-right: none; }
+
+    .lbadge__icon {
+      width: 30px;
+      height: 30px;
+      background: rgba(189,252,36,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .lbadge__icon svg {
+      width: 14px;
+      height: 14px;
+      color: #bdfc24;
+    }
+
+    .lbadge__text {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(240,240,240,0.7);
+      line-height: 1.3;
+    }
+
+    .login-left__copy {
+      font-size: 11px;
+      color: rgba(240,240,240,0.25);
+      margin-top: 24px;
+    }
+
+    /* ============================================================
+       RIGHT — FORM PANEL
+    ============================================================ */
+    .login-right {
+      flex: 1;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      padding: 40px 48px;
+      position: relative;
+    }
+
+    .login-right__header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 32px;
+    }
+
+    /* Dark mode toggle */
+    .theme-toggle {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      border-color: rgba(189,252,36,0.3);
+      color: var(--accent);
+    }
+
+    .theme-toggle svg { width: 16px; height: 16px; }
+
+    /* Form content */
+    .login-form-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 380px;
+    }
+
+    .login-greeting {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .login-subtext {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      margin-bottom: 36px;
+    }
+
+    /* Error alert */
+    .login-error {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,82,82,0.1);
+      border: 1px solid rgba(255,82,82,0.25);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #ff8585;
+    }
+
+    .login-error.show { display: flex; }
+    .login-error svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* Form group */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      letter-spacing: 0.01em;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .input-icon svg { width: 16px; height: 16px; }
+
+    .form-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 44px;
+      font-size: 14px;
+      font-family: var(--font);
+      color: var(--text-primary);
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+
+    .form-input::placeholder { color: var(--text-muted); }
+
+    .form-input:hover { background: var(--input-bg-hover); }
+
+    .form-input:focus {
+      border-color: var(--border-focus);
+      background: var(--input-bg-hover);
+      box-shadow: 0 0 0 3px rgba(189,252,36,0.08);
+    }
+
+    [data-theme="light"] .form-input:focus {
+      box-shadow: 0 0 0 3px rgba(90,176,0,0.1);
+    }
+
+    .input-action {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      transition: color 0.2s;
+    }
+
+    .input-action:hover { color: var(--text-primary); }
+    .input-action svg { width: 16px; height: 16px; }
+
+    /* Remember / forgot row */
+    .form-extras {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-secondary);
+      user-select: none;
+    }
+
+    .remember-checkbox {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border);
+      background: var(--input-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    input[type="checkbox"]#rememberMe {
+      display: none;
+    }
+
+    input[type="checkbox"]#rememberMe:checked + .remember-checkbox {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    input[type="checkbox"]#rememberMe:checked + .remember-checkbox::after {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 7px;
+      border: 2px solid #0a0a0c;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+
+    .forgot-link {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .forgot-link:hover { opacity: 0.7; }
+
+    /* Sign In Button */
+    .btn-signin {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: var(--accent-text);
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: var(--font);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      letter-spacing: 0.01em;
+      margin-bottom: 20px;
+    }
+
+    .btn-signin:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(189,252,36,0.3);
+    }
+
+    .btn-signin:active { transform: translateY(0); }
+
+    .btn-signin svg { width: 16px; height: 16px; }
+
+    .btn-signin.loading { opacity: 0.7; pointer-events: none; }
+    .btn-signin.loading .btn-text { display: none; }
+    .btn-signin .btn-spinner { display: none; }
+    .btn-signin.loading .btn-spinner { display: block; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-spinner { animation: spin 0.8s linear infinite; }
+
+    /* OR divider */
+    .or-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .or-divider::before, .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Social buttons */
+    .social-btns {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .social-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 8px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-family: var(--font);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .social-btn:hover {
+      background: var(--input-bg-hover);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .social-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* Bottom link */
+    .login-footer-text {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .login-footer-text a {
+      color: var(--accent);
+      font-weight: 600;
+      margin-left: 4px;
+      transition: opacity 0.2s;
+    }
+
+    .login-footer-text a:hover { opacity: 0.7; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 760px) {
+      .admin-login-page { padding: 0; }
+      .login-card { flex-direction: column; border-radius: 0; min-height: 100vh; max-width: 100%; }
+      .login-left { flex: 0 0 220px; padding: 24px; }
+      .login-left__badges { display: none; }
+      .login-right { padding: 32px 28px; }
+      .login-form-wrap { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-login-page">
+    <div class="login-card">
+
+      <!-- LEFT: Branding -->
+      <div class="login-left">
+        <div class="login-left__bg"></div>
+        <div class="login-left__overlay"></div>
+
+        <div class="admin-logo">
+          <svg class="admin-logo__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="admin-logo__name">NOVA</span>
+        </div>
+
+        <div class="login-left__bottom">
+          <div class="login-left__tag">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
+            Admin Panel
+          </div>
+          <h2 class="login-left__title"><span>NOVA</span> ADMIN<br>PANEL</h2>
+          <p class="login-left__desc">Manage your store, track performance, and grow your business.</p>
+
+          <div class="login-left__badges">
+            <div class="lbadge">
+              <div class="lbadge__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="lbadge__text">Secure<br>Access</div>
+            </div>
+            <div class="lbadge">
+              <div class="lbadge__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <div class="lbadge__text">Real-time<br>Analytics</div>
+            </div>
+            <div class="lbadge">
+              <div class="lbadge__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div class="lbadge__text">Fast &<br>Reliable</div>
+            </div>
+          </div>
+
+          <p class="login-left__copy">© 2026 Nova Sports. All rights reserved.</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: Form -->
+      <div class="login-right">
+        <div class="login-right__header">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark">
+            <svg id="themeIconDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg id="themeIconLight" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </div>
+
+        <div class="login-form-wrap">
+          <h1 class="login-greeting">Welcome Back! 👋</h1>
+          <p class="login-subtext">Sign in to your admin account</p>
+
+          <div class="login-error" id="loginError">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="loginErrorText">Invalid email or password. Please try again.</span>
+          </div>
+
+          <form id="adminLoginForm" novalidate>
+            <!-- Email -->
+            <div class="form-group">
+              <label class="form-label" for="adminEmail">Email Address</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </span>
+                <input
+                  type="email"
+                  id="adminEmail"
+                  class="form-input"
+                  placeholder="admin@novasports.com"
+                 
+                  autocomplete="email"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+              <label class="form-label" for="adminPassword">Password</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <input
+                  type="password"
+                  id="adminPassword"
+                  class="form-input"
+                  placeholder="••••••••••"
+                
+                  autocomplete="current-password"
+                  required
+                />
+                <button type="button" class="input-action" id="togglePassword" aria-label="Show password">
+                  <svg id="eyeOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg id="eyeClosed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Extras -->
+            <div class="form-extras">
+              <label class="remember-label" for="rememberMe">
+                <input type="checkbox" id="rememberMe" checked />
+                <span class="remember-checkbox"></span>
+                Remember me
+              </label>
+              <a href="#" class="forgot-link">Forgot Password?</a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-signin" id="signinBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="btn-text">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <span class="btn-text">Sign In</span>
+              <svg class="btn-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" opacity=".3"/>
+                <path d="M12 2v4" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </form>
+
+          <div class="or-divider">or continue with</div>
+
+          <div class="social-btns">
+            <button class="social-btn" type="button" onclick="window.requireLogin && window.requireLogin()">
+              <!-- Google -->
+              <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+              Google
+            </button>
+            <button class="social-btn" type="button">
+              <!-- Microsoft -->
+              <svg viewBox="0 0 24 24" width="16" height="16"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg>
+              Microsoft
+            </button>
+            <button class="social-btn" type="button">
+              <!-- Apple -->
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+              Apple
+            </button>
+          </div>
+
+          <p class="login-footer-text">
+            Not an admin?
+            <a href="index.html">Go to website</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // THEME TOGGLE
+    // ============================================================
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const iconDark = document.getElementById('themeIconDark');
+    const iconLight = document.getElementById('themeIconLight');
+
+    const savedTheme = localStorage.getItem('nova_admin_theme') || 'dark';
+    applyTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    function applyTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('nova_admin_theme', theme);
+      if (theme === 'dark') {
+        iconDark.style.display = 'block';
+        iconLight.style.display = 'none';
+      } else {
+        iconDark.style.display = 'none';
+        iconLight.style.display = 'block';
+      }
+    }
+
+    // ============================================================
+    // PASSWORD VISIBILITY
+    // ============================================================
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('adminPassword');
+    const eyeOpen = document.getElementById('eyeOpen');
+    const eyeClosed = document.getElementById('eyeClosed');
+
+    togglePassword.addEventListener('click', () => {
+      const isVisible = passwordInput.type === 'text';
+      passwordInput.type = isVisible ? 'password' : 'text';
+      eyeOpen.style.display = isVisible ? 'block' : 'none';
+      eyeClosed.style.display = isVisible ? 'none' : 'block';
+    });
+
+    // ============================================================
+    // FORM SUBMISSION — AUTH
+    // ============================================================
+    const ADMIN_CREDENTIALS = {
+      email: 'admin@novasports.com',
+      password: 'admin123'
+    };
+
+    const form = document.getElementById('adminLoginForm');
+    const signinBtn = document.getElementById('signinBtn');
+    const loginError = document.getElementById('loginError');
+    const loginErrorText = document.getElementById('loginErrorText');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value;
+      const remember = document.getElementById('rememberMe').checked;
+
+      // Loading state
+      signinBtn.classList.add('loading');
+      loginError.classList.remove('show');
+
+      setTimeout(() => {
+        if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+          // Save admin session
+          const adminSession = {
+            email,
+            name: 'Admin User',
+            role: 'super_admin',
+            loginTime: Date.now()
+          };
+          if (remember) {
+            localStorage.setItem('nova_admin_session', JSON.stringify(adminSession));
+          } else {
+            sessionStorage.setItem('nova_admin_session', JSON.stringify(adminSession));
+          }
+          window.location.href = 'admin.html';
+        } else {
+          signinBtn.classList.remove('loading');
+          loginErrorText.textContent = 'Invalid email or password. Please try again.';
+          loginError.classList.add('show');
+          document.getElementById('adminPassword').value = '';
+          document.getElementById('adminPassword').focus();
+        }
+      }, 1200);
+    });
+
+    // Clear error on input change
+    ['adminEmail', 'adminPassword'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        loginError.classList.remove('show');
+      });
+    });
+  </script>
+</body>
+</html>

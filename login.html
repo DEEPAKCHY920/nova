@@ -774,16 +774,45 @@ document.addEventListener('DOMContentLoaded', () => {
   initPasswordToggle('loginPassword', 'loginPasswordToggle', 'loginEyeOpen', 'loginEyeClosed');
   initPasswordToggle('signupPassword', 'signupPasswordToggle', 'signupEyeOpen', 'signupEyeClosed');
 
-  // Magnetic
-  document.querySelectorAll('[data-magnetic]').forEach(el => {
-    el.addEventListener('mousemove', e => {
-      const r = el.getBoundingClientRect();
-      gsap.to(el, { x: (e.clientX - r.left - r.width/2)*0.35, y: (e.clientY - r.top - r.height/2)*0.35, duration: 0.3, ease: 'power2.out' });
+  // Login handler
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.removeAttribute('onsubmit'); // remove event.preventDefault inline hook
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const user = {
+        name: 'Alex Vance',
+        email: email,
+        tier: 'Black Elite',
+        joined: 'July 2026',
+        points: 1250
+      };
+      localStorage.setItem('nova_user', JSON.stringify(user));
+      window.location.href = 'dashboard.html';
     });
-    el.addEventListener('mouseleave', () => {
-      gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+  }
+
+  // Signup handler
+  const signupForm = document.getElementById('signupForm');
+  if (signupForm) {
+    signupForm.removeAttribute('onsubmit'); // remove event.preventDefault inline hook
+    signupForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('signupEmail').value;
+      const firstName = document.getElementById('signupFirstName').value;
+      const lastName = document.getElementById('signupLastName').value;
+      const user = {
+        name: `${firstName} ${lastName}`,
+        email: email,
+        tier: 'Bronze Member',
+        joined: 'July 2026',
+        points: 0
+      };
+      localStorage.setItem('nova_user', JSON.stringify(user));
+      window.location.href = 'dashboard.html';
     });
-  });
+  }
 
   // Entry animation
   gsap.from('.flip-card-wrapper', { opacity: 0, y: 48, duration: 1, ease: 'power3.out' });

@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOVA Admin — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --sb: 220px;
+      --hh: 60px;
+      --bg: #0c0c0e;
+      --sbg: #101013;
+      --sur: #161619;
+      --su2: #1e1e23;
+      --su3: #252529;
+      --bd: rgba(255, 255, 255, .07);
+      --bd2: rgba(255, 255, 255, .04);
+      --tx: #f0f0f2;
+      --txd: rgba(240, 240, 242, .55);
+      --txf: rgba(240, 240, 242, .3);
+      --ac: #bdfc24;
+      --acd: rgba(189, 252, 36, .12);
+      --act: #0a0a0c;
+      --gr: #22c55e;
+      --rd: #ef4444;
+      --yl: #f59e0b;
+      --bl: #3b82f6;
+      --pu: #8b5cf6;
+      --f: 'Inter', sans-serif;
+      --r: 12px;
+      --rs: 8px;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: var(--f);
+      background: var(--bg);
+      color: var(--tx);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit
+    }
+
+    button {
+      font-family: var(--f);
+      cursor: pointer;
+      border: none;
+      background: none
+    }
+
+    img {
+      display: block
+    }
+
+    /* LAYOUT */
+    .wrap {
+      display: flex;
+      height: 100vh;
+      overflow: hidden
+    }
+
+    /* SIDEBAR */
+    .sb {
+      width: var(--sb);
+      background: var(--sbg);
+      border-right: 1px solid var(--bd);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+      overflow-x: hidden
+    }
+
+    .sb::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .sb::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .06)
+    }
+
+    .sb-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 20px 18px;
+      border-bottom: 1px solid var(--bd)
+    }
+
+    .sb-logo svg {
+      width: 28px;
+      height: 28px;
+      color: var(--ac);
+      flex-shrink: 0
+    }
+
+    .sb-logo-n {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: .08em
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px
+    }
+
+    .ni {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: var(--rs);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--txd);
+      cursor: pointer;
+      transition: background .18s, color .18s;
+      width: 100%;
+      text-align: left
+    }
+
+    .ni:hover {
+      background: rgba(255, 255, 255, .05);
+      color: var(--tx)
+    }
+
+    .ni.act {
+      background: var(--acd);
+      color: var(--ac);
+      font-weight: 600
+    }
+
+    .ni svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0
+    }
+
+    .nbadge {
+      margin-left: auto;
+      background: var(--ac);
+      color: var(--act);
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 20px;
+      padding: 1px 6px;
+      min-width: 18px;
+      text-align: center
+    }
+
+    .nbadge.r {
+      background: var(--rd);
+      color: #fff
+    }
+
+    .nchev {
+      margin-left: auto;
+      width: 13px;
+      height: 13px;
+      color: var(--txf);
+      transition: transform .2s
+    }
+
+    .sb-up {
+      margin: 12px 10px;
+      background: rgba(189, 252, 36, .06);
+      border: 1px solid rgba(189, 252, 36, .15);
+      border-radius: var(--r);
+      padding: 16px 14px
+    }
+
+    .up-t {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ac);
+      margin-bottom: 6px
+    }
+
+    .up-d {
+      font-size: 11.5px;
+      color: var(--txd);
+      line-height: 1.5;
+      margin-bottom: 12px
+    }
+
+    .up-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 8px 0;
+      background: transparent;
+      border: 1px solid var(--ac);
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ac);
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    .up-btn:hover {
+      background: var(--acd)
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0
+    }
+
+    /* HEADER */
+    .hdr {
+      height: var(--hh);
+      background: var(--sbg);
+      border-bottom: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+      flex-shrink: 0
+    }
+
+    .hdr-search {
+      flex: 1;
+      max-width: 420px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 8px 14px;
+      transition: border-color .2s
+    }
+
+    .hdr-search:focus-within {
+      border-color: rgba(189, 252, 36, .3)
+    }
+
+    .hdr-search svg {
+      width: 15px;
+      height: 15px;
+      color: var(--txf);
+      flex-shrink: 0
+    }
+
+    .hdr-search input {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      color: var(--tx);
+      font-family: var(--f);
+      flex: 1;
+      min-width: 0
+    }
+
+    .hdr-search input::placeholder {
+      color: var(--txf)
+    }
+
+    .skbd {
+      font-size: 11px;
+      color: var(--txf);
+      background: var(--su3);
+      border-radius: 5px;
+      padding: 2px 7px;
+      white-space: nowrap;
+      border: 1px solid var(--bd)
+    }
+
+    .hsp {
+      flex: 1
+    }
+
+    .hacts {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .hib {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      color: var(--txd);
+      position: relative;
+      cursor: pointer;
+      transition: border-color .2s, color .2s
+    }
+
+    .hib:hover {
+      border-color: rgba(189, 252, 36, .3);
+      color: var(--tx)
+    }
+
+    .hib svg {
+      width: 16px;
+      height: 16px
+    }
+
+    .hbdg {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--rd);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 1px 4px;
+      min-width: 16px;
+      text-align: center;
+      border: 1.5px solid var(--sbg)
+    }
+
+    .hav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color .2s
+    }
+
+    .hav:hover {
+      border-color: rgba(189, 252, 36, .3)
+    }
+
+    .avc {
+      width: 28px;
+      height: 28px;
+      background: var(--ac);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--act);
+      flex-shrink: 0
+    }
+
+    .avi {
+      line-height: 1.3
+    }
+
+    .avn {
+      font-size: 12.5px;
+      font-weight: 600
+    }
+
+    .avr {
+      font-size: 10.5px;
+      color: var(--txf)
+    }
+
+    .avch {
+      width: 14px;
+      height: 14px;
+      color: var(--txf)
+    }
+
+    /* CONTENT */
+    .pg {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px
+    }
+
+    .pg::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .pg::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .08);
+      border-radius: 2px
+    }
+
+    /* PAGE HEADER */
+    .pgh {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px
+    }
+
+    .pgt {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .pgs {
+      font-size: 13px;
+      color: var(--txd)
+    }
+
+    .dpkr {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sur);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--txd);
+      cursor: pointer;
+      transition: border-color .2s
+    }
+
+    .dpkr:hover {
+      border-color: rgba(255, 255, 255, .15);
+      color: var(--tx)
+    }
+
+    .dpkr svg {
+      width: 15px;
+      height: 15px
+    }
+
+    /* STAT CARDS */
+    .srow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px
+    }
+
+    .sc {
+      background: var(--sur);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .sc::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--acd);
+      transform: translate(30px, -30px)
+    }
+
+    .sch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .sci {
+      width: 38px;
+      height: 38px;
+      background: var(--acd);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .sci svg {
+      width: 18px;
+      height: 18px;
+      color: var(--ac)
+    }
+
+    .scmc canvas {
+      height: 36px !important;
+      width: 80px !important
+    }
+
+    .scv {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.02em
+    }
+
+    .scl {
+      font-size: 12px;
+      color: var(--txf);
+      font-weight: 500;
+      margin-bottom: 2px
+    }
+
+    .scch {
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 3px
+    }
+
+    .scch.up {
+      color: var(--gr)
+    }
+
+    .scch.dn {
+      color: var(--rd)
+    }
+
+    .scch span {
+      color: var(--txf);
+      font-weight: 400
+    }
+
+    /* CHARTS ROW */
+    .crow {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 16px;
+      margin-bottom: 20px
+    }
+
+    .cc {
+      background: var(--sur);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      padding: 20px
+    }
+
+    .cch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px
+    }
+
+    .cct {
+      font-size: 15px;
+      font-weight: 700
+    }
+
+    .cdd {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--txd);
+      cursor: pointer
+    }
+
+    .cdd svg {
+      width: 12px;
+      height: 12px
+    }
+
+    .cw {
+      position: relative;
+      height: 200px
+    }
+
+    /* DONUT LEGEND */
+    .dl {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .dli {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px
+    }
+
+    .dll {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--txd)
+    }
+
+    .dd {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      flex-shrink: 0
+    }
+
+    .dlv {
+      font-weight: 600
+    }
+
+    .vaob {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      margin-top: 16px;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid rgba(189, 252, 36, .3);
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ac);
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    .vaob:hover {
+      background: var(--acd)
+    }
+
+    .vaob svg {
+      width: 14px;
+      height: 14px
+    }
+
+    /* BOTTOM TABLES */
+    .trow {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px
+    }
+
+    .tc {
+      background: var(--sur);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      padding: 20px
+    }
+
+    .th {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px
+    }
+
+    .tht {
+      font-size: 14px;
+      font-weight: 700
+    }
+
+    .val {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ac);
+      cursor: pointer;
+      transition: opacity .2s
+    }
+
+    .val:hover {
+      opacity: .7
+    }
+
+    /* ORDER ROW */
+    .olist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .or {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--bd2)
+    }
+
+    .or:last-child {
+      border-bottom: none;
+      padding-bottom: 0
+    }
+
+    .oth {
+      width: 38px;
+      height: 38px;
+      background: var(--su2);
+      border-radius: 8px;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--ac)
+    }
+
+    .oth img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .oi {
+      flex: 1;
+      min-width: 0
+    }
+
+    .oid {
+      font-size: 12px;
+      font-weight: 600
+    }
+
+    .ocu {
+      font-size: 11.5px;
+      color: var(--txf);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .odt {
+      font-size: 10.5px;
+      color: var(--txf)
+    }
+
+    .ost {
+      font-size: 10.5px;
+      font-weight: 600;
+      border-radius: 20px;
+      padding: 3px 9px;
+      white-space: nowrap;
+      flex-shrink: 0
+    }
+
+    .s-de {
+      background: rgba(34, 197, 94, .12);
+      color: var(--gr)
+    }
+
+    .s-pr {
+      background: rgba(59, 130, 246, .12);
+      color: var(--bl)
+    }
+
+    .s-sh {
+      background: rgba(139, 92, 246, .12);
+      color: var(--pu)
+    }
+
+    .s-pe {
+      background: rgba(245, 158, 11, .12);
+      color: var(--yl)
+    }
+
+    .s-ca {
+      background: rgba(239, 68, 68, .12);
+      color: var(--rd)
+    }
+
+    .opx {
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .omr {
+      color: var(--txf);
+      padding: 4px;
+      cursor: pointer;
+      transition: color .2s;
+      flex-shrink: 0
+    }
+
+    .omr:hover {
+      color: var(--tx)
+    }
+
+    .omr svg {
+      width: 14px;
+      height: 14px
+    }
+
+    /* PRODUCT ROW */
+    .plist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .pr {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--bd2)
+    }
+
+    .pr:last-child {
+      border-bottom: none;
+      padding-bottom: 0
+    }
+
+    .prk {
+      width: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--txf);
+      text-align: center;
+      flex-shrink: 0
+    }
+
+    .pth {
+      width: 38px;
+      height: 38px;
+      background: var(--su2);
+      border-radius: 8px;
+      flex-shrink: 0;
+      overflow: hidden
+    }
+
+    .pth img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .pi {
+      flex: 1;
+      min-width: 0
+    }
+
+    .pn {
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .ps {
+      font-size: 11px;
+      color: var(--txf)
+    }
+
+    .pp {
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    /* STOCK ROW */
+    .slist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .sr {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--bd2)
+    }
+
+    .sr:last-child {
+      border-bottom: none;
+      padding-bottom: 0
+    }
+
+    .sth {
+      width: 38px;
+      height: 38px;
+      background: var(--su2);
+      border-radius: 8px;
+      flex-shrink: 0;
+      overflow: hidden
+    }
+
+    .sth img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .si {
+      flex: 1;
+      min-width: 0
+    }
+
+    .sn {
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .sq {
+      font-size: 11px;
+      font-weight: 600
+    }
+
+    .sq.cr {
+      color: var(--rd)
+    }
+
+    .sq.wa {
+      color: var(--yl)
+    }
+
+    .sq.ok {
+      color: var(--gr)
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--txf);
+      font-size: 13px
+    }
+
+    .empty-state svg {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 12px;
+      opacity: .3
+    }
+
+    /* LOGOUT btn */
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 10px;
+      border-radius: var(--rs);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--rd);
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: background .18s;
+      margin-top: auto
+    }
+
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, .08)
+    }
+
+    .logout-btn svg {
+      width: 16px;
+      height: 16px
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- SIDEBAR -->
+    <aside class="sb">
+      <a href="admin.html" class="sb-logo">
+        <svg viewBox="0 0 48 48" fill="none">
+          <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span class="sb-logo-n">NOVA</span>
+      </a>
+
+      <nav class="sb-nav">
+        <button class="ni act">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          Dashboard
+        </button>
+        <a class="ni" href="admin-products.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 0 1-8 0" />
+          </svg>
+          Products
+          <svg style="margin-left:auto;width:13px;height:13px;color:var(--txf)" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </a>
+        <a class="ni" href="admin-orders.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Orders
+          <span class="nbadge" id="sbOrdersBadge">0</span>
+        </a>
+        <button class="ni">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+          </svg>
+          Customers
+        </button>
+        <button class="ni">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+          Reviews
+        </button>
+        <button class="ni">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+            <line x1="7" y1="7" x2="7.01" y2="7" />
+          </svg>
+          Coupons
+        </button>
+        <button class="ni">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <path d="M3 9h18M9 21V9" />
+          </svg>
+          Banners
+        </button>
+        <button class="ni">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Analytics
+        </button>
+        <button class="ni">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+          Newsletter
+        </button>
+        <button class="ni">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          Messages
+          <span class="nbadge r" id="sbMsgBadge">0</span>
+        </button>
+        <button class="ni">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="3" width="15" height="13" />
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+            <circle cx="5.5" cy="18.5" r="2.5" />
+            <circle cx="18.5" cy="18.5" r="2.5" />
+          </svg>
+          Shipping
+        </button>
+        <button class="ni" id="logoutBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ef4444">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span style="color:#ef4444">Sign Out</span>
+        </button>
+      </nav>
+
+      <div class="sb-up">
+        <div class="up-t">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+          Upgrade to Pro
+        </div>
+        <p class="up-d">Unlock advanced analytics and features.</p>
+        <button class="up-btn">Upgrade Now</button>
+      </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <div class="main">
+
+      <!-- HEADER -->
+      <header class="hdr">
+        <button style="color:var(--txd);padding:6px;border-radius:8px;display:flex">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div class="hdr-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" placeholder="Search orders, products, customers..." />
+          <span class="skbd">Ctrl + K</span>
+        </div>
+        <div class="hsp"></div>
+        <div class="hacts">
+          <div class="hib">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+            <span class="hbdg" id="notifBadge">0</span>
+          </div>
+          <div class="hav" id="adminAvatar">
+            <div class="avc" id="avatarInitial">A</div>
+            <div class="avi">
+              <div class="avn" id="adminName">Admin</div>
+              <div class="avr">Super Admin</div>
+            </div>
+            <svg class="avch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- PAGE -->
+      <main class="pg">
+
+        <!-- PAGE HEADER -->
+        <div class="pgh">
+          <div>
+            <h1 class="pgt" id="pageGreeting">Good Evening, Admin 👋</h1>
+            <p class="pgs">Here's what's happening with your store today.</p>
+          </div>
+          <button class="dpkr">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span id="todayDate">—</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="srow">
+          <div class="sc">
+            <div class="sch">
+              <div class="sci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg></div>
+              <div class="scmc"><canvas id="mc1"></canvas></div>
+            </div>
+            <div>
+              <div class="scl">Total Revenue</div>
+              <div class="scv" id="statRevenue">₹0</div>
+            </div>
+            <div class="scch up" id="statRevChg">▲ +0% <span>vs last week</span></div>
+          </div>
+          <div class="sc">
+            <div class="sch">
+              <div class="sci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg></div>
+              <div class="scmc"><canvas id="mc2"></canvas></div>
+            </div>
+            <div>
+              <div class="scl">Total Orders</div>
+              <div class="scv" id="statOrders">0</div>
+            </div>
+            <div class="scch" id="statOrdChg">— <span>all time</span></div>
+          </div>
+          <div class="sc">
+            <div class="sch">
+              <div class="sci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg></div>
+              <div class="scmc"><canvas id="mc3"></canvas></div>
+            </div>
+            <div>
+              <div class="scl">Wishlist Items</div>
+              <div class="scv" id="statWishlist">0</div>
+            </div>
+            <div class="scch up" id="statWishChg">▲ saved <span>across users</span></div>
+          </div>
+          <div class="sc">
+            <div class="sch">
+              <div class="sci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg></div>
+              <div class="scmc"><canvas id="mc4"></canvas></div>
+            </div>
+            <div>
+              <div class="scl">Cart Items</div>
+              <div class="scv" id="statCart">0</div>
+            </div>
+            <div class="scch up" id="statCartChg">▲ in active carts <span>right now</span></div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW -->
+        <div class="crow">
+          <!-- Revenue by day -->
+          <div class="cc">
+            <div class="cch">
+              <span class="cct">Revenue Overview</span>
+              <button class="cdd">
+                Last 7 Days
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+            </div>
+            <div class="cw"><canvas id="revenueChart"></canvas></div>
+          </div>
+
+          <!-- Orders by Status -->
+          <div class="cc">
+            <div class="cch"><span class="cct">Orders by Status</span></div>
+            <div class="cw" style="height:155px"><canvas id="statusChart"></canvas></div>
+            <div class="dl" id="statusLegend"></div>
+            <button class="vaob">
+              View All Orders
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- BOTTOM TABLES -->
+        <div class="trow">
+
+          <!-- Recent Orders -->
+          <div class="tc">
+            <div class="th"><span class="tht">Recent Orders</span><span class="val">View All</span></div>
+            <div class="olist" id="recentOrdersEl"></div>
+          </div>
+
+          <!-- Top Selling Products (from order items) -->
+          <div class="tc">
+            <div class="th"><span class="tht">Top Products Ordered</span><span class="val">View All</span></div>
+            <div class="plist" id="topProductsEl"></div>
+          </div>
+
+          <!-- Cart + Wishlist snapshot -->
+          <div class="tc">
+            <div class="th"><span class="tht">Current Cart Items</span><span class="val" id="cartWishTabs">Wishlist
+                →</span></div>
+            <div class="slist" id="cartItemsEl"></div>
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       PRODUCT CATALOGUE (source of truth for images/prices)
+    ========================================================= */
+    const PRODUCTS = [
+      { id: 'nova-surge-x1', name: 'Nova Surge X1', price: 8999, img: 'assets/images/product_surge.png', stock: 8 },
+      { id: 'nova-phantom', name: 'Nova Phantom', price: 7999, img: 'assets/images/product_phantom.png', stock: 12 },
+      { id: 'nova-air-pro', name: 'Nova Air Pro', price: 8499, img: 'assets/images/product_air_pro.png', stock: 22 },
+      { id: 'nova-edge', name: 'Nova Edge', price: 6999, img: 'assets/images/product_edge.png', stock: 35 },
+      { id: 'nova-boost', name: 'Nova Boost', price: 7499, img: 'assets/images/product_boost.png', stock: 18 },
+      { id: 'nova-drift', name: 'Nova Drift', price: 5499, img: 'assets/images/product_drift.png', stock: 9 },
+      { id: 'nova-lite', name: 'Nova Lite', price: 4999, img: 'assets/images/product_lite.png', stock: 30 },
+      { id: 'nova-trail', name: 'Nova Trail', price: 6799, img: 'assets/images/product_trail.png', stock: 7 },
+      { id: 'nova-motion', name: 'Nova Motion', price: 6299, img: 'assets/images/product_motion.png', stock: 14 },
+      { id: 'nova-flow', name: 'Nova Flow', price: 5999, img: 'assets/images/product_flow.png', stock: 25 },
+      { id: 'nova-carbon', name: 'Nova Carbon', price: 10999, img: 'assets/images/product_carbon.png', stock: 15 },
+      { id: 'nova-flex', name: 'Nova Flex', price: 4799, img: 'assets/images/product_flex.png', stock: 11 }
+    ];
+
+    /* =========================================================
+       DATA HELPERS
+    ========================================================= */
+    function getOrders() {
+      try { return JSON.parse(localStorage.getItem('nova_orders')) || []; } catch (e) { return []; }
+    }
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem('nova_cart')) || []; } catch (e) { return []; }
+    }
+    function getWishlist() {
+      try { return JSON.parse(localStorage.getItem('nova_wishlist')) || []; } catch (e) { return []; }
+    }
+    function getSession() {
+      try {
+        return JSON.parse(localStorage.getItem('nova_admin_session') || sessionStorage.getItem('nova_admin_session') || 'null');
+      } catch (e) { return null; }
+    }
+    function fmt(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
+
+    /* =========================================================
+       AUTH GUARD
+    ========================================================= */
+    const session = getSession();
+    if (!session) { window.location.href = 'admin-login.html'; }
+
+    /* =========================================================
+       PERSONALIZE HEADER
+    ========================================================= */
+    (function () {
+      if (!session) return;
+      const h = new Date().getHours();
+      const greet = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
+      const first = (session.name || 'Admin').split(' ')[0];
+      document.getElementById('pageGreeting').textContent = `${greet}, ${first} 👋`;
+      document.getElementById('adminName').textContent = first;
+      document.getElementById('avatarInitial').textContent = first[0].toUpperCase();
+    })();
+
+    // Date
+    document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('nova_admin_session');
+      sessionStorage.removeItem('nova_admin_session');
+      window.location.href = 'admin-login.html';
+    });
+
+    /* =========================================================
+       COMPUTE DYNAMIC DATA
+    ========================================================= */
+    const orders = getOrders();
+    const cart = getCart();
+    const wishlist = getWishlist();
+
+    // --- Revenue ---
+    const totalRevenue = orders.reduce((s, o) => s + (Number(o.total) || 0), 0);
+
+    // --- Revenue per day (last 7 days) ---
+    const dayLabels = [], dayRevenue = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const label = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+      dayLabels.push(label);
+      const dayTotal = orders
+        .filter(o => {
+          const od = new Date(o.date || '');
+          return od.toDateString() === d.toDateString();
+        })
+        .reduce((s, o) => s + (Number(o.total) || 0), 0);
+      dayRevenue.push(dayTotal);
+    }
+
+    // --- Orders by status ---
+    const statusMap = { Processing: 0, Delivered: 0, Shipped: 0, Pending: 0, Cancelled: 0 };
+    orders.forEach(o => {
+      const s = o.status || 'Processing';
+      if (statusMap[s] !== undefined) statusMap[s]++;
+      else statusMap.Processing++;
+    });
+
+    // --- Top products (by order items) ---
+    const productSales = {};
+    orders.forEach(o => {
+      (o.items || []).forEach(item => {
+        const k = item.id || item.name;
+        if (!productSales[k]) productSales[k] = { ...item, sold: 0 };
+        productSales[k].sold += (item.qty || 1);
+      });
+    });
+    const topProducts = Object.values(productSales).sort((a, b) => b.sold - a.sold).slice(0, 5);
+
+    // --- Sidebar badges ---
+    document.getElementById('sbOrdersBadge').textContent = Math.min(orders.length, 99) || 0;
+    document.getElementById('sbMsgBadge').textContent = 3; // static placeholder
+    document.getElementById('notifBadge').textContent = Math.min(orders.length + wishlist.length, 99);
+
+    /* =========================================================
+       STAT CARDS
+    ========================================================= */
+    document.getElementById('statRevenue').textContent = fmt(totalRevenue);
+    document.getElementById('statOrders').textContent = orders.length.toLocaleString('en-IN');
+    document.getElementById('statWishlist').textContent = wishlist.length.toLocaleString('en-IN');
+
+    const cartQty = cart.reduce((s, i) => s + (i.qty || 1), 0);
+    document.getElementById('statCart').textContent = cartQty.toLocaleString('en-IN');
+
+    // Revenue change: this week vs last week
+    const nowTs = Date.now(), weekMs = 7 * 24 * 60 * 60 * 1000;
+    const thisWeekRev = orders.filter(o => (nowTs - new Date(o.date || 0).getTime()) < weekMs).reduce((s, o) => s + (Number(o.total) || 0), 0);
+    const lastWeekRev = orders.filter(o => {
+      const age = nowTs - new Date(o.date || 0).getTime();
+      return age >= weekMs && age < 2 * weekMs;
+    }).reduce((s, o) => s + (Number(o.total) || 0), 0);
+
+    if (lastWeekRev > 0) {
+      const pct = (((thisWeekRev - lastWeekRev) / lastWeekRev) * 100).toFixed(1);
+      const el = document.getElementById('statRevChg');
+      el.className = 'scch ' + (pct >= 0 ? 'up' : 'dn');
+      el.innerHTML = `${pct >= 0 ? '▲' : '▼'} ${Math.abs(pct)}% <span>vs last week</span>`;
+    }
+
+    // Order count change
+    const thisWeekOrd = orders.filter(o => (nowTs - new Date(o.date || 0).getTime()) < weekMs).length;
+    const ordEl = document.getElementById('statOrdChg');
+    if (thisWeekOrd > 0) {
+      ordEl.className = 'scch up';
+      ordEl.innerHTML = `▲ ${thisWeekOrd} <span>this week</span>`;
+    }
+
+    /* =========================================================
+       MINI SPARKLINES
+    ========================================================= */
+    const sparkCfg = (data, color) => ({
+      type: 'line',
+      data: { labels: data.map((_, i) => i), datasets: [{ data, borderColor: color || '#bdfc24', borderWidth: 2, tension: 0.4, pointRadius: 0, fill: false }] },
+      options: { responsive: false, animation: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } } }
+    });
+
+    // Generate sparklines from real data or fallback
+    const revSpark = dayRevenue.some(v => v > 0) ? dayRevenue : [2, 4, 3, 6, 5, 8, 10];
+    new Chart(document.getElementById('mc1'), sparkCfg(revSpark));
+    const ordSpark = (() => { const r = []; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); r.push(orders.filter(o => new Date(o.date || 0).toDateString() === d.toDateString()).length); } return r.some(v => v > 0) ? r : [1, 2, 1, 3, 2, 4, 3]; })();
+    new Chart(document.getElementById('mc2'), sparkCfg(ordSpark));
+    new Chart(document.getElementById('mc3'), sparkCfg([1, 2, 3, 2, wishlist.length || 1, wishlist.length || 2, wishlist.length || 3]));
+    new Chart(document.getElementById('mc4'), sparkCfg([1, 2, 1, 3, cartQty || 1, cartQty || 2, cartQty || 3]));
+
+    /* =========================================================
+       REVENUE CHART
+    ========================================================= */
+    (function () {
+      const ctx = document.getElementById('revenueChart');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: dayLabels,
+          datasets: [{
+            label: 'Revenue',
+            data: dayRevenue,
+            borderColor: '#bdfc24',
+            borderWidth: 2.5,
+            tension: 0.4,
+            pointRadius: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0 ? 4 : 0,
+            pointBackgroundColor: '#bdfc24',
+            pointBorderColor: '#0c0c0e',
+            pointBorderWidth: 2,
+            fill: true,
+            backgroundColor: (ctx) => {
+              const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 200);
+              g.addColorStop(0, 'rgba(189,252,36,.18)');
+              g.addColorStop(1, 'rgba(189,252,36,0)');
+              return g;
+            }
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          animation: { duration: 600, easing: 'easeInOutQuart' },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1e1e23', borderColor: 'rgba(255,255,255,.08)', borderWidth: 1,
+              titleColor: '#f0f0f2', bodyColor: '#bdfc24', padding: 10,
+              callbacks: { label: c => `  ${fmt(c.raw)}` }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: 'rgba(240,240,242,.4)', font: { size: 11 } } },
+            y: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: 'rgba(240,240,242,.4)', font: { size: 11 }, callback: v => v >= 100000 ? '₹' + (v / 100000).toFixed(0) + 'L' : v > 0 ? '₹' + (v / 1000) + 'K' : '₹0' } }
+          }
+        }
+      });
+    })();
+
+    /* =========================================================
+       STATUS DONUT
+    ========================================================= */
+    (function () {
+      const labels = ['Processing', 'Delivered', 'Shipped', 'Pending', 'Cancelled'];
+      const colors = ['#3b82f6', '#22c55e', '#8b5cf6', '#f59e0b', '#ef4444'];
+      const data = labels.map(l => statusMap[l] || 0);
+      const total = data.reduce((s, v) => s + v, 0);
+
+      const ctx = document.getElementById('statusChart');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{ data: data.length && total > 0 ? data : [1, 1, 1, 1, 1], backgroundColor: colors, borderWidth: 0, hoverOffset: 6 }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, cutout: '68%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1e1e23', borderColor: 'rgba(255,255,255,.08)', borderWidth: 1, titleColor: '#f0f0f2', bodyColor: '#f0f0f2', padding: 10,
+              callbacks: { label: c => total > 0 ? `  ${c.label}: ${c.raw}` : `  ${c.label}: 0` }
+            }
+          }
+        },
+        plugins: [{
+          id: 'ct',
+          beforeDraw(chart) {
+            const { width, height, ctx } = chart;
+            ctx.save();
+            const cx = width / 2, cy = height / 2;
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#f0f0f2';
+            ctx.font = 'bold 20px Inter,sans-serif';
+            ctx.fillText(total > 0 ? total.toLocaleString('en-IN') : '0', cx, cy - 8);
+            ctx.font = '11px Inter,sans-serif';
+            ctx.fillStyle = 'rgba(240,240,242,.4)';
+            ctx.fillText('Total', cx, cy + 13);
+            ctx.restore();
+          }
+        }]
+      });
+
+      // Legend
+      const legendEl = document.getElementById('statusLegend');
+      legendEl.innerHTML = labels.map((l, i) => `
+    <div class="dli">
+      <span class="dll"><span class="dd" style="background:${colors[i]}"></span>${l}</span>
+      <span class="dlv">${data[i]}</span>
+    </div>
+  `).join('');
+    })();
+
+    /* =========================================================
+       RECENT ORDERS
+    ========================================================= */
+    (function () {
+      const el = document.getElementById('recentOrdersEl');
+      const statusCls = { Processing: 's-pr', Delivered: 's-de', Shipped: 's-sh', Pending: 's-pe', Cancelled: 's-ca' };
+
+      if (orders.length === 0) {
+        el.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>No orders yet.<br><small style="color:var(--txf)">Orders will appear here after checkout.</small></div>`;
+        return;
+      }
+
+      const recent = [...orders].reverse().slice(0, 5);
+      el.innerHTML = recent.map(o => {
+        const firstItem = (o.items || [])[0];
+        const prod = firstItem ? PRODUCTS.find(p => p.id === firstItem.id) : null;
+        const imgSrc = prod ? prod.img : (firstItem && firstItem.img ? firstItem.img : '');
+        const customer = o.shippingAddress
+          ? `${o.shippingAddress.firstName || ''} ${o.shippingAddress.lastName || ''}`.trim()
+          : 'Customer';
+        const cls = statusCls[o.status || 'Processing'] || 's-pr';
+        return `
+      <div class="or">
+        <div class="oth">${imgSrc ? `<img src="${imgSrc}" alt="">` : '📦'}</div>
+        <div class="oi">
+          <div class="oid">${o.id || '—'}</div>
+          <div class="ocu">${customer || 'Customer'}</div>
+          <div class="odt">${o.date || '—'}</div>
+        </div>
+        <span class="ost ${cls}">${o.status || 'Processing'}</span>
+        <span class="opx">${fmt(o.total || 0)}</span>
+        <button class="omr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+      </div>`;
+      }).join('');
+    })();
+
+    /* =========================================================
+       TOP PRODUCTS
+    ========================================================= */
+    (function () {
+      const el = document.getElementById('topProductsEl');
+
+      if (topProducts.length === 0) {
+        // Fall back: show catalogue with stock info
+        const fallback = PRODUCTS.slice(0, 5);
+        el.innerHTML = fallback.map((p, i) => `
+      <div class="pr">
+        <span class="prk">${i + 1}</span>
+        <div class="pth"><img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'"/></div>
+        <div class="pi"><div class="pn">${p.name}</div><div class="ps">In catalogue</div></div>
+        <span class="pp">${fmt(p.price)}</span>
+      </div>`).join('');
+        return;
+      }
+
+      el.innerHTML = topProducts.map((p, i) => {
+        const prod = PRODUCTS.find(pr => pr.id === p.id) || {};
+        const img = prod.img || p.img || '';
+        const name = prod.name || p.name || 'Product';
+        const price = prod.price || p.price || 0;
+        return `
+      <div class="pr">
+        <span class="prk">${i + 1}</span>
+        <div class="pth">${img ? `<img src="${img}" alt="${name}" onerror="this.style.display='none'"/>` : ''}</div>
+        <div class="pi"><div class="pn">${name}</div><div class="ps">${p.sold} sold</div></div>
+        <span class="pp">${fmt(price)}</span>
+      </div>`;
+      }).join('');
+    })();
+
+    /* =========================================================
+       CART ITEMS / WISHLIST PANEL
+    ========================================================= */
+    (function () {
+      const el = document.getElementById('cartItemsEl');
+      const tab = document.getElementById('cartWishTabs');
+      let showCart = true;
+
+      function renderCart() {
+        if (cart.length === 0) {
+          el.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Cart is empty</div>`;
+          return;
+        }
+        el.innerHTML = cart.slice(0, 5).map(item => {
+          const prod = PRODUCTS.find(p => p.id === item.id) || {};
+          const img = prod.img || item.img || '';
+          const name = prod.name || item.name || 'Item';
+          return `<div class="sr">
+        <div class="sth">${img ? `<img src="${img}" alt="${name}" onerror="this.style.display='none'"/>` : '🛒'}</div>
+        <div class="si"><div class="sn">${name}</div><div class="sq ok">Qty: ${item.qty || 1} · Size ${item.size || 9}</div></div>
+        <span style="font-size:13px;font-weight:700">${fmt((prod.price || item.price || 0) * (item.qty || 1))}</span>
+      </div>`;
+        }).join('');
+      }
+
+      function renderWishlist() {
+        if (wishlist.length === 0) {
+          el.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Wishlist is empty</div>`;
+          return;
+        }
+        el.innerHTML = wishlist.slice(0, 5).map(item => `
+      <div class="sr">
+        <div class="sth">${item.img ? `<img src="${item.img}" alt="${item.name}" onerror="this.style.display='none'"/>` : '❤️'}</div>
+        <div class="si"><div class="sn">${item.name || 'Item'}</div><div class="sq wa">${item.category || 'Saved'}</div></div>
+        <span style="font-size:12px;color:var(--txd)">${item.price || ''}</span>
+      </div>`).join('');
+      }
+
+      renderCart();
+
+      tab.addEventListener('click', () => {
+        showCart = !showCart;
+        tab.textContent = showCart ? 'Wishlist →' : 'Cart →';
+        document.querySelector('.tht').textContent = showCart ? 'Current Cart Items' : 'Wishlisted Items';
+        showCart ? renderCart() : renderWishlist();
+      });
+    })();
+  </script>
+</body>
+
+</html>

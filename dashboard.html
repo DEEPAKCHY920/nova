@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>NOVA — Member Dashboard</title>
+  <meta name="description" content="Manage your orders, profile, and exclusive member perks." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.cdnfonts.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+  <script>window.disablePreloaderAutoRun = true;</script>
+  <script src="preloader.js"></script>
+
+  <style>
+    :root {
+      --accent: #bdfc24;
+      --accent-glow: rgba(189, 252, 36, 0.15);
+      --void-light: #0d0d10;
+      --void-dark: #050506;
+      --border-color: rgba(243, 241, 234, 0.08);
+      --border-hover: rgba(243, 241, 234, 0.2);
+    }
+
+    body {
+      background: var(--void-dark);
+      color: var(--platinum, #f3f1ea);
+      font-family: 'General Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .dashboard-page {
+      padding: 120px 24px 80px;
+      max-width: 1280px;
+      margin: 0 auto;
+      min-height: 80vh;
+    }
+
+    /* Header Profile Info banner */
+    .dashboard-header {
+      background: var(--void-light);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-header__bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, var(--accent-glow), transparent 45%);
+      pointer-events: none;
+    }
+
+    .profile-info {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1f1f2e, #0d0d15);
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 28px;
+      font-weight: 600;
+      font-family: 'Clash Display', sans-serif;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .profile-details {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .profile-name {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0;
+      color: #fff;
+    }
+
+    .profile-tier {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 4px 10px;
+      border-radius: 30px;
+      width: fit-content;
+      border: 1px solid rgba(189, 252, 36, 0.2);
+    }
+
+    .profile-joined {
+      font-size: 13px;
+      color: rgba(243, 241, 234, 0.4);
+    }
+
+    .logout-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      color: #ff6b6b;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 107, 107, 0.1);
+      border-color: #ff6b6b;
+    }
+
+    /* Layout tabs */
+    .dashboard-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 40px;
+      padding-bottom: 1px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: rgba(243, 241, 234, 0.5);
+      padding: 14px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+    }
+
+    .tab-btn.is-active {
+      color: var(--accent);
+    }
+
+    .tab-btn.is-active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.is-active {
+      display: block;
+    }
+
+    /* Section components grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+      }
+      .logout-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    .dashboard-card {
+      background: var(--void-light);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 32px;
+      transition: border-color 0.3s;
+    }
+
+    .dashboard-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .dashboard-card__title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    /* Loyalty points elements */
+    .points-display {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .points-val {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .points-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: rgba(243, 241, 234, 0.4);
+      text-transform: uppercase;
+    }
+
+    .points-progress-bar {
+      height: 4px;
+      background: rgba(243, 241, 234, 0.05);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .points-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 62%; /* Dynamic progress */
+    }
+
+    .points-next-tier-msg {
+      font-size: 12px;
+      color: rgba(243, 241, 234, 0.4);
+      margin-bottom: 24px;
+    }
+
+    .perks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .perk-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .perk-icon {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* Order items history */
+    .orders-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .order-card {
+      background: var(--void-light);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s;
+    }
+
+    .order-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .order-card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    .order-card__meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .order-card__id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .order-card__date {
+      font-size: 12px;
+      color: rgba(243, 241, 234, 0.4);
+    }
+
+    .order-card__status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .status-processing {
+      background: rgba(244, 125, 32, 0.1);
+      color: #f47d20;
+    }
+
+    .status-shipped {
+      background: rgba(106, 176, 255, 0.1);
+      color: #6ab0ff;
+    }
+
+    .status-delivered {
+      background: rgba(189, 252, 36, 0.1);
+      color: var(--accent);
+    }
+
+    .order-card__items {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .order-item-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .order-item-img {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.01);
+    }
+
+    .order-item-details {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .order-item-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .order-item-desc {
+      font-size: 11px;
+      color: rgba(243, 241, 234, 0.4);
+    }
+
+    .order-item-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+    }
+
+    /* Tracking Timeline stepper */
+    .tracking-timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+    }
+
+    .tracking-timeline::before {
+      content: '';
+      position: absolute;
+      top: 31px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 2px;
+      background: rgba(243, 241, 234, 0.05);
+      z-index: 1;
+    }
+
+    .tracking-progress-line {
+      position: absolute;
+      top: 31px;
+      left: 12.5%;
+      height: 2px;
+      background: var(--accent);
+      z-index: 2;
+      width: 0%; /* Dynamic based on status */
+    }
+
+    .tracking-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .tracking-step__dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--void-light);
+      border: 2px solid rgba(243, 241, 234, 0.1);
+      transition: all 0.3s;
+    }
+
+    .tracking-step.is-active .tracking-step__dot {
+      border-color: #fff;
+      background: #fff;
+    }
+
+    .tracking-step.is-complete .tracking-step__dot {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .tracking-step__label {
+      font-size: 11px;
+      color: rgba(243, 241, 234, 0.4);
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .tracking-step.is-active .tracking-step__label {
+      color: #fff;
+    }
+
+    .tracking-step.is-complete .tracking-step__label {
+      color: var(--accent);
+    }
+
+    .order-card__footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+      font-size: 13px;
+    }
+
+    /* Wishlist Grid inside Dashboard */
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    /* Settings inputs */
+    .settings-form {
+      max-width: 580px;
+    }
+
+    .form-submit-btn {
+      padding: 12px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Empty state */
+    .empty-history-state {
+      text-align: center;
+      padding: 80px 24px;
+      color: rgba(243, 241, 234, 0.4);
+      border: 1px dashed var(--border-color);
+      border-radius: 12px;
+    }
+
+    /* ============================================================
+       DASHBOARD FOOTER — PREMIUM REDESIGN
+    ============================================================ */
+    .dash-footer {
+      background: #050506;
+      position: relative;
+      overflow: hidden;
+      margin-top: 80px;
+    }
+
+    .dash-footer__glow {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 300px;
+      background: radial-gradient(ellipse, rgba(189,252,36,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .dash-footer__top {
+      border-bottom: 1px solid rgba(243,241,234,0.06);
+      padding: 60px 48px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .dfooter-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 320px;
+    }
+
+    .dfooter-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #f3f1ea;
+      font-family: 'Clash Display', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .dfooter-logo svg {
+      width: 32px;
+      height: 32px;
+      color: var(--accent);
+    }
+
+    .dfooter-tagline {
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(243,241,234,0.4);
+      margin: 0;
+    }
+
+    .dfooter-social {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .dfooter-social a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(243,241,234,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(243,241,234,0.4);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .dfooter-social a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(189,252,36,0.06);
+      transform: translateY(-2px);
+    }
+
+    .dfooter-social a svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .dfooter-newsletter {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .dfooter-newsletter-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+
+    .dfooter-newsletter-sub {
+      font-size: 12px;
+      color: rgba(243,241,234,0.4);
+      margin: 0;
+    }
+
+    .dfooter-newsletter-form {
+      display: flex;
+      gap: 0;
+      border: 1px solid rgba(243,241,234,0.12);
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.3s;
+    }
+
+    .dfooter-newsletter-form:focus-within {
+      border-color: var(--accent);
+    }
+
+    .dfooter-newsletter-form input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #f3f1ea;
+      font-family: 'General Sans', sans-serif;
+    }
+
+    .dfooter-newsletter-form input::placeholder {
+      color: rgba(243,241,234,0.3);
+    }
+
+    .dfooter-newsletter-form button {
+      background: var(--accent);
+      color: #050506;
+      border: none;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+      font-family: 'Clash Display', sans-serif;
+      letter-spacing: 0.03em;
+    }
+
+    .dfooter-newsletter-form button:hover {
+      opacity: 0.88;
+    }
+
+    /* Main link grid */
+    .dash-footer__grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 40px 32px;
+      padding: 56px 48px;
+      border-bottom: 1px solid rgba(243,241,234,0.06);
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 900px) {
+      .dash-footer__grid { grid-template-columns: repeat(3, 1fr); }
+      .dash-footer__top { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 600px) {
+      .dash-footer__grid { grid-template-columns: repeat(2, 1fr); padding: 40px 24px; }
+      .dash-footer__top { padding: 40px 24px 36px; }
+      .dash-footer__bottom { padding: 24px; flex-direction: column; }
+    }
+
+    .dfooter-col-head {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(243,241,234,0.35);
+      margin: 0 0 20px;
+    }
+
+    .dfooter-col-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dfooter-col-links a {
+      font-size: 13px;
+      color: rgba(243,241,234,0.55);
+      text-decoration: none;
+      transition: color 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dfooter-col-links a:hover {
+      color: #f3f1ea;
+    }
+
+    .dfooter-col-links a:hover::before {
+      content: '→';
+      font-size: 10px;
+      color: var(--accent);
+    }
+
+    /* Trust badges + bottom strip */
+    .dash-footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 48px;
+      gap: 24px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .dfooter-copy {
+      font-size: 12px;
+      color: rgba(243,241,234,0.25);
+      margin: 0;
+    }
+
+    .dfooter-trust {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .dfooter-trust-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(243,241,234,0.25);
+    }
+
+    .dfooter-pay-icons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .dfooter-pay-icon {
+      height: 28px;
+      width: auto;
+      background: rgba(255,255,255,0.95);
+      padding: 3px 8px;
+      border-radius: 5px;
+      object-fit: contain;
+      display: block;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+
+    .dfooter-pay-icon:hover {
+      opacity: 1;
+    }
+
+    .dfooter-legal-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .dfooter-legal-links a {
+      font-size: 11px;
+      color: rgba(243,241,234,0.25);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .dfooter-legal-links a:hover {
+      color: rgba(243,241,234,0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Promo bar -->
+  <div class="promo-bar">
+    <div class="promo-bar__inner">
+      <div class="promo-item">
+        <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="1" y="3" width="15" height="13"></rect>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
+        </svg>
+        <div class="promo-text">
+          <span class="promo-title">FREE SHIPPING</span>
+          <span class="promo-sub">On orders above ₹999</span>
+        </div>
+      </div>
+      <div class="promo-item">
+        <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01"></path>
+        </svg>
+        <div class="promo-text">
+          <span class="promo-title">EXTRA 10% OFF</span>
+          <span class="promo-sub">On prepaid orders</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo" aria-label="NOVA home">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>NOVA</span>
+      </a>
+
+      <nav class="nav__links" aria-label="Primary">
+        <a href="index.html" class="nav__link">Home</a>
+        <a href="collection.html" class="nav__link">Collection</a>
+        <a href="men.html" class="nav__link">Men</a>
+        <a href="women.html" class="nav__link">Women</a>
+        <a href="about.html" class="nav__link">About</a>
+        <a href="contact.html" class="nav__link">Contact</a>
+      </nav>
+
+      <div class="nav__right">
+        <button class="nav__icon-btn" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <a href="login.html" class="nav__icon-btn" aria-label="Account" style="border-bottom-color: var(--accent); color: var(--accent-text);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </a>
+        <a href="wishlist.html" class="nav__icon-btn" aria-label="Wishlist">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard main frame -->
+  <main class="dashboard-page">
+    <!-- Header profile banner -->
+    <div class="dashboard-header">
+      <div class="dashboard-header__bg"></div>
+      <div class="profile-info">
+        <div class="profile-avatar" id="avatarDisplay">AV</div>
+        <div class="profile-details">
+          <h1 class="profile-name" id="profileName">Alex Vance</h1>
+          <span class="profile-tier" id="profileTier">Black Elite</span>
+          <span class="profile-joined" id="profileJoined">Member since July 2026</span>
+        </div>
+      </div>
+      <button class="logout-btn" id="logoutBtn">Log Out</button>
+    </div>
+
+    <!-- Navigation tabs -->
+    <div class="dashboard-tabs">
+      <button class="tab-btn is-active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="orders">Orders</button>
+      <button class="tab-btn" data-tab="wishlist">Wishlist</button>
+      <button class="tab-btn" data-tab="settings">Settings</button>
+    </div>
+
+    <!-- Tab 1: Overview -->
+    <section class="tab-content is-active" id="tabContent_overview">
+      <div class="dashboard-grid">
+        <!-- Loyalty points tracker card -->
+        <div class="dashboard-card">
+          <h3 class="dashboard-card__title">Nova Club Rewards</h3>
+          <div class="points-display">
+            <span class="points-val" id="loyaltyPointsVal">1,250</span>
+            <span class="points-label">PTS</span>
+          </div>
+          <div class="points-progress-bar">
+            <div class="points-progress-fill" id="loyaltyBarFill"></div>
+          </div>
+          <p class="points-next-tier-msg" id="loyaltyTierMsg">750 points to unlock Black Diamond drop tier.</p>
+          <div class="perks-list">
+            <div class="perk-item">
+              <span class="perk-icon">✓</span>
+              <span>Free Express Delivery on all footwear orders</span>
+            </div>
+            <div class="perk-item">
+              <span class="perk-icon">✓</span>
+              <span>Early access drop passes (24 hours prior)</span>
+            </div>
+            <div class="perk-item">
+              <span class="perk-icon">✓</span>
+              <span>Complimentary premium cleaning service kit</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Default addresses card -->
+        <div class="dashboard-card">
+          <h3 class="dashboard-card__title">Preferred Shipping Address</h3>
+          <div id="addressBookContent" style="font-size: 14px; line-height: 1.6; color: rgba(243, 241, 234, 0.7);">
+            <p style="margin: 0; font-weight: 500; color: #fff;" id="addressName">Alex Vance</p>
+            <p style="margin: 4px 0;" id="addressStreet">100 Feet Road, Indiranagar</p>
+            <p style="margin: 4px 0;" id="addressCityState">Bangalore, Karnataka, 560038</p>
+            <p style="margin: 4px 0;" id="addressCountry">India</p>
+            <p style="margin: 12px 0 0 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent);">Default shipping method: Standard (Free)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2: Orders -->
+    <section class="tab-content" id="tabContent_orders">
+      <div class="orders-list" id="dashboardOrdersList">
+        <!-- Empty history state template -->
+        <div class="empty-history-state">
+          <p>No orders placed yet. Explore the studio catalog to discover new drops.</p>
+          <a href="collection.html" class="btn btn--solid" style="margin-top: 16px;"><span>Shop Collection</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: Wishlist -->
+    <section class="tab-content" id="tabContent_wishlist">
+      <div class="wishlist-grid" id="dashboardWishlistGrid">
+        <div class="empty-history-state" style="grid-column: 1 / -1;">
+          <p>No items added to your wishlist yet.</p>
+          <a href="collection.html" class="btn btn--solid" style="margin-top: 16px;"><span>View Products</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: Settings -->
+    <section class="tab-content" id="tabContent_settings">
+      <div class="dashboard-card" style="max-width: 600px;">
+        <h3 class="dashboard-card__title">Profile Settings</h3>
+        <form class="settings-form" id="settingsForm">
+          <div class="form-group">
+            <label class="form-label" for="settingsName">Full Name</label>
+            <input type="text" id="settingsName" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="settingsEmail">Email Address</label>
+            <input type="email" id="settingsEmail" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="settingsPhone">Phone Number</label>
+            <input type="tel" id="settingsPhone" class="form-input" placeholder="+91 XXXXX XXXXX">
+          </div>
+          <p id="settingsMsg" style="color: var(--accent); font-size: 13px; font-weight: 500; display: none; margin-bottom: 16px;"></p>
+          <button type="submit" class="btn btn--solid form-submit-btn">
+            <span>Save Profile Updates</span>
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================
+       PREMIUM FOOTER
+  ==================================================== -->
+  <footer class="dash-footer">
+    <div class="dash-footer__glow"></div>
+
+    <!-- Top: brand + newsletter -->
+    <div class="dash-footer__top">
+      <div class="dfooter-brand">
+        <a href="index.html" class="dfooter-logo">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          NOVA
+        </a>
+        <p class="dfooter-tagline">High-performance footwear built for those who refuse to slow down. Engineered for every stride.</p>
+        <div class="dfooter-social">
+          <a href="#" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter / X">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+          <a href="#" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+          </a>
+          <a href="#" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="dfooter-newsletter">
+        <h4 class="dfooter-newsletter-title">Get exclusive drops first</h4>
+        <p class="dfooter-newsletter-sub">Join 50,000+ Nova members who get early access and special discounts.</p>
+        <form class="dfooter-newsletter-form" onsubmit="event.preventDefault(); this.querySelector('input').value=''; this.querySelector('button').textContent='Subscribed ✓';">
+          <input type="email" placeholder="Enter your email address" required />
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main link columns -->
+    <div class="dash-footer__grid">
+      <div>
+        <p class="dfooter-col-head">Shop</p>
+        <ul class="dfooter-col-links">
+          <li><a href="collection.html">All Footwear</a></li>
+          <li><a href="men.html">Men's Collection</a></li>
+          <li><a href="women.html">Women's Collection</a></li>
+          <li><a href="collection.html?tag=new">New Arrivals</a></li>
+          <li><a href="collection.html?tag=bestseller">Best Sellers</a></li>
+          <li><a href="collection.html?tag=sale">Sale</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="dfooter-col-head">Support</p>
+        <ul class="dfooter-col-links">
+          <li><a href="dashboard.html">My Orders</a></li>
+          <li><a href="contact.html">Track Shipment</a></li>
+          <li><a href="contact.html">Returns &amp; Refunds</a></li>
+          <li><a href="contact.html">Size Guide</a></li>
+          <li><a href="contact.html">FAQs</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="dfooter-col-head">Company</p>
+        <ul class="dfooter-col-links">
+          <li><a href="about.html">About NOVA</a></li>
+          <li><a href="about.html">Careers</a></li>
+          <li><a href="about.html">Sustainability</a></li>
+          <li><a href="about.html">Blog</a></li>
+          <li><a href="about.html">Press</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="dfooter-col-head">Legal</p>
+        <ul class="dfooter-col-links">
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Shipping Policy</a></li>
+          <li><a href="#">Warranty Info</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="dfooter-col-head">Contact</p>
+        <ul class="dfooter-col-links">
+          <li><a href="tel:+919876543210">+91 98765 43210</a></li>
+          <li><a href="mailto:support@novasports.com">support@novasports.com</a></li>
+          <li><a href="contact.html">Mon–Sat, 10am–7pm IST</a></li>
+          <li><a href="contact.html">Indiranagar, Bangalore</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="dash-footer__bottom">
+      <p class="dfooter-copy">© 2026 Nova Footwear Pvt. Ltd. All rights reserved.</p>
+
+      <div class="dfooter-legal-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+      </div>
+
+      <div class="dfooter-trust">
+        <span class="dfooter-trust-label">Secure Payments</span>
+        <div class="dfooter-pay-icons">
+          <img class="dfooter-pay-icon" src="assets/images/visa.png" alt="Visa">
+          <img class="dfooter-pay-icon" src="assets/images/mastercard.png" alt="Mastercard">
+          <img class="dfooter-pay-icon" src="assets/images/upi.png" alt="UPI">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Tab switcher
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('is-active'));
+          tabContents.forEach(c => c.classList.remove('is-active'));
+
+          btn.classList.add('is-active');
+          const content = document.getElementById('tabContent_' + btn.dataset.tab);
+          if (content) content.classList.add('is-active');
+        });
+      });
+
+      // User session details loader
+      let user = null;
+      function loadUser() {
+        try {
+          user = JSON.parse(localStorage.getItem('nova_user'));
+        } catch (e) {
+          user = null;
+        }
+
+        if (!user) {
+          // Fallback demo user
+          user = {
+            name: 'Alex Vance',
+            email: 'alex.vance@nova.com',
+            tier: 'Black Elite',
+            joined: 'July 2026',
+            points: 1250
+          };
+          localStorage.setItem('nova_user', JSON.stringify(user));
+        }
+
+        // Apply profile values
+        document.getElementById('profileName').textContent = user.name;
+        document.getElementById('profileTier').textContent = user.tier;
+        document.getElementById('profileJoined').textContent = `Member since ${user.joined}`;
+        document.getElementById('avatarDisplay').textContent = user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+
+        // loyalty details
+        document.getElementById('loyaltyPointsVal').textContent = user.points.toLocaleString();
+        const nextTierPoints = 2000;
+        const remaining = Math.max(0, nextTierPoints - user.points);
+        const progressPct = Math.min(100, (user.points / nextTierPoints) * 100);
+        document.getElementById('loyaltyBarFill').style.width = progressPct + '%';
+        document.getElementById('loyaltyTierMsg').textContent = remaining > 0 
+          ? `${remaining.toLocaleString()} points to unlock Black Diamond drop tier.` 
+          : 'Congratulations! You have reached maximum Drop Tier status.';
+
+        // settings form pre-fill
+        document.getElementById('settingsName').value = user.name;
+        document.getElementById('settingsEmail').value = user.email;
+        document.getElementById('settingsPhone').value = user.phone || '+91 98765 43210';
+      }
+
+      // Settings updates
+      const settingsForm = document.getElementById('settingsForm');
+      const settingsMsg = document.getElementById('settingsMsg');
+      settingsForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        user.name = document.getElementById('settingsName').value;
+        user.email = document.getElementById('settingsEmail').value;
+        user.phone = document.getElementById('settingsPhone').value;
+
+        localStorage.setItem('nova_user', JSON.stringify(user));
+        loadUser();
+
+        settingsMsg.style.display = 'block';
+        settingsMsg.textContent = 'Profile successfully updated!';
+        setTimeout(() => {
+          settingsMsg.style.display = 'none';
+        }, 3000);
+      });
+
+      // Address Book Loader
+      function loadAddress() {
+        const orders = JSON.parse(localStorage.getItem('nova_orders')) || [];
+        if (orders.length > 0) {
+          const lastOrder = orders[orders.length - 1];
+          const addr = lastOrder.shippingAddress;
+          document.getElementById('addressName').textContent = `${addr.firstName} ${addr.lastName}`;
+          document.getElementById('addressStreet').textContent = `${addr.street} ${addr.apartment || ''}`;
+          document.getElementById('addressCityState').textContent = `${addr.city}, ${addr.state}, ${addr.postalCode}`;
+        } else {
+          document.getElementById('addressName').textContent = user.name;
+        }
+      }
+
+      // Orders Loader
+      function loadOrders() {
+        const ordersList = document.getElementById('dashboardOrdersList');
+        const orders = JSON.parse(localStorage.getItem('nova_orders')) || [];
+
+        if (orders.length === 0) {
+          ordersList.innerHTML = `
+            <div class="empty-history-state">
+              <p>No orders placed yet. Explore the studio catalog to discover new drops.</p>
+              <a href="collection.html" class="btn btn--solid" style="margin-top: 16px;"><span>Shop Collection</span></a>
+            </div>
+          `;
+          return;
+        }
+
+        ordersList.innerHTML = orders.map((order, idx) => {
+          // Status timeline width percentage calculation
+          let progressWidth = '0%';
+          if (order.status === 'Processing') progressWidth = '33%';
+          if (order.status === 'Shipped') progressWidth = '66%';
+          if (order.status === 'Delivered') progressWidth = '100%';
+
+          const itemsHtml = order.items.map(item => `
+            <div class="order-item-row">
+              <img class="order-item-img" src="${item.img}" alt="${item.name}">
+              <div class="order-item-details">
+                <span class="order-item-name">${item.name}</span>
+                <span class="order-item-desc">Size ${item.size} × ${item.qty}</span>
+              </div>
+              <span class="order-item-price">₹${item.price.toLocaleString()}</span>
+            </div>
+          `).join('');
+
+          return `
+            <div class="order-card">
+              <div class="order-card__header">
+                <div class="order-card__meta">
+                  <span class="order-card__id">Order ${order.id}</span>
+                  <span class="order-card__date">Placed on ${order.date}</span>
+                </div>
+                <span class="order-card__status status-${order.status.toLowerCase()}">${order.status}</span>
+              </div>
+              
+              <div class="order-card__items">
+                ${itemsHtml}
+              </div>
+
+              <!-- Tracking timeline -->
+              <div class="tracking-timeline">
+                <div class="tracking-progress-line" style="width: ${progressWidth};"></div>
+                <div class="tracking-step is-complete">
+                  <div class="tracking-step__dot"></div>
+                  <span class="tracking-step__label">Ordered</span>
+                </div>
+                <div class="tracking-step ${order.status === 'Processing' ? 'is-active' : 'is-complete'}">
+                  <div class="tracking-step__dot"></div>
+                  <span class="tracking-step__label">Processing</span>
+                </div>
+                <div class="tracking-step ${order.status === 'Shipped' ? 'is-active' : order.status === 'Delivered' ? 'is-complete' : ''}">
+                  <div class="tracking-step__dot"></div>
+                  <span class="tracking-step__label">Shipped</span>
+                </div>
+                <div class="tracking-step ${order.status === 'Delivered' ? 'is-active is-complete' : ''}">
+                  <div class="tracking-step__dot"></div>
+                  <span class="tracking-step__label">Delivered</span>
+                </div>
+              </div>
+
+              <div class="order-card__footer">
+                <span>Payment: <strong>${order.paymentMethod}</strong></span>
+                <span>Total Paid: <strong>₹${order.total.toLocaleString()}</strong></span>
+              </div>
+            </div>
+          `;
+        }).reverse().join(''); // show newest orders first
+      }
+
+      // Wishlist Loader
+      function loadWishlist() {
+        const wishlistGrid = document.getElementById('dashboardWishlistGrid');
+        const wishlist = JSON.parse(localStorage.getItem('nova_wishlist')) || [];
+
+        if (wishlist.length === 0) {
+          wishlistGrid.innerHTML = `
+            <div class="empty-history-state" style="grid-column: 1 / -1;">
+              <p>No items added to your wishlist yet.</p>
+              <a href="collection.html" class="btn btn--solid" style="margin-top: 16px;"><span>View Products</span></a>
+            </div>
+          `;
+          return;
+        }
+
+        wishlistGrid.innerHTML = wishlist.map(prod => {
+          const priceHtml = `₹${prod.price.toLocaleString()}`;
+          return `
+            <div class="product-card" data-id="${prod.id}">
+              <button class="wishlist-btn" aria-label="Remove from Wishlist" onclick="removeWishlistItem('${prod.id}')" style="color: var(--accent);">
+                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+              <div class="product-card__img-wrap" style="background: rgba(255,255,255,0.01);">
+                <img src="${prod.img}" alt="${prod.name}" class="product-card__img" />
+              </div>
+              <div class="product-card__info" style="padding: 16px;">
+                <h4 class="product-card__title" style="font-size: 14px; margin-bottom: 4px;">${prod.name}</h4>
+                <span class="product-card__category" style="font-size: 11px; margin-bottom: 8px;">${prod.category} Shoes</span>
+                <div class="product-card__footer" style="margin-top: 12px;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;">${priceHtml}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Expose remove item globally
+      window.removeWishlistItem = (id) => {
+        let wishlist = JSON.parse(localStorage.getItem('nova_wishlist')) || [];
+        wishlist = wishlist.filter(item => item.id !== id);
+        localStorage.setItem('nova_wishlist', JSON.stringify(wishlist));
+        loadWishlist();
+        // Dispatch custom sync event
+        window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+      };
+
+      // Logout handler
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('nova_user');
+        window.location.href = 'index.html';
+      });
+
+      // Initial boot
+      loadUser();
+      loadAddress();
+      loadOrders();
+      loadWishlist();
+    });
+  </script>
+</body>
+</html>

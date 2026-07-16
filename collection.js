@@ -1,23 +1,72 @@
 (() => {
   'use strict';
+  window._collectionJsLoaded = true; // Signal to wishlist-sync.js to skip its add-to-cart handler
 
   /* ---------------------------------------------------------
-     PRODUCTS DATA
+     PRODUCTS — Single Source of Truth: nova_admin_products
+     Admin manages this key; collection reads from it.
   --------------------------------------------------------- */
-  const PRODUCTS = [
-    { id: 'nova-surge-x1', name: 'Nova Surge X1', category: 'Running', gender: 'men', size: [8, 9, 10, 11], price: 8999, img: 'assets/images/product_surge.png', stars: 5, reviews: 128, new: false, bestseller: true, discount: 0, color: 'orange', features: ['air', 'lightweight', 'breathable'] },
-    { id: 'nova-phantom', name: 'Nova Phantom', category: 'Running', gender: 'men', size: [7, 8, 9, 10], price: 7999, img: 'assets/images/product_phantom.png', stars: 5, reviews: 96, new: false, bestseller: true, discount: 0, color: 'white', features: ['lightweight', 'breathable'] },
-    { id: 'nova-air-pro', name: 'Nova Air Pro', category: 'Training', gender: 'unisex', size: [6, 7, 8, 9, 10], price: 8499, img: 'assets/images/product_air_pro.png', stars: 5, reviews: 76, new: true, bestseller: false, discount: 0, color: 'white', features: ['air', 'breathable', 'grip'] },
-    { id: 'nova-edge', name: 'Nova Edge', category: 'Basketball', gender: 'men', size: [9, 10, 11, 12, 13], price: 6999, img: 'assets/images/product_edge.png', stars: 5, reviews: 88, new: false, bestseller: false, discount: 0, color: 'red', features: ['grip'] },
-    { id: 'nova-boost', name: 'Nova Boost', category: 'Running', gender: 'men', size: [8, 9, 10], price: 7499, oldPrice: 8299, img: 'assets/images/product_boost.png', stars: 5, reviews: 142, new: false, bestseller: false, discount: 10, color: 'blue', features: ['air', 'lightweight'] },
-    { id: 'nova-drift', name: 'Nova Drift', category: 'Lifestyle', gender: 'unisex', size: [6, 7, 8, 9, 10, 11], price: 5499, img: 'assets/images/product_drift.png', stars: 5, reviews: 58, new: true, bestseller: false, discount: 0, color: 'green', features: ['lightweight', 'breathable'] },
-    { id: 'nova-lite', name: 'Nova Lite', category: 'Training', gender: 'women', size: [6, 7, 8, 9], price: 4999, img: 'assets/images/product_lite.png', stars: 5, reviews: 64, new: false, bestseller: false, discount: 0, color: 'purple', features: ['lightweight'] },
-    { id: 'nova-trail', name: 'Nova Trail', category: 'Hiking', gender: 'men', size: [7, 8, 9, 10, 11, 12], price: 6799, oldPrice: 7999, img: 'assets/images/product_trail.png', stars: 5, reviews: 41, new: false, bestseller: false, discount: 15, color: 'white', features: ['grip', 'waterproof'] },
-    { id: 'nova-motion', name: 'Nova Motion', category: 'Running', gender: 'women', size: [6, 7, 8], price: 6299, img: 'assets/images/product_motion.png', stars: 5, reviews: 33, new: false, bestseller: false, discount: 0, color: 'red', features: ['air', 'breathable'] },
-    { id: 'nova-flow', name: 'Nova Flow', category: 'Lifestyle', gender: 'women', size: [6, 7, 8, 9], price: 5999, img: 'assets/images/product_flow.png', stars: 5, reviews: 27, new: true, bestseller: false, discount: 0, color: 'yellow', features: ['lightweight', 'breathable'] },
-    { id: 'nova-carbon', name: 'Nova Carbon', category: 'Running', gender: 'women', size: [8, 9, 10, 11, 12], price: 10999, img: 'assets/images/product_carbon.png', stars: 5, reviews: 19, new: false, bestseller: false, discount: 0, color: 'purple', features: ['air', 'lightweight', 'breathable'] },
-    { id: 'nova-flex', name: 'Nova Flex', category: 'Training', gender: 'unisex', size: [6, 7, 8, 9, 10], price: 4799, img: 'assets/images/product_flex.png', stars: 5, reviews: 22, new: false, bestseller: false, discount: 0, color: 'purple', features: ['lightweight', 'grip'] }
+
+  /** Full canonical catalogue — used ONLY for first-time seeding */
+  const CANONICAL_PRODUCTS = [
+    { id: 'nova-surge-x1', name: 'Nova Surge X1', category: 'Running', gender: 'men', size: [8, 9, 10, 11], price: 8999, oldPrice: null, img: 'assets/images/product_surge.png', stars: 5, reviews: 128, new: false, bestseller: true, discount: 0, color: 'orange', features: ['air', 'lightweight', 'breathable'], status: 'Active', stock: 22, featured: true, sku: 'NOVA-SX-001', desc: "Men's Running Shoes" },
+    { id: 'nova-phantom', name: 'Nova Phantom', category: 'Running', gender: 'men', size: [7, 8, 9, 10], price: 7999, oldPrice: null, img: 'assets/images/product_phantom.png', stars: 5, reviews: 96, new: false, bestseller: true, discount: 0, color: 'white', features: ['lightweight', 'breathable'], status: 'Active', stock: 18, featured: true, sku: 'NOVA-PH-002', desc: "Men's Running Shoes" },
+    { id: 'nova-air-pro', name: 'Nova Air Pro', category: 'Training', gender: 'unisex', size: [6, 7, 8, 9, 10], price: 8499, oldPrice: null, img: 'assets/images/product_air_pro.png', stars: 5, reviews: 76, new: true, bestseller: false, discount: 0, color: 'white', features: ['air', 'breathable', 'grip'], status: 'Active', stock: 30, featured: false, sku: 'NOVA-AP-003', desc: 'Unisex Training Shoes' },
+    { id: 'nova-edge', name: 'Nova Edge', category: 'Basketball', gender: 'men', size: [9, 10, 11, 12, 13], price: 6999, oldPrice: null, img: 'assets/images/product_edge.png', stars: 5, reviews: 88, new: false, bestseller: false, discount: 0, color: 'red', features: ['grip'], status: 'Active', stock: 14, featured: false, sku: 'NOVA-EG-004', desc: "Men's Basketball Shoes" },
+    { id: 'nova-boost', name: 'Nova Boost', category: 'Running', gender: 'men', size: [8, 9, 10], price: 7499, oldPrice: 8299, img: 'assets/images/product_boost.png', stars: 5, reviews: 142, new: false, bestseller: false, discount: 10, color: 'blue', features: ['air', 'lightweight'], status: 'Active', stock: 25, featured: false, sku: 'NOVA-BO-005', desc: "Men's Running Shoes" },
+    { id: 'nova-drift', name: 'Nova Drift', category: 'Lifestyle', gender: 'unisex', size: [6, 7, 8, 9, 10, 11], price: 5499, oldPrice: null, img: 'assets/images/product_drift.png', stars: 5, reviews: 58, new: true, bestseller: false, discount: 0, color: 'green', features: ['lightweight', 'breathable'], status: 'Active', stock: 9, featured: false, sku: 'NOVA-DR-006', desc: 'Unisex Lifestyle Shoes' },
+    { id: 'nova-lite', name: 'Nova Lite', category: 'Training', gender: 'women', size: [6, 7, 8, 9], price: 4999, oldPrice: null, img: 'assets/images/product_lite.png', stars: 5, reviews: 64, new: false, bestseller: false, discount: 0, color: 'purple', features: ['lightweight'], status: 'Active', stock: 35, featured: false, sku: 'NOVA-LT-007', desc: "Women's Training Shoes" },
+    { id: 'nova-trail', name: 'Nova Trail', category: 'Hiking', gender: 'men', size: [7, 8, 9, 10, 11, 12], price: 6799, oldPrice: 7999, img: 'assets/images/product_trail.png', stars: 5, reviews: 41, new: false, bestseller: false, discount: 15, color: 'white', features: ['grip', 'waterproof'], status: 'Active', stock: 0, featured: false, sku: 'NOVA-TR-008', desc: "Men's Hiking Shoes" },
+    { id: 'nova-motion', name: 'Nova Motion', category: 'Running', gender: 'women', size: [6, 7, 8], price: 6299, oldPrice: null, img: 'assets/images/product_motion.png', stars: 5, reviews: 33, new: false, bestseller: false, discount: 0, color: 'red', features: ['air', 'breathable'], status: 'Active', stock: 12, featured: false, sku: 'NOVA-MO-009', desc: "Women's Running Shoes" },
+    { id: 'nova-flow', name: 'Nova Flow', category: 'Lifestyle', gender: 'women', size: [6, 7, 8, 9], price: 5999, oldPrice: null, img: 'assets/images/product_flow.png', stars: 5, reviews: 27, new: true, bestseller: false, discount: 0, color: 'yellow', features: ['lightweight', 'breathable'], status: 'Active', stock: 20, featured: false, sku: 'NOVA-FL-010', desc: "Women's Lifestyle Shoes" },
+    { id: 'nova-carbon', name: 'Nova Carbon', category: 'Running', gender: 'women', size: [8, 9, 10, 11, 12], price: 10999, oldPrice: null, img: 'assets/images/product_carbon.png', stars: 5, reviews: 19, new: false, bestseller: false, discount: 0, color: 'purple', features: ['air', 'lightweight', 'breathable'], status: 'Active', stock: 0, featured: true, sku: 'NOVA-CA-011', desc: "Women's Running Shoes" },
+    { id: 'nova-flex', name: 'Nova Flex', category: 'Training', gender: 'unisex', size: [6, 7, 8, 9, 10], price: 4799, oldPrice: 5499, img: 'assets/images/product_flex.png', stars: 5, reviews: 22, new: false, bestseller: false, discount: 0, color: 'purple', features: ['lightweight', 'grip'], status: 'Active', stock: 11, featured: false, sku: 'NOVA-FX-012', desc: 'Unisex Training Shoes' }
   ];
+
+  /** Seed localStorage once if empty, then always read from it */
+  function getProducts() {
+    try {
+      const raw = localStorage.getItem('nova_admin_products');
+      if (!raw) {
+        localStorage.setItem('nova_admin_products', JSON.stringify(CANONICAL_PRODUCTS));
+        return [...CANONICAL_PRODUCTS];
+      }
+      return JSON.parse(raw);
+    } catch (e) {
+      return [...CANONICAL_PRODUCTS];
+    }
+  }
+
+  /**
+   * Map admin product → collection-compatible object.
+   * Only show Active products with stock > 0 to users.
+   */
+  function toCollectionProduct(ap) {
+    const disc = (ap.oldPrice && ap.price) ? Math.round((1 - ap.price / ap.oldPrice) * 100) : (ap.discount || 0);
+    return {
+      id: ap.id,
+      name: ap.name,
+      category: ap.category || 'Running',
+      gender: ap.gender || 'unisex',
+      size: Array.isArray(ap.size) ? ap.size : [7, 8, 9, 10],
+      price: Number(ap.price) || 0,
+      oldPrice: ap.oldPrice ? Number(ap.oldPrice) : undefined,
+      img: ap.img || '',
+      stars: ap.stars || 5,
+      reviews: ap.reviews || 0,
+      new: ap.new || false,
+      bestseller: ap.featured || ap.bestseller || false,
+      discount: disc,
+      color: ap.color || 'white',
+      features: ap.features || ['lightweight'],
+    };
+  }
+
+  const PRODUCTS = getProducts()
+    .filter(p => p.status !== 'Inactive' && p.stock > 0)
+    .map(toCollectionProduct);
+
+
 
   /* ---------------------------------------------------------
      STATE MANAGEMENT
@@ -72,7 +121,8 @@
     price: 12000,
     color: [],
     feature: [],
-    tag: []
+    tag: [],
+    searchQuery: ''
   };
   let activeSort = 'featured';
   let activeView = 'grid';
@@ -88,6 +138,11 @@
   // Parse query params to set initial filters
   function parseQueryParams() {
     const params = new URLSearchParams(window.location.search);
+
+    const query = params.get('q');
+    if (query) {
+      activeFilters.searchQuery = query;
+    }
 
     const category = params.get('category');
     if (category) {
@@ -214,6 +269,17 @@
         if (activeFilters.tag.includes('bestseller') && !prod.bestseller) return false;
       }
 
+      // Search query filter
+      if (activeFilters.searchQuery) {
+        const q = activeFilters.searchQuery.toLowerCase();
+        const matchesQuery = 
+          prod.name.toLowerCase().includes(q) ||
+          prod.category.toLowerCase().includes(q) ||
+          prod.color.toLowerCase().includes(q) ||
+          prod.features.some(f => f.toLowerCase().includes(q));
+        if (!matchesQuery) return false;
+      }
+
       return true;
     });
 
@@ -239,13 +305,18 @@
       price: 12000,
       color: [],
       feature: [],
-      tag: []
+      tag: [],
+      searchQuery: ''
     };
     priceRange.value = 12000;
     priceVal.textContent = '₹12,000+';
 
     // Clear size button checks
     document.querySelectorAll('.size-btn input').forEach((inp) => inp.checked = false);
+
+    // Clear URL query param without reload
+    const newUrl = window.location.pathname;
+    window.history.pushState({ path: newUrl }, '', newUrl);
 
     filterAndSortProducts();
   }
@@ -347,9 +418,12 @@
   const checkoutBtn = document.getElementById('checkoutBtn');
   if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
-      alert('Thank you for choosing NOVA! Checkout demo simulated.');
-      cartState.save([]);
-      closeCart();
+      const cart = cartState.get();
+      if (cart.length === 0) {
+        alert('Your shopping cart is empty!');
+        return;
+      }
+      window.location.href = 'checkout.html';
     });
   }
 
@@ -415,6 +489,10 @@
     // Add to cart click inside modal
     const modalAddBtn = modalContent.querySelector('.modal-add-to-cart-btn');
     modalAddBtn.addEventListener('click', (e) => {
+      // Auth guard
+      if (typeof window.requireLogin === 'function') {
+        if (!window.requireLogin('Sign in to add items to your cart and start shopping.')) return;
+      }
       const selectedSize = Number(modalContent.querySelector('input[name="modal-size"]:checked').value);
       cartState.add(prod.id, prod.name, prod.price, prod.img, selectedSize);
 
@@ -555,11 +633,15 @@
     });
   }
 
-  // Add to cart buttons globally
+  // Add to cart buttons globally (product cards)
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('.add-to-cart-btn');
     if (btn) {
       e.preventDefault();
+      // Auth guard — must be logged in to add to cart
+      if (typeof window.requireLogin === 'function') {
+        if (!window.requireLogin('Sign in to add items to your cart and start shopping.')) return;
+      }
       // If it's the product card cart button, we add default size 9
       cartState.add(btn.dataset.id, btn.dataset.name, btn.dataset.price, btn.dataset.img, 9);
 
@@ -585,18 +667,12 @@
     });
   }
 
-  // Magnetic elements
-  document.querySelectorAll('[data-magnetic]').forEach((el) => {
-    const strength = 0.35;
-    const moveX = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3.out' });
-    const moveY = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3.out' });
-    el.addEventListener('mousemove', (e) => {
-      const r = el.getBoundingClientRect();
-      moveX((e.clientX - r.left - r.width / 2) * strength);
-      moveY((e.clientY - r.top - r.height / 2) * strength);
-    });
-    el.addEventListener('mouseleave', () => { moveX(0); moveY(0); });
-  });
+
+  // Global search interface hook
+  window.updateCollectionSearch = (query) => {
+    activeFilters.searchQuery = query;
+    filterAndSortProducts();
+  };
 
   /* ---------------------------------------------------------
      RUN BOOT

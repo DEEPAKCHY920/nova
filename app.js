@@ -472,20 +472,6 @@
     state.mouse.ny = (e.clientY / window.innerHeight - 0.5) * 2;
   });
 
-  /* ---------------------------------------------------------
-     MAGNETIC BUTTONS
-  --------------------------------------------------------- */
-  document.querySelectorAll('[data-magnetic]').forEach((el) => {
-    const strength = 0.35;
-    const moveX = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3.out' });
-    const moveY = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3.out' });
-    el.addEventListener('mousemove', (e) => {
-      const r = el.getBoundingClientRect();
-      moveX((e.clientX - r.left - r.width / 2) * strength);
-      moveY((e.clientY - r.top - r.height / 2) * strength);
-    });
-    el.addEventListener('mouseleave', () => { moveX(0); moveY(0); });
-  });
 
   /* ---------------------------------------------------------
      WATCH FILM — smooth-scrolls into the next chapter

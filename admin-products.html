@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NOVA Admin — Products</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --sb:220px;--hh:60px;
+      --bg:#0c0c0e;--sbg:#101013;--sur:#161619;--su2:#1e1e23;--su3:#252529;
+      --bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.04);
+      --tx:#f0f0f2;--txd:rgba(240,240,242,.55);--txf:rgba(240,240,242,.3);
+      --ac:#bdfc24;--acd:rgba(189,252,36,.12);--act:#0a0a0c;
+      --gr:#22c55e;--rd:#ef4444;--yl:#f59e0b;--bl:#3b82f6;--pu:#8b5cf6;
+      --f:"Inter",sans-serif;--r:12px;--rs:8px;
+    }
+    html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden}
+    a{text-decoration:none;color:inherit}button{font-family:var(--f);cursor:pointer;border:none;background:none}
+    img{display:block;object-fit:cover}select,input,textarea{font-family:var(--f)}
+    .wrap{display:flex;height:100vh;overflow:hidden}
+    /* SIDEBAR */
+    .sb{width:var(--sb);background:var(--sbg);border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb::-webkit-scrollbar{width:3px}.sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.05)}
+    .sb-logo{display:flex;align-items:center;gap:9px;padding:20px 18px;border-bottom:1px solid var(--bd)}
+    .sb-logo svg{width:28px;height:28px;color:var(--ac)}.sb-logo-n{font-size:17px;font-weight:800;letter-spacing:.08em}
+    .sb-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:1px}
+    .ni{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rs);font-size:13px;font-weight:500;color:var(--txd);cursor:pointer;transition:background .15s,color .15s;width:100%;text-align:left}
+    .ni:hover{background:rgba(255,255,255,.05);color:var(--tx)}.ni.act{background:var(--acd);color:var(--ac);font-weight:600}
+    .ni svg{width:16px;height:16px;flex-shrink:0}
+    .nbadge{margin-left:auto;background:var(--ac);color:var(--act);font-size:10px;font-weight:700;border-radius:20px;padding:1px 6px;min-width:18px;text-align:center}
+    .sb-up{margin:12px 10px;background:rgba(189,252,36,.06);border:1px solid rgba(189,252,36,.15);border-radius:var(--r);padding:14px}
+    .up-t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--ac);margin-bottom:5px}
+    .up-d{font-size:11px;color:var(--txd);line-height:1.5;margin-bottom:10px}
+    .up-btn{display:block;width:100%;text-align:center;padding:7px 0;background:transparent;border:1px solid var(--ac);border-radius:7px;font-size:12px;font-weight:700;color:var(--ac);cursor:pointer;transition:background .2s}
+    .up-btn:hover{background:var(--acd)}
+    /* MAIN */
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+    .hdr{height:var(--hh);background:var(--sbg);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0}
+    .hdr-search{flex:1;max-width:440px;display:flex;align-items:center;gap:10px;background:var(--su2);border:1px solid var(--bd);border-radius:10px;padding:8px 14px;transition:border-color .2s}
+    .hdr-search:focus-within{border-color:rgba(189,252,36,.3)}.hdr-search svg{width:15px;height:15px;color:var(--txf);flex-shrink:0}
+    .hdr-search input{background:none;border:none;outline:none;font-size:13px;color:var(--tx);flex:1;min-width:0}.hdr-search input::placeholder{color:var(--txf)}
+    .hsp{flex:1}.hacts{display:flex;align-items:center;gap:8px}
+    .hib{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--su2);border:1px solid var(--bd);border-radius:10px;color:var(--txd);cursor:pointer;transition:border-color .2s,color .2s}
+    .hib:hover{border-color:rgba(189,252,36,.3);color:var(--tx)}.hib svg{width:16px;height:16px}
+    .hav{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--su2);border:1px solid var(--bd);border-radius:10px;cursor:pointer}
+    .avc{width:28px;height:28px;background:var(--ac);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--act);flex-shrink:0}
+    .avn{font-size:12.5px;font-weight:600}.avr{font-size:10.5px;color:var(--txf)}
+    /* PAGE */
+    .pg{flex:1;overflow-y:auto;padding:24px}.pg::-webkit-scrollbar{width:4px}.pg::-webkit-scrollbar-thumb{background:rgba(255,255,255,.07);border-radius:2px}
+    .bc{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--txf);margin-bottom:16px}
+    .bc a{color:var(--txf);transition:color .2s}.bc a:hover{color:var(--tx)}.bc svg{width:12px;height:12px;opacity:.5}
+    .pgh{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .pgt{font-size:22px;font-weight:700}.pgs{font-size:13px;color:var(--txd);margin-top:3px}.pgh-btns{display:flex;gap:10px;align-items:center}
+    .btn{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+    .btn-ghost{background:var(--su2);border:1px solid var(--bd);color:var(--txd)}.btn-ghost:hover{border-color:rgba(255,255,255,.15);color:var(--tx)}
+    .btn-primary{background:var(--ac);color:var(--act)}.btn-primary:hover{box-shadow:0 4px 16px rgba(189,252,36,.3);transform:translateY(-1px)}
+    .btn svg{width:15px;height:15px}
+    /* STAT CARDS */
+    .srow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+    .sc{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:14px}
+    .sci-wrap{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.sci-wrap svg{width:22px;height:22px}
+    .sc-info{flex:1}.sc-lbl{font-size:12px;color:var(--txf);margin-bottom:3px}.sc-val{font-size:22px;font-weight:800;line-height:1;letter-spacing:-.02em;margin-bottom:4px}.sc-sub{font-size:11.5px;color:var(--txd)}
+    /* TOOLBAR */
+    .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+    .search-box{display:flex;align-items:center;gap:8px;background:var(--su2);border:1px solid var(--bd);border-radius:var(--rs);padding:8px 12px;min-width:200px;flex:1;max-width:280px;transition:border-color .2s}
+    .search-box:focus-within{border-color:rgba(189,252,36,.3)}.search-box svg{width:14px;height:14px;color:var(--txf);flex-shrink:0}
+    .search-box input{background:none;border:none;outline:none;font-size:13px;color:var(--tx);width:100%}.search-box input::placeholder{color:var(--txf)}
+    .fsel{appearance:none;background:var(--su2);border:1px solid var(--bd);border-radius:var(--rs);padding:8px 32px 8px 12px;font-size:13px;color:var(--txd);cursor:pointer;outline:none;transition:border-color .2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(240,240,242,.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:14px}
+    .fsel:focus{border-color:rgba(189,252,36,.3)}.fsel option{background:var(--su2)}
+    .toolbar-right{margin-left:auto;display:flex;gap:8px}
+    .reset-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:transparent;border:1px solid var(--bd);border-radius:var(--rs);font-size:13px;color:var(--txd);cursor:pointer;transition:color .2s}
+    .reset-btn:hover{color:var(--tx)}.reset-btn svg{width:14px;height:14px}
+    /* TABLE */
+    .tbl-wrap{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+    table{width:100%;border-collapse:collapse}thead{background:rgba(255,255,255,.02);border-bottom:1px solid var(--bd)}
+    th{padding:12px 14px;font-size:11px;font-weight:600;color:var(--txf);text-align:left;white-space:nowrap;letter-spacing:.05em;text-transform:uppercase}
+    th:first-child,td:first-child{padding-left:16px;width:40px}tbody tr{border-bottom:1px solid var(--bd2);transition:background .15s}tbody tr:last-child{border-bottom:none}tbody tr:hover{background:rgba(255,255,255,.025)}
+    td{padding:12px 14px;font-size:13px;vertical-align:middle}
+    .prod-cell{display:flex;align-items:center;gap:12px}
+    .prod-img{width:46px;height:46px;background:var(--su2);border-radius:10px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
+    .prod-img img{width:100%;height:100%;object-fit:cover}
+    .prod-name{font-weight:600;color:var(--tx);font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:155px}
+    .prod-sub{font-size:11px;color:var(--txf)}
+    .badge{font-size:11px;font-weight:600;border-radius:20px;padding:3px 10px;white-space:nowrap}
+    .badge-active{background:rgba(34,197,94,.12);color:var(--gr)}.badge-inactive{background:rgba(240,240,242,.08);color:var(--txf)}.badge-out{background:rgba(239,68,68,.12);color:var(--rd)}
+    .toggle{width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,.1);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none}
+    .toggle.on{background:var(--ac)}.toggle::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}.toggle.on::after{left:19px}
+    .actions{display:flex;align-items:center;gap:5px}
+    .abn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:7px;background:var(--su2);border:1px solid var(--bd);cursor:pointer;transition:all .2s;color:var(--txd)}
+    .abn:hover{border-color:rgba(255,255,255,.15);color:var(--tx)}.abn.del{color:rgba(239,68,68,.6)}.abn.del:hover{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:var(--rd)}.abn svg{width:13px;height:13px}
+    .cb{width:16px;height:16px;accent-color:var(--ac);cursor:pointer}
+    .price-now{font-weight:700}.price-old{font-size:11px;color:var(--txf);text-decoration:line-through}.disc-pill{font-size:10px;font-weight:700;background:rgba(34,197,94,.15);color:var(--gr);border-radius:4px;padding:1px 5px;margin-left:4px}
+    .stk-ok{color:var(--gr);font-weight:700}.stk-low{color:var(--yl);font-weight:700}.stk-out{color:var(--rd);font-weight:700}
+    /* PAGINATION */
+    .pg-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-top:1px solid var(--bd)}
+    .pg-info{font-size:12.5px;color:var(--txf)}.pg-right{display:flex;align-items:center;gap:8px}
+    .per-sel{appearance:none;background:var(--su2);border:1px solid var(--bd);border-radius:7px;padding:5px 26px 5px 9px;font-size:12px;color:var(--txd);cursor:pointer;outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(240,240,242,.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;background-size:12px}.per-sel option{background:var(--su2)}
+    .pg-btns{display:flex;align-items:center;gap:4px}
+    .pgb{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:7px;background:var(--su2);border:1px solid var(--bd);font-size:12.5px;font-weight:500;color:var(--txd);cursor:pointer;transition:all .2s}
+    .pgb:hover{border-color:rgba(255,255,255,.15);color:var(--tx)}.pgb.act{background:var(--ac);color:var(--act);border-color:var(--ac);font-weight:700}.pgb:disabled{opacity:.3;cursor:not-allowed}
+    .pg-dots{font-size:12px;color:var(--txf);padding:0 4px}
+    /* EMPTY */
+    .empty{text-align:center;padding:60px 24px;color:var(--txf)}.empty svg{width:52px;height:52px;margin:0 auto 16px;opacity:.25}.empty h3{font-size:15px;font-weight:600;color:var(--txd);margin-bottom:6px}.empty p{font-size:13px;margin-bottom:20px}
+    /* MODAL */
+    .mlo{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;background:rgba(5,5,6,.85);backdrop-filter:blur(8px)}
+    .mlo.open{opacity:1;visibility:visible}
+    .mo{background:var(--su2);border:1px solid var(--bd);border-radius:16px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;animation:su .3s cubic-bezier(.16,1,.3,1)}
+    @keyframes su{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+    .mo::-webkit-scrollbar{width:4px}.mo::-webkit-scrollbar-thumb{background:rgba(255,255,255,.07);border-radius:2px}
+    .mo-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--bd)}
+    .mo-title{font-size:16px;font-weight:700}
+    .mo-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--txf);cursor:pointer;transition:all .2s}
+    .mo-close:hover{background:rgba(255,255,255,.06);color:var(--tx)}.mo-close svg{width:16px;height:16px}
+    .mo-body{padding:24px}.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .fgrp{display:flex;flex-direction:column;gap:5px}.fgrp.full{grid-column:1/-1}
+    .flbl{font-size:11.5px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.04em}
+    .finp{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--tx);outline:none;transition:border-color .2s;width:100%}
+    .finp:focus{border-color:rgba(189,252,36,.4);background:rgba(255,255,255,.06)}.finp::placeholder{color:var(--txf)}
+    select.finp{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(240,240,242,.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px;padding-right:32px}
+    select.finp option{background:var(--su2)}
+    .img-preview{width:80px;height:80px;background:var(--su3);border-radius:10px;overflow:hidden;border:1px solid var(--bd);margin-top:4px}
+    .img-preview img{width:100%;height:100%;object-fit:cover}
+    .mo-ftr{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--bd)}
+    /* CONFIRM */
+    .clo{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(5,5,6,.9);backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+    .clo.open{opacity:1;visibility:visible}
+    .cbox{background:var(--su2);border:1px solid var(--bd);border-radius:16px;padding:28px;max-width:380px;width:100%;text-align:center}
+    .ci{width:52px;height:52px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}.ci svg{width:24px;height:24px;color:var(--rd)}
+    .ct{font-size:16px;font-weight:700;margin-bottom:8px}.cd{font-size:13px;color:var(--txd);line-height:1.6;margin-bottom:24px}
+    .cbtns{display:flex;gap:10px}
+    .cc{flex:1;padding:11px;background:var(--su3);border:1px solid var(--bd);border-radius:8px;font-size:13px;font-weight:600;color:var(--txd);cursor:pointer;transition:color .2s}.cc:hover{color:var(--tx)}
+    .cok{flex:1;padding:11px;background:var(--rd);border:none;border-radius:8px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;transition:opacity .2s}.cok:hover{opacity:.85}
+    .cok-warn{background:var(--yl)!important;color:#000!important}
+    /* TOAST */
+    #adToast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--su2);border:1px solid var(--bd);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:500;color:var(--tx);display:flex;align-items:center;gap:10px;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+    #adToast.show{opacity:1;transform:translateX(-50%) translateY(0)}#adToast svg{width:16px;height:16px;flex-shrink:0}
+    #adToast.ok{border-color:rgba(34,197,94,.3);color:var(--gr)}#adToast.err{border-color:rgba(239,68,68,.3);color:var(--rd)}#adToast.war{border-color:rgba(245,158,11,.3);color:var(--yl)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <!-- SIDEBAR -->
+  <aside class="sb">
+    <a href="admin.html" class="sb-logo">
+      <svg viewBox="0 0 48 48" fill="none"><path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="sb-logo-n">NOVA</span>
+    </a>
+    <nav class="sb-nav">
+      <a class="ni" href="admin.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a class="ni act" href="admin-products.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Products<span class="nbadge" id="sbTotalBadge">0</span></a>
+      <a class="ni" href="admin-orders.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Orders</a>
+      <button class="ni">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Customers</button>
+      <button class="ni" id="logoutBtn" style="margin-top:12px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ef4444"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span style="color:#ef4444">Sign Out</span></button>
+    </nav>
+    <div class="sb-up">
+      <div class="up-t">&#9733; Admin Panel</div>
+      <p class="up-d">All changes are live on the storefront instantly.</p>
+      <button class="up-btn" onclick="resetToDefaults()">&#8635; Reset to Defaults</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="hdr">
+      <div class="hdr-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="hdrSearch" placeholder="Quick search products..."/>
+      </div>
+      <div class="hsp"></div>
+      <div class="hacts">
+        <a href="collection.html" target="_blank" class="hib" title="View storefront">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <div class="hav">
+          <div class="avc" id="hdrAvatar">A</div>
+          <div><div class="avn" id="hdrName">Admin</div><div class="avr">Super Admin</div></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="pg">
+      <div class="bc">
+        <a href="admin.html">Dashboard</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>Products</span>
+      </div>
+      <div class="pgh">
+        <div>
+          <div class="pgt">Products</div>
+          <div class="pgs">Changes are live instantly on the storefront</div>
+        </div>
+        <div class="pgh-btns">
+          <button class="btn btn-ghost" onclick="exportCSV()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+          <button class="btn btn-primary" onclick="openAddModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Product
+          </button>
+        </div>
+      </div>
+
+      <div class="srow">
+        <div class="sc">
+          <div class="sci-wrap" style="background:rgba(189,252,36,.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#bdfc24" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <div class="sc-info"><div class="sc-lbl">Total Products</div><div class="sc-val" id="statTotal">0</div><div class="sc-sub">In catalogue</div></div>
+        </div>
+        <div class="sc">
+          <div class="sci-wrap" style="background:rgba(34,197,94,.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="sc-info"><div class="sc-lbl">Active</div><div class="sc-val" id="statActive">0</div><div class="sc-sub">Visible to users</div></div>
+        </div>
+        <div class="sc">
+          <div class="sci-wrap" style="background:rgba(245,158,11,.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+          </div>
+          <div class="sc-info"><div class="sc-lbl">Low Stock</div><div class="sc-val" id="statLow">0</div><div class="sc-sub">10 or fewer units</div></div>
+        </div>
+        <div class="sc">
+          <div class="sci-wrap" style="background:rgba(239,68,68,.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+          <div class="sc-info"><div class="sc-lbl">Out of Stock</div><div class="sc-val" id="statOut">0</div><div class="sc-sub">Hidden from users</div></div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search name, SKU..."/>
+        </div>
+        <select class="fsel" id="filterCat"><option value="">All Categories</option><option>Running</option><option>Training</option><option>Basketball</option><option>Lifestyle</option><option>Hiking</option></select>
+        <select class="fsel" id="filterGender"><option value="">All Genders</option><option value="men">Men</option><option value="women">Women</option><option value="unisex">Unisex</option></select>
+        <select class="fsel" id="filterStatus"><option value="">All Status</option><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
+        <select class="fsel" id="filterFeat"><option value="">All</option><option value="yes">Featured Only</option></select>
+        <button class="reset-btn" onclick="resetFilters()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>Reset
+        </button>
+        <div class="toolbar-right">
+          <select class="fsel" id="sortBy">
+            <option value="default">Sort: Default</option>
+            <option value="name_asc">Name A-Z</option><option value="name_desc">Name Z-A</option>
+            <option value="price_asc">Price Low-High</option><option value="price_desc">Price High-Low</option>
+            <option value="stock_asc">Stock Low-High</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox" class="cb" id="selectAll" onchange="document.querySelectorAll('.row-cb').forEach(c=>c.checked=this.checked)"/></th>
+              <th>Product</th><th>SKU</th><th>Category</th><th>Gender</th><th>Price</th><th>Stock</th><th>Status</th><th>Featured</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="prodBody"></tbody>
+        </table>
+        <div class="pg-bar">
+          <div class="pg-info" id="pgInfo">-</div>
+          <div class="pg-right">
+            <select class="per-sel" id="perPage"><option value="10">10 / page</option><option value="20">20 / page</option><option value="50">50 / page</option></select>
+            <div class="pg-btns" id="pgBtns"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="mlo" id="prodModal">
+  <div class="mo">
+    <div class="mo-hdr">
+      <div class="mo-title" id="moTitle">Add Product</div>
+      <button class="mo-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="mo-body">
+      <input type="hidden" id="editIdx"/>
+      <div class="fg">
+        <div class="fgrp full"><label class="flbl">Product Name *</label><input type="text" class="finp" id="fName" placeholder="e.g. Nova Surge X2"/></div>
+        <div class="fgrp"><label class="flbl">SKU *</label><input type="text" class="finp" id="fSKU" placeholder="NOVA-SX-013"/></div>
+        <div class="fgrp"><label class="flbl">Category</label>
+          <select class="finp" id="fCat"><option>Running</option><option>Training</option><option>Basketball</option><option>Lifestyle</option><option>Hiking</option></select></div>
+        <div class="fgrp"><label class="flbl">Gender</label>
+          <select class="finp" id="fGender"><option value="men">Men</option><option value="women">Women</option><option value="unisex">Unisex</option></select></div>
+        <div class="fgrp"><label class="flbl">Price (Rs.) *</label><input type="number" class="finp" id="fPrice" placeholder="6999" min="0"/></div>
+        <div class="fgrp"><label class="flbl">Original Price (Rs.)</label><input type="number" class="finp" id="fOldPrice" placeholder="7999"/></div>
+        <div class="fgrp"><label class="flbl">Stock Qty *</label><input type="number" class="finp" id="fStock" placeholder="50" min="0"/></div>
+        <div class="fgrp"><label class="flbl">Status</label>
+          <select class="finp" id="fStatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
+        <div class="fgrp full"><label class="flbl">Available Sizes (comma-separated)</label><input type="text" class="finp" id="fSizes" placeholder="7, 8, 9, 10, 11"/></div>
+        <div class="fgrp"><label class="flbl">Color</label><input type="text" class="finp" id="fColor" placeholder="white"/></div>
+        <div class="fgrp"><label class="flbl">Featured</label>
+          <select class="finp" id="fFeatured"><option value="false">No</option><option value="true">Yes</option></select></div>
+        <div class="fgrp full"><label class="flbl">Description</label><input type="text" class="finp" id="fDesc" placeholder="Men's Running Shoes"/></div>
+        <div class="fgrp full">
+          <label class="flbl">Image URL</label>
+          <input type="text" class="finp" id="fImg" placeholder="assets/images/product_surge.png" oninput="updateImgPrev(this.value)"/>
+          <div class="img-preview"><img id="imgPrev" src="" alt="" onerror="this.style.display='none'" onload="this.style.display='block'" style="display:none"/></div>
+        </div>
+      </div>
+    </div>
+    <div class="mo-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="clo" id="confirmDel">
+  <div class="cbox">
+    <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
+    <div class="ct">Delete Product?</div>
+    <div class="cd" id="delMsg">This product will be permanently removed.</div>
+    <div class="cbtns"><button class="cc" onclick="closeConfirm()">Cancel</button><button class="cok" id="confirmDelBtn">Delete</button></div>
+  </div>
+</div>
+
+<!-- CONFIRM RESET -->
+<div class="clo" id="confirmReset">
+  <div class="cbox">
+    <div class="ci" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+    </div>
+    <div class="ct">Reset Catalogue?</div>
+    <div class="cd">Restore all 12 original products and remove any custom additions. Cannot be undone.</div>
+    <div class="cbtns"><button class="cc" onclick="closeResetConfirm()">Cancel</button><button class="cok cok-warn" onclick="doReset()">Reset Now</button></div>
+  </div>
+</div>
+
+<div id="adToast"></div>
+
+<script>
+/* AUTH */
+(function(){
+  const s=localStorage.getItem('nova_admin_session');
+  if(!s){window.location.href='admin-login.html';return;}
+  try{const d=JSON.parse(s);document.getElementById('hdrName').textContent=d.name||'Admin';document.getElementById('hdrAvatar').textContent=(d.name||'A')[0].toUpperCase();}catch(e){}
+})();
+document.getElementById('logoutBtn').addEventListener('click',()=>{localStorage.removeItem('nova_admin_session');window.location.href='admin-login.html';});
+
+/* CANONICAL DATA */
+const CANONICAL=[
+  {id:'nova-surge-x1',name:'Nova Surge X1',category:'Running',gender:'men',size:[8,9,10,11],price:8999,oldPrice:null,img:'assets/images/product_surge.png',stars:5,reviews:128,new:false,bestseller:true,discount:0,color:'orange',features:['air','lightweight','breathable'],status:'Active',stock:22,featured:true,sku:'NOVA-SX-001',desc:"Men's Running Shoes"},
+  {id:'nova-phantom',name:'Nova Phantom',category:'Running',gender:'men',size:[7,8,9,10],price:7999,oldPrice:null,img:'assets/images/product_phantom.png',stars:5,reviews:96,new:false,bestseller:true,discount:0,color:'white',features:['lightweight','breathable'],status:'Active',stock:18,featured:true,sku:'NOVA-PH-002',desc:"Men's Running Shoes"},
+  {id:'nova-air-pro',name:'Nova Air Pro',category:'Training',gender:'unisex',size:[6,7,8,9,10],price:8499,oldPrice:null,img:'assets/images/product_air_pro.png',stars:5,reviews:76,new:true,bestseller:false,discount:0,color:'white',features:['air','breathable','grip'],status:'Active',stock:30,featured:false,sku:'NOVA-AP-003',desc:'Unisex Training Shoes'},
+  {id:'nova-edge',name:'Nova Edge',category:'Basketball',gender:'men',size:[9,10,11,12,13],price:6999,oldPrice:null,img:'assets/images/product_edge.png',stars:5,reviews:88,new:false,bestseller:false,discount:0,color:'red',features:['grip'],status:'Active',stock:14,featured:false,sku:'NOVA-EG-004',desc:"Men's Basketball Shoes"},
+  {id:'nova-boost',name:'Nova Boost',category:'Running',gender:'men',size:[8,9,10],price:7499,oldPrice:8299,img:'assets/images/product_boost.png',stars:5,reviews:142,new:false,bestseller:false,discount:10,color:'blue',features:['air','lightweight'],status:'Active',stock:25,featured:false,sku:'NOVA-BO-005',desc:"Men's Running Shoes"},
+  {id:'nova-drift',name:'Nova Drift',category:'Lifestyle',gender:'unisex',size:[6,7,8,9,10,11],price:5499,oldPrice:null,img:'assets/images/product_drift.png',stars:5,reviews:58,new:true,bestseller:false,discount:0,color:'green',features:['lightweight','breathable'],status:'Active',stock:9,featured:false,sku:'NOVA-DR-006',desc:'Unisex Lifestyle Shoes'},
+  {id:'nova-lite',name:'Nova Lite',category:'Training',gender:'women',size:[6,7,8,9],price:4999,oldPrice:null,img:'assets/images/product_lite.png',stars:5,reviews:64,new:false,bestseller:false,discount:0,color:'purple',features:['lightweight'],status:'Active',stock:35,featured:false,sku:'NOVA-LT-007',desc:"Women's Training Shoes"},
+  {id:'nova-trail',name:'Nova Trail',category:'Hiking',gender:'men',size:[7,8,9,10,11,12],price:6799,oldPrice:7999,img:'assets/images/product_trail.png',stars:5,reviews:41,new:false,bestseller:false,discount:15,color:'white',features:['grip','waterproof'],status:'Active',stock:0,featured:false,sku:'NOVA-TR-008',desc:"Men's Hiking Shoes"},
+  {id:'nova-motion',name:'Nova Motion',category:'Running',gender:'women',size:[6,7,8],price:6299,oldPrice:null,img:'assets/images/product_motion.png',stars:5,reviews:33,new:false,bestseller:false,discount:0,color:'red',features:['air','breathable'],status:'Active',stock:12,featured:false,sku:'NOVA-MO-009',desc:"Women's Running Shoes"},
+  {id:'nova-flow',name:'Nova Flow',category:'Lifestyle',gender:'women',size:[6,7,8,9],price:5999,oldPrice:null,img:'assets/images/product_flow.png',stars:5,reviews:27,new:true,bestseller:false,discount:0,color:'yellow',features:['lightweight','breathable'],status:'Active',stock:20,featured:false,sku:'NOVA-FL-010',desc:"Women's Lifestyle Shoes"},
+  {id:'nova-carbon',name:'Nova Carbon',category:'Running',gender:'women',size:[8,9,10,11,12],price:10999,oldPrice:null,img:'assets/images/product_carbon.png',stars:5,reviews:19,new:false,bestseller:false,discount:0,color:'purple',features:['air','lightweight','breathable'],status:'Active',stock:0,featured:true,sku:'NOVA-CA-011',desc:"Women's Running Shoes"},
+  {id:'nova-flex',name:'Nova Flex',category:'Training',gender:'unisex',size:[6,7,8,9,10],price:4799,oldPrice:5499,img:'assets/images/product_flex.png',stars:5,reviews:22,new:false,bestseller:false,discount:0,color:'purple',features:['lightweight','grip'],status:'Active',stock:11,featured:false,sku:'NOVA-FX-012',desc:'Unisex Training Shoes'}
+];
+
+function loadProducts(){try{const r=localStorage.getItem('nova_admin_products');if(!r){localStorage.setItem('nova_admin_products',JSON.stringify(CANONICAL));return JSON.parse(JSON.stringify(CANONICAL));}return JSON.parse(r);}catch(e){return JSON.parse(JSON.stringify(CANONICAL));}}
+function saveProducts(l){localStorage.setItem('nova_admin_products',JSON.stringify(l));}
+let products=loadProducts();
+let searchQ='',filterCat='',filterGender='',filterStatus='',filterFeat='',sortKey='default',currentPage=1,perPage=10;
+
+function filtered(){
+  let l=[...products];
+  const q=searchQ.toLowerCase();
+  if(q)l=l.filter(p=>p.name.toLowerCase().includes(q)||(p.sku||'').toLowerCase().includes(q));
+  if(filterCat)l=l.filter(p=>p.category===filterCat);
+  if(filterGender)l=l.filter(p=>p.gender===filterGender);
+  if(filterStatus)l=l.filter(p=>(p.status||'Active')===filterStatus);
+  if(filterFeat)l=l.filter(p=>p.featured);
+  if(sortKey==='name_asc')l.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sortKey==='name_desc')l.sort((a,b)=>b.name.localeCompare(a.name));
+  else if(sortKey==='price_asc')l.sort((a,b)=>a.price-b.price);
+  else if(sortKey==='price_desc')l.sort((a,b)=>b.price-a.price);
+  else if(sortKey==='stock_asc')l.sort((a,b)=>a.stock-b.stock);
+  return l;
+}
+
+function updateStats(){
+  document.getElementById('statTotal').textContent=products.length;
+  document.getElementById('statActive').textContent=products.filter(p=>p.status!=='Inactive').length;
+  document.getElementById('statLow').textContent=products.filter(p=>p.stock>0&&p.stock<=10).length;
+  document.getElementById('statOut').textContent=products.filter(p=>p.stock===0).length;
+  document.getElementById('sbTotalBadge').textContent=products.length;
+}
+
+function stkClass(p){if(p.stock===0)return 'stk-out';if(p.stock<=10)return 'stk-low';return 'stk-ok';}
+function statusBadge(p){
+  if(p.stock===0)return '<span class="badge badge-out">Out of Stock</span>';
+  return (p.status||'Active')==='Inactive'?'<span class="badge badge-inactive">Inactive</span>':'<span class="badge badge-active">Active</span>';
+}
+
+function renderTable(){
+  updateStats();
+  const list=filtered(),total=list.length,totalPages=Math.max(1,Math.ceil(total/perPage));
+  if(currentPage>totalPages)currentPage=1;
+  const start=(currentPage-1)*perPage,page=list.slice(start,start+perPage);
+  const body=document.getElementById('prodBody');
+  if(!page.length){
+    body.innerHTML='<tr><td colspan="10"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><h3>No products found</h3><p>Try adjusting your filters.</p><button class="btn btn-primary" onclick="openAddModal()">+ Add Product</button></div></td></tr>';
+  } else {
+    body.innerHTML=page.map(p=>{
+      const ri=products.indexOf(p);
+      const sz=Array.isArray(p.size)?p.size.join(', '):(p.size||'-');
+      const disc=p.oldPrice?Math.round((1-p.price/p.oldPrice)*100):(p.discount||0);
+      const imgHtml=p.img?`<img src="${p.img}" alt="" onerror="this.parentElement.textContent='👟'"/>`:'👟';
+      return `<tr>
+        <td><input type="checkbox" class="cb row-cb"/></td>
+        <td><div class="prod-cell"><div class="prod-img">${imgHtml}</div><div><div class="prod-name" title="${p.name}">${p.name}</div><div class="prod-sub">${sz}</div></div></div></td>
+        <td style="color:var(--txf);font-size:11.5px">${p.sku||'-'}</td>
+        <td>${p.category}</td>
+        <td style="text-transform:capitalize">${p.gender||'unisex'}</td>
+        <td><div class="price-now">Rs.${Number(p.price).toLocaleString()}</div>${p.oldPrice?`<div class="price-old">Rs.${Number(p.oldPrice).toLocaleString()}</div>`:''} ${disc>0?`<span class="disc-pill">-${disc}%</span>`:''}</td>
+        <td><span class="${stkClass(p)}">${p.stock}</span></td>
+        <td>${statusBadge(p)}</td>
+        <td><button class="toggle ${p.featured?'on':''}" onclick="toggleFeatured(${ri},this)"></button></td>
+        <td><div class="actions">
+          <button class="abn" onclick="openEditModal(${ri})" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="abn" onclick="duplicateProduct(${ri})" title="Duplicate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+          <button class="abn" onclick="toggleStatus(${ri})" title="Toggle Status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg></button>
+          <button class="abn del" onclick="confirmDelete(${ri})" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+        </div></td>
+      </tr>`;
+    }).join('');
+  }
+  document.getElementById('pgInfo').textContent=total===0?'No products found':`Showing ${start+1}-${Math.min(start+perPage,total)} of ${total}`;
+  const pb=document.getElementById('pgBtns');pb.innerHTML='';
+  const pv=document.createElement('button');pv.className='pgb';pv.innerHTML='&#8249;';pv.disabled=currentPage===1;pv.onclick=()=>{currentPage--;renderTable();};pb.appendChild(pv);
+  const mk=n=>{const b=document.createElement('button');b.className='pgb'+(n===currentPage?' act':'');b.textContent=n;b.onclick=()=>{currentPage=n;renderTable();};return b;};
+  if(totalPages<=7){for(let i=1;i<=totalPages;i++)pb.appendChild(mk(i));}
+  else{pb.appendChild(mk(1));if(currentPage>3){const d=document.createElement('span');d.className='pg-dots';d.textContent='...';pb.appendChild(d);}for(let i=Math.max(2,currentPage-1);i<=Math.min(totalPages-1,currentPage+1);i++)pb.appendChild(mk(i));if(currentPage<totalPages-2){const d=document.createElement('span');d.className='pg-dots';d.textContent='...';pb.appendChild(d);}pb.appendChild(mk(totalPages));}
+  const nx=document.createElement('button');nx.className='pgb';nx.innerHTML='&#8250;';nx.disabled=currentPage===totalPages;nx.onclick=()=>{currentPage++;renderTable();};pb.appendChild(nx);
+}
+
+document.getElementById('searchInput').addEventListener('input',e=>{searchQ=e.target.value;currentPage=1;renderTable();});
+document.getElementById('hdrSearch').addEventListener('input',e=>{searchQ=e.target.value;document.getElementById('searchInput').value=e.target.value;currentPage=1;renderTable();});
+['filterCat','filterGender','filterStatus','filterFeat'].forEach(id=>document.getElementById(id).addEventListener('change',e=>{window[id.replace('filter','filter')]=e.target.value;if(id==='filterCat')filterCat=e.target.value;if(id==='filterGender')filterGender=e.target.value;if(id==='filterStatus')filterStatus=e.target.value;if(id==='filterFeat')filterFeat=e.target.value;currentPage=1;renderTable();}));
+document.getElementById('sortBy').addEventListener('change',e=>{sortKey=e.target.value;renderTable();});
+document.getElementById('perPage').addEventListener('change',e=>{perPage=parseInt(e.target.value);currentPage=1;renderTable();});
+
+function resetFilters(){searchQ='';filterCat='';filterGender='';filterStatus='';filterFeat='';sortKey='default';currentPage=1;['searchInput','hdrSearch'].forEach(id=>document.getElementById(id).value='');['filterCat','filterGender','filterStatus','filterFeat'].forEach(id=>document.getElementById(id).value='');document.getElementById('sortBy').value='default';renderTable();}
+
+function toggleFeatured(idx,btn){products[idx].featured=!products[idx].featured;btn.classList.toggle('on',products[idx].featured);saveProducts(products);toast(products[idx].featured?`"${products[idx].name}" featured!`:`"${products[idx].name}" unfeatured.`);}
+function toggleStatus(idx){const p=products[idx];p.status=(p.status||'Active')==='Active'?'Inactive':'Active';saveProducts(products);renderTable();toast(`"${p.name}" is now ${p.status}.`,p.status==='Active'?'ok':'war');}
+function duplicateProduct(idx){const s=products[idx];const c={...s,id:s.id+'-copy-'+Date.now(),name:s.name+' (Copy)',sku:(s.sku||'')+'-C',featured:false,stock:0,status:'Inactive'};products.splice(idx+1,0,c);saveProducts(products);renderTable();toast(`"${c.name}" duplicated.`);}
+
+function updateImgPrev(v){const pv=document.getElementById('imgPrev');pv.src=v;pv.style.display=v?'block':'none';}
+function openAddModal(){document.getElementById('moTitle').textContent='Add Product';document.getElementById('editIdx').value='';['fName','fSKU','fDesc','fImg','fColor'].forEach(id=>document.getElementById(id).value='');['fPrice','fOldPrice','fStock'].forEach(id=>document.getElementById(id).value='');document.getElementById('fCat').value='Running';document.getElementById('fGender').value='men';document.getElementById('fStatus').value='Active';document.getElementById('fFeatured').value='false';document.getElementById('fSizes').value='7, 8, 9, 10';document.getElementById('fColor').value='white';document.getElementById('imgPrev').style.display='none';document.getElementById('prodModal').classList.add('open');}
+function openEditModal(idx){const p=products[idx];document.getElementById('moTitle').textContent='Edit: '+p.name;document.getElementById('editIdx').value=idx;document.getElementById('fName').value=p.name||'';document.getElementById('fSKU').value=p.sku||'';document.getElementById('fDesc').value=p.desc||'';document.getElementById('fImg').value=p.img||'';document.getElementById('fPrice').value=p.price||'';document.getElementById('fOldPrice').value=p.oldPrice||'';document.getElementById('fStock').value=p.stock??'';document.getElementById('fCat').value=p.category||'Running';document.getElementById('fGender').value=p.gender||'men';document.getElementById('fStatus').value=p.status==='Inactive'?'Inactive':'Active';document.getElementById('fFeatured').value=p.featured?'true':'false';document.getElementById('fColor').value=p.color||'';document.getElementById('fSizes').value=Array.isArray(p.size)?p.size.join(', '):(p.size||'7, 8, 9, 10');const pv=document.getElementById('imgPrev');if(p.img){pv.src=p.img;pv.style.display='block';}else pv.style.display='none';document.getElementById('prodModal').classList.add('open');}
+function closeModal(){document.getElementById('prodModal').classList.remove('open');}
+
+function saveProduct(){
+  const name=document.getElementById('fName').value.trim();
+  const sku=document.getElementById('fSKU').value.trim();
+  const price=parseFloat(document.getElementById('fPrice').value);
+  const stock=parseInt(document.getElementById('fStock').value)||0;
+  if(!name){toast('Product name is required.','err');return;}
+  if(!sku){toast('SKU is required.','err');return;}
+  if(!price||price<=0){toast('Valid price is required.','err');return;}
+  const oldPrice=parseFloat(document.getElementById('fOldPrice').value)||null;
+  const sizes=document.getElementById('fSizes').value.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n));
+  const disc=oldPrice?Math.round((1-price/oldPrice)*100):0;
+  const obj={id:sku.toLowerCase().replace(/[^a-z0-9]+/g,'-'),name,sku,desc:document.getElementById('fDesc').value.trim(),img:document.getElementById('fImg').value.trim(),category:document.getElementById('fCat').value,gender:document.getElementById('fGender').value,size:sizes.length?sizes:[7,8,9,10],color:document.getElementById('fColor').value.trim()||'white',price,oldPrice,discount:disc,stock,status:document.getElementById('fStatus').value,featured:document.getElementById('fFeatured').value==='true',features:['lightweight'],stars:5,reviews:0,new:false,bestseller:false};
+  const ei=document.getElementById('editIdx').value;
+  if(ei!==''){const orig=products[parseInt(ei)];obj.stars=orig.stars||5;obj.reviews=orig.reviews||0;obj.new=orig.new||false;obj.features=orig.features||['lightweight'];obj.bestseller=orig.bestseller||false;products[parseInt(ei)]=obj;toast(`"${name}" updated!`,'ok');}
+  else{obj.new=true;products.unshift(obj);toast(`"${name}" added!`,'ok');}
+  saveProducts(products);closeModal();renderTable();
+}
+
+let _dIdx=-1;
+function confirmDelete(idx){_dIdx=idx;document.getElementById('delMsg').textContent=`"${products[idx].name}" will be permanently removed.`;document.getElementById('confirmDel').classList.add('open');}
+function closeConfirm(){document.getElementById('confirmDel').classList.remove('open');_dIdx=-1;}
+document.getElementById('confirmDelBtn').addEventListener('click',()=>{if(_dIdx<0)return;const n=products[_dIdx].name;products.splice(_dIdx,1);saveProducts(products);closeConfirm();renderTable();toast(`"${n}" deleted.`,'err');});
+function resetToDefaults(){document.getElementById('confirmReset').classList.add('open');}
+function closeResetConfirm(){document.getElementById('confirmReset').classList.remove('open');}
+function doReset(){localStorage.setItem('nova_admin_products',JSON.stringify(CANONICAL));products=JSON.parse(JSON.stringify(CANONICAL));closeResetConfirm();resetFilters();toast('Catalogue reset to defaults.','ok');}
+
+function exportCSV(){const rows=[['Name','SKU','Category','Gender','Price','Old Price','Stock','Status','Featured'],...products.map(p=>[`"${p.name}"`,p.sku||'',p.category,p.gender||'unisex',p.price,p.oldPrice||'',p.stock,p.status||'Active',p.featured?'Yes':'No'].join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows],{type:'text/csv'}));a.download=`nova-products-${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('Exported as CSV!');}
+
+['prodModal','confirmDel','confirmReset'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id)){if(id==='prodModal')closeModal();else if(id==='confirmDel')closeConfirm();else closeResetConfirm();}});});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeConfirm();closeResetConfirm();}});
+
+let _tt;
+function toast(msg,type=''){const el=document.getElementById('adToast');const ic={ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',err:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',war:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>'};el.className=type?type:'';el.innerHTML=(ic[type]||ic['ok'])+msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
+
+renderTable();
+</script>
+</body>
+</html>

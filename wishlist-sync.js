@@ -129,6 +129,11 @@
     e.preventDefault();
     e.stopPropagation();
 
+    // Auth guard — must be logged in to use wishlist
+    if (typeof window.requireLogin === 'function') {
+      if (!window.requireLogin('Sign in to save items to your wishlist and access them anytime.')) return;
+    }
+
     const card = btn.closest('.product-card');
     if (!card) return;
 
@@ -184,6 +189,27 @@
   });
   window.addEventListener('cartUpdated', updateGlobalNavbarBadges);
 
+  // Global add-to-cart handler (for pages that don't load collection.js, e.g. index.html)
+  // collection.js has its own handler; this one covers all other pages.
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.add-to-cart-btn');
+    if (!btn) return;
+    // Skip if collection.js is already handling this (it defines cartState as an IIFE-scoped var)
+    if (window._collectionJsLoaded) return;
+    e.preventDefault();
+    // Auth guard
+    if (typeof window.requireLogin === 'function') {
+      if (!window.requireLogin('Sign in to add items to your cart and start shopping.')) return;
+    }
+    // Add to cart
+    cartState.add(btn.dataset.id, btn.dataset.name, btn.dataset.price, btn.dataset.img, 9);
+    // Animate button
+    btn.style.transform = 'scale(0.85)';
+    setTimeout(() => { btn.style.transform = ''; }, 150);
+    // Show toast feedback
+    showToast(`Added "${btn.dataset.name || 'item'}" to your cart!`);
+  });
+
   // Initialize Navbar badges and heart icon states on page load
   updateGlobalNavbarBadges();
   syncProductHeartStates();
@@ -202,6 +228,24 @@
      WISHLIST PAGE DYNAMIC RENDERER & INTERACTIVE LOGIC
      ========================================================= */
   if (window.location.pathname.endsWith('wishlist.html')) {
+
+    // Auth guard — must be logged in to view wishlist page
+    if (!localStorage.getItem('nova_user')) {
+      // Show a message in the page before requireLogin is available
+      document.addEventListener('DOMContentLoaded', () => {
+        // Use requireLogin once preloader.js has set it up
+        const tryGuard = () => {
+          if (typeof window.requireLogin === 'function') {
+            window.requireLogin('Sign in to view your saved wishlist items.');
+          } else {
+            // Fallback if preloader.js hasn't loaded yet
+            window.location.href = 'login.html';
+          }
+        };
+        // Small delay to ensure preloader.js has run
+        setTimeout(tryGuard, 100);
+      });
+    }
     
     const container = document.getElementById('wishlistItemsContainer');
     const subtitle = document.getElementById('wishlistSubtitle');
@@ -228,17 +272,7 @@
             </div>
           `;
           
-          // Re-init magnetic button for the empty state link
-          const shopBtn = layoutGrid.querySelector('[data-magnetic]');
-          if (shopBtn && typeof gsap !== 'undefined') {
-            shopBtn.addEventListener('mousemove', (e) => {
-              const r = shopBtn.getBoundingClientRect();
-              gsap.to(shopBtn, { x: (e.clientX - r.left - r.width / 2) * 0.35, y: (e.clientY - r.top - r.height / 2) * 0.35, duration: 0.3, ease: 'power2.out' });
-            });
-            shopBtn.addEventListener('mouseleave', () => {
-              gsap.to(shopBtn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
-            });
-          }
+
         }
         if (subtitle) subtitle.textContent = '0 items saved for later';
         return;
