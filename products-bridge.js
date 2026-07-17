@@ -203,9 +203,40 @@
   }
 
   /* ── 6. Page detection and rendering ────────────────────────── */
-  function boot() {
-    const allProducts = getProducts();
-    const activeProdcuts = allProducts.filter(p => p.status !== 'Inactive' && p.stock > 0);
+  async function boot() {
+    let allProducts = [];
+    try {
+      const data = await window.novaFetch('/products?limit=100');
+      if (data && data.success && data.products) {
+        allProducts = data.products.map(p => ({
+          id: p._id,
+          name: p.name,
+          category: p.category,
+          gender: p.gender,
+          size: (p.sizes || []).map(s => s.size),
+          price: p.price,
+          oldPrice: p.oldPrice || null,
+          img: (p.images && p.images.length) ? p.images[0] : 'assets/images/product_surge.png',
+          stars: (p.rating && p.rating.average) || 5,
+          reviews: (p.rating && p.rating.count) || 0,
+          new: (p.tags || []).includes('new'),
+          bestseller: (p.tags || []).includes('bestseller'),
+          discount: p.discountPercent || 0,
+          color: p.color,
+          features: p.features || [],
+          status: p.isActive ? 'Active' : 'Inactive',
+          stock: (p.sizes || []).reduce((acc, s) => acc + s.stock, 0),
+          featured: p.isFeatured || (p.tags || []).includes('featured') || false,
+          sku: p.sku || '',
+          desc: p.description || ''
+        }));
+      }
+    } catch (e) {
+      console.warn("Backend products fetch failed, using local fallback", e);
+      allProducts = getProducts();
+    }
+
+    const activeProducts = allProducts.filter(p => p.status !== 'Inactive' && p.stock > 0);
 
     const page = document.body.getAttribute('data-page') ||
       (location.pathname.includes('men') ? 'men' :
@@ -215,28 +246,28 @@
     /* --- men.html: replace static bestsellers row --- */
     const menBestRow = document.querySelector('.bestsellers-row');
     if (menBestRow && (page === 'men' || location.pathname.includes('men'))) {
-      const menProds = activeProdcuts.filter(p => p.gender === 'men' || p.gender === 'unisex');
+      const menProds = activeProducts.filter(p => p.gender === 'men' || p.gender === 'unisex');
       renderIntoContainer(menBestRow, menProds, 5);
     }
 
     /* --- men.html: new arrivals section (if exists) --- */
     const menNewRow = document.querySelector('.new-arrivals-row');
     if (menNewRow && (page === 'men' || location.pathname.includes('men'))) {
-      const newMen = activeProdcuts.filter(p => (p.gender === 'men' || p.gender === 'unisex') && p.new);
+      const newMen = activeProducts.filter(p => (p.gender === 'men' || p.gender === 'unisex') && p.new);
       renderIntoContainer(menNewRow, newMen, 4);
     }
 
     /* --- women.html: replace static product rows --- */
     const womenBestRow = document.querySelector('.women-bestsellers-row, .bestsellers-row');
     if (womenBestRow && location.pathname.includes('women')) {
-      const womenProds = activeProdcuts.filter(p => p.gender === 'women' || p.gender === 'unisex');
+      const womenProds = activeProducts.filter(p => p.gender === 'women' || p.gender === 'unisex');
       renderIntoContainer(womenBestRow, womenProds, 6);
     }
 
     /* --- index.html: featured section (data-bridge="featured") --- */
     const featuredRow = document.querySelector('[data-bridge="featured"]');
     if (featuredRow) {
-      const featured = activeProdcuts.filter(p => p.featured);
+      const featured = activeProducts.filter(p => p.featured || p.bestseller);
       renderIntoContainer(featuredRow, featured, 4);
     }
 
@@ -244,7 +275,7 @@
     document.querySelectorAll('[data-bridge="products"]').forEach(el => {
       const genderFilter = el.getAttribute('data-gender') || '';
       const limit = parseInt(el.getAttribute('data-limit')) || 8;
-      let list = activeProdcuts;
+      let list = activeProducts;
       if (genderFilter) list = list.filter(p => p.gender === genderFilter || p.gender === 'unisex');
       renderIntoContainer(el, list, limit);
     });

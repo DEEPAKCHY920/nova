@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="animations.css" />
   <script>window.disablePreloaderAutoRun = true;</script>
   <script src="preloader.js"></script>
+  <script src="api-config.js"></script>
+  <script src="wishlist-sync.js"></script>
 
   <style>
     /* ============================================================
@@ -388,6 +390,19 @@
       .logout-btn {
         width: 100%;
         text-align: center;
+      }
+      .dashboard-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 4px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border-color);
+        -webkit-overflow-scrolling: touch;
+      }
+      .tab-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        flex-shrink: 0;
       }
     }
 
@@ -1479,46 +1494,47 @@
         const update = (now) => {
           const elapsed = now - start;
           const progress = Math.min(elapsed / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
-          el.textContent = Math.round(eased * target).toLocaleString();
-          if (progress < 1) requestAnimationFrame(update);
-        };
-        requestAnimationFrame(update);
-      }
-
-      // User session details loader
+                // User session details loader
       let user = null;
-      function loadUser() {
+      async function loadUser() {
+        const token = localStorage.getItem('nova_user_token');
+        if (!token) {
+          window.location.href = 'login.html';
+          return;
+        }
+
         try {
-          user = JSON.parse(localStorage.getItem('nova_user'));
-        } catch (e) {
-          user = null;
+          const data = await window.novaFetch('/auth/me');
+          if (data && data.success && data.user) {
+            user = data.user;
+            localStorage.setItem('nova_user', JSON.stringify(user));
+          }
+        } catch (err) {
+          console.error("Fetch me failed, using local user cached details", err);
+          try {
+            user = JSON.parse(localStorage.getItem('nova_user'));
+          } catch(e) {}
         }
 
         if (!user) {
-          // Fallback demo user
-          user = {
-            name: 'Alex Vance',
-            email: 'alex.vance@nova.com',
-            tier: 'Black Elite',
-            joined: 'July 2026',
-            points: 1250
-          };
-          localStorage.setItem('nova_user', JSON.stringify(user));
+          window.location.href = 'login.html';
+          return;
         }
 
         // Apply profile values
         document.getElementById('profileName').textContent = user.name;
-        document.getElementById('profileTier').textContent = user.tier;
-        document.getElementById('profileJoined').textContent = `Member since ${user.joined}`;
+        document.getElementById('profileTier').textContent = user.role === 'admin' ? 'Studio Admin' : 'Bronze Member';
+        const joinedDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : 'July 2026';
+        document.getElementById('profileJoined').textContent = `Member since ${joinedDate}`;
         document.getElementById('avatarDisplay').textContent = user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
 
         // loyalty details
         const pointsEl = document.getElementById('loyaltyPointsVal');
-        animateCounter(pointsEl, user.points, 1400);
+        const mockPoints = 1250;
+        animateCounter(pointsEl, mockPoints, 1400);
         const nextTierPoints = 2000;
-        const remaining = Math.max(0, nextTierPoints - user.points);
-        const progressPct = Math.min(100, (user.points / nextTierPoints) * 100);
+        const remaining = Math.max(0, nextTierPoints - mockPoints);
+        const progressPct = Math.min(100, (mockPoints / nextTierPoints) * 100);
         document.getElementById('loyaltyBarFill').style.width = progressPct + '%';
         document.getElementById('loyaltyTierMsg').textContent = remaining > 0 
           ? `${remaining.toLocaleString()} points to unlock Black Diamond drop tier.` 
@@ -1527,46 +1543,67 @@
         // settings form pre-fill
         document.getElementById('settingsName').value = user.name;
         document.getElementById('settingsEmail').value = user.email;
-        document.getElementById('settingsPhone').value = user.phone || '+91 98765 43210';
+        document.getElementById('settingsPhone').value = user.phone || '';
       }
 
       // Settings updates
       const settingsForm = document.getElementById('settingsForm');
       const settingsMsg = document.getElementById('settingsMsg');
-      settingsForm.addEventListener('submit', (e) => {
+      settingsForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        user.name = document.getElementById('settingsName').value;
-        user.email = document.getElementById('settingsEmail').value;
-        user.phone = document.getElementById('settingsPhone').value;
+        const name = document.getElementById('settingsName').value.trim();
+        const phone = document.getElementById('settingsPhone').value.trim();
 
-        localStorage.setItem('nova_user', JSON.stringify(user));
-        loadUser();
+        try {
+          const data = await window.novaFetch('/auth/me', {
+            method: 'PUT',
+            body: JSON.stringify({ name, phone })
+          });
 
-        settingsMsg.style.display = 'block';
-        settingsMsg.textContent = 'Profile successfully updated!';
-        setTimeout(() => {
-          settingsMsg.style.display = 'none';
-        }, 3000);
+          if (data.success) {
+            settingsMsg.style.display = 'block';
+            settingsMsg.textContent = 'Profile successfully updated!';
+            await loadUser();
+            setTimeout(() => {
+              settingsMsg.style.display = 'none';
+            }, 3000);
+          }
+        } catch (err) {
+          alert(err.message || 'Update failed.');
+        }
       });
 
       // Address Book Loader
       function loadAddress() {
-        const orders = JSON.parse(localStorage.getItem('nova_orders')) || [];
-        if (orders.length > 0) {
-          const lastOrder = orders[orders.length - 1];
-          const addr = lastOrder.shippingAddress;
-          document.getElementById('addressName').textContent = `${addr.firstName} ${addr.lastName}`;
-          document.getElementById('addressStreet').textContent = `${addr.street} ${addr.apartment || ''}`;
-          document.getElementById('addressCityState').textContent = `${addr.city}, ${addr.state}, ${addr.postalCode}`;
+        if (user && user.addresses && user.addresses.length > 0) {
+          const addr = user.addresses[0];
+          document.getElementById('addressName').textContent = addr.fullName;
+          document.getElementById('addressStreet').textContent = addr.line1;
+          document.getElementById('addressCityState').textContent = `${addr.city}, ${addr.state}, ${addr.pincode}`;
         } else {
-          document.getElementById('addressName').textContent = user.name;
+          document.getElementById('addressName').textContent = user ? user.name : 'No address saved yet';
+          document.getElementById('addressStreet').textContent = 'Please place an order to register address details.';
+          document.getElementById('addressCityState').textContent = '';
         }
       }
 
       // Orders Loader
-      function loadOrders() {
+      async function loadOrders() {
         const ordersList = document.getElementById('dashboardOrdersList');
-        const orders = JSON.parse(localStorage.getItem('nova_orders')) || [];
+        if (!ordersList) return;
+        
+        let orders = [];
+        const token = localStorage.getItem('nova_user_token');
+        if (token) {
+          try {
+            const data = await window.novaFetch('/orders/mine');
+            if (data.success && data.orders) {
+              orders = data.orders;
+            }
+          } catch (err) {
+            console.error("Load orders from API failed", err);
+          }
+        }
 
         if (orders.length === 0) {
           ordersList.innerHTML = `
@@ -1578,38 +1615,44 @@
           return;
         }
 
-        ordersList.innerHTML = orders.map((order, idx) => {
-          // Status timeline width percentage calculation
+        ordersList.innerHTML = orders.map((order) => {
           let progressWidth = '0%';
-          if (order.status === 'Processing') progressWidth = '33%';
-          if (order.status === 'Shipped') progressWidth = '66%';
-          if (order.status === 'Delivered') progressWidth = '100%';
+          if (order.orderStatus === 'placed' || order.orderStatus === 'confirmed') progressWidth = '33%';
+          if (order.orderStatus === 'processing' || order.orderStatus === 'shipped') progressWidth = '66%';
+          if (order.orderStatus === 'delivered') progressWidth = '100%';
 
-          const itemsHtml = order.items.map(item => `
-            <div class="order-item-row">
-              <img class="order-item-img" src="${item.img}" alt="${item.name}">
-              <div class="order-item-details">
-                <span class="order-item-name">${item.name}</span>
-                <span class="order-item-desc">Size ${item.size} × ${item.qty}</span>
+          const itemsHtml = (order.items || []).map(item => {
+            const priceNum = item.price || 8999;
+            const pName = item.product ? item.product.name : 'Nova Premium';
+            const pImg = (item.product && item.product.images && item.product.images.length) ? item.product.images[0] : 'assets/images/product_surge.png';
+            return `
+              <div class="order-item-row">
+                <img class="order-item-img" src="${pImg}" alt="${pName}">
+                <div class="order-item-details">
+                  <span class="order-item-name">${pName}</span>
+                  <span class="order-item-desc">Size ${item.size} × ${item.qty}</span>
+                </div>
+                <span class="order-item-price">₹${priceNum.toLocaleString()}</span>
               </div>
-              <span class="order-item-price">₹${item.price.toLocaleString()}</span>
-            </div>
-          `).join('');
+            `;
+          }).join('');
+
+          const orderDateStr = new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 
           return `
             <div class="order-card">
               <div class="order-card__header">
                 <div class="order-card__meta">
-                  <span class="order-card__id">Order ${order.id}</span>
-                  <span class="order-card__date">Placed on ${order.date}</span>
+                  <span class="order-card__id">Order #${order._id.substring(18).toUpperCase()}</span>
+                  <span class="order-card__date">Placed on ${orderDateStr}</span>
                 </div>
-                <span class="order-card__status status-${order.status.toLowerCase()}">${order.status}</span>
+                <span class="order-card__status status-${order.orderStatus.toLowerCase()}">${order.orderStatus}</span>
               </div>
               
               <div class="order-card__items">
                 ${itemsHtml}
               </div>
-
+    
               <!-- Tracking timeline -->
               <div class="tracking-timeline">
                 <div class="tracking-progress-line" style="width: ${progressWidth};"></div>
@@ -1617,33 +1660,34 @@
                   <div class="tracking-step__dot"></div>
                   <span class="tracking-step__label">Ordered</span>
                 </div>
-                <div class="tracking-step ${order.status === 'Processing' ? 'is-active' : 'is-complete'}">
+                <div class="tracking-step ${order.orderStatus !== 'placed' ? 'is-complete' : 'is-active'}">
                   <div class="tracking-step__dot"></div>
                   <span class="tracking-step__label">Processing</span>
                 </div>
-                <div class="tracking-step ${order.status === 'Shipped' ? 'is-active' : order.status === 'Delivered' ? 'is-complete' : ''}">
+                <div class="tracking-step ${(order.orderStatus === 'shipped' || order.orderStatus === 'delivered') ? 'is-complete' : order.orderStatus === 'processing' ? 'is-active' : ''}">
                   <div class="tracking-step__dot"></div>
                   <span class="tracking-step__label">Shipped</span>
                 </div>
-                <div class="tracking-step ${order.status === 'Delivered' ? 'is-active is-complete' : ''}">
+                <div class="tracking-step ${order.orderStatus === 'delivered' ? 'is-active is-complete' : ''}">
                   <div class="tracking-step__dot"></div>
                   <span class="tracking-step__label">Delivered</span>
                 </div>
               </div>
-
+    
               <div class="order-card__footer">
                 <span>Payment: <strong>${order.paymentMethod}</strong></span>
                 <span>Total Paid: <strong>₹${order.total.toLocaleString()}</strong></span>
               </div>
             </div>
           `;
-        }).reverse().join(''); // show newest orders first
+        }).reverse().join('');
       }
 
       // Wishlist Loader
-      function loadWishlist() {
+      async function loadWishlist() {
         const wishlistGrid = document.getElementById('dashboardWishlistGrid');
-        const wishlist = JSON.parse(localStorage.getItem('nova_wishlist')) || [];
+        if (!wishlistGrid) return;
+        const wishlist = await window.novaWishlistState.get();
 
         if (wishlist.length === 0) {
           wishlistGrid.innerHTML = `
@@ -1656,10 +1700,9 @@
         }
 
         wishlistGrid.innerHTML = wishlist.map(prod => {
-          const priceHtml = `₹${prod.price.toLocaleString()}`;
           return `
             <div class="product-card" data-id="${prod.id}">
-              <button class="wishlist-btn" aria-label="Remove from Wishlist" onclick="removeWishlistItem('${prod.id}')" style="color: var(--accent);">
+              <button class="wishlist-btn" aria-label="Remove from Wishlist" onclick="removeWishlistItem('${prod.id}', '${prod.name}')" style="color: var(--accent);">
                 <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
               </button>
               <div class="product-card__img-wrap" style="background: rgba(255,255,255,0.01);">
@@ -1669,7 +1712,7 @@
                 <h4 class="product-card__title" style="font-size: 14px; margin-bottom: 4px;">${prod.name}</h4>
                 <span class="product-card__category" style="font-size: 11px; margin-bottom: 8px;">${prod.category} Shoes</span>
                 <div class="product-card__footer" style="margin-top: 12px;">
-                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;">${priceHtml}</span>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;">${prod.price}</span>
                 </div>
               </div>
             </div>
@@ -1678,28 +1721,76 @@
       }
 
       // Expose remove item globally
-      window.removeWishlistItem = (id) => {
-        let wishlist = JSON.parse(localStorage.getItem('nova_wishlist')) || [];
-        wishlist = wishlist.filter(item => item.id !== id);
-        localStorage.setItem('nova_wishlist', JSON.stringify(wishlist));
-        loadWishlist();
-        // Dispatch custom sync event
-        window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+      window.removeWishlistItem = async (id, name) => {
+        await window.novaWishlistState.toggle({ id, name });
+        await loadWishlist();
       };
 
       // Logout handler
-      document.getElementById('logoutBtn').addEventListener('click', () => {
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        try {
+          await window.novaFetch('/auth/logout', { method: 'POST' });
+        } catch (e) {}
         localStorage.removeItem('nova_user');
+        localStorage.removeItem('nova_user_token');
         window.location.href = 'index.html';
       });
 
       // Initial boot
-      loadUser();
-      loadAddress();
-      loadOrders();
-      loadWishlist();
+      async function boot() {
+        await loadUser();
+        loadAddress();
+        await loadOrders();
+        await loadWishlist();
+      }
+      boot();
     });
   </script>
+
+  <!-- ============================= -->
+  <!-- MOBILE BOTTOM NAVIGATION      -->
+  <!-- ============================= -->
+  <div class="mobile-bottom-nav">
+    <a href="index.html" class="mobile-bottom-nav__item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>HOME</span>
+    </a>
+    <a href="collection.html" class="mobile-bottom-nav__item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>SHOP</span>
+    </a>
+    <a href="collection.html#categories" class="mobile-bottom-nav__item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+      <span>CATEGORIES</span>
+    </a>
+    <a href="wishlist.html" class="mobile-bottom-nav__item">
+      <div class="mobile-bottom-nav__icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <span class="mobile-bottom-nav__badge nav__wish-count" id="wishlistCountMobile">0</span>
+      </div>
+      <span>WISHLIST</span>
+    </a>
+    <a href="dashboard.html" class="mobile-bottom-nav__item is-active" id="mobileAccountLink">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      <span>ACCOUNT</span>
+    </a>
+  </div>
 </body>
 </html>
-

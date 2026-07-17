@@ -721,7 +721,7 @@
       </div>
     </div>
   </div>
-
+  <script src="api-config.js"></script>
   <script>
     // ============================================================
     // THEME TOGGLE
@@ -779,7 +779,7 @@
     const loginError = document.getElementById('loginError');
     const loginErrorText = document.getElementById('loginErrorText');
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('adminEmail').value.trim();
       const password = document.getElementById('adminPassword').value;
@@ -789,29 +789,36 @@
       signinBtn.classList.add('loading');
       loginError.classList.remove('show');
 
-      setTimeout(() => {
-        if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-          // Save admin session
+      try {
+        const data = await window.novaFetch('/auth/admin-login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password })
+        });
+
+        if (data.success) {
+          localStorage.setItem('nova_admin_token', data.token);
           const adminSession = {
-            email,
-            name: 'Admin User',
-            role: 'super_admin',
+            id: data.user.id || data.user._id,
+            email: data.user.email,
+            name: data.user.name,
+            role: data.user.role,
             loginTime: Date.now()
           };
+          
           if (remember) {
             localStorage.setItem('nova_admin_session', JSON.stringify(adminSession));
           } else {
             sessionStorage.setItem('nova_admin_session', JSON.stringify(adminSession));
           }
           window.location.href = 'admin.html';
-        } else {
-          signinBtn.classList.remove('loading');
-          loginErrorText.textContent = 'Invalid email or password. Please try again.';
-          loginError.classList.add('show');
-          document.getElementById('adminPassword').value = '';
-          document.getElementById('adminPassword').focus();
         }
-      }, 1200);
+      } catch (err) {
+        signinBtn.classList.remove('loading');
+        loginErrorText.textContent = err.message || 'Invalid email or password. Please try again.';
+        loginError.classList.add('show');
+        document.getElementById('adminPassword').value = '';
+        document.getElementById('adminPassword').focus();
+      }
     });
 
     // Clear error on input change

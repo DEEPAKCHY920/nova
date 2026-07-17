@@ -5,24 +5,64 @@
 (() => {
   'use strict';
 
-  // Helper: Read/Write localStorage Wishlist
-  const wishlistState = {
-    get() {
+  // Helper: Read/Write localStorage & Backend Wishlist
+  window.novaWishlistState = {
+    async get() {
+      const token = localStorage.getItem('nova_user_token');
+      if (token) {
+        try {
+          const data = await window.novaFetch('/wishlist');
+          if (data && data.success && data.wishlist) {
+            return data.wishlist.map(p => ({
+              id: p._id,
+              name: p.name,
+              category: p.category,
+              img: (p.images && p.images.length) ? p.images[0] : 'assets/images/product_surge.png',
+              price: `₹${p.price.toLocaleString()}`,
+              badge: '',
+              badgeClass: '',
+              size: 9,
+              color: p.color
+            }));
+          }
+        } catch (e) {
+          console.error("Fetch wishlist failed", e);
+        }
+      }
       try {
         return JSON.parse(localStorage.getItem('nova_wishlist')) || [];
       } catch (e) {
         return [];
       }
     },
-    save(list) {
+    async save(list) {
       localStorage.setItem('nova_wishlist', JSON.stringify(list));
       window.dispatchEvent(new CustomEvent('wishlistUpdated'));
     },
-    has(name) {
-      return this.get().some(item => item.name === name);
+    async has(name) {
+      const list = await this.get();
+      return list.some(item => item.name === name);
     },
-    toggle(item) {
-      let list = this.get();
+    async toggle(item) {
+      const token = localStorage.getItem('nova_user_token');
+      if (token) {
+        try {
+          const list = await this.get();
+          const exists = list.find(i => i.name === item.name);
+          if (exists) {
+            await window.novaFetch(`/wishlist/${item.id}`, { method: 'DELETE' });
+            window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+            return false;
+          } else {
+            await window.novaFetch(`/wishlist/${item.id}`, { method: 'POST' });
+            window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+            return true;
+          }
+        } catch (e) {
+          console.error("Toggle wishlist failed", e);
+        }
+      }
+      let list = await this.get();
       const idx = list.findIndex(i => i.name === item.name);
       let added = false;
       if (idx > -1) {
@@ -31,35 +71,111 @@
         list.push(item);
         added = true;
       }
-      this.save(list);
+      await this.save(list);
       return added;
     }
   };
 
   // Helper: Read/Write Cart count sync
-  const cartState = {
-    get() {
+  window.novaCartState = {
+    async get() {
+      const token = localStorage.getItem('nova_user_token');
+      if (token) {
+        try {
+          const data = await window.novaFetch('/cart');
+          if (data && data.success && data.cart) {
+            return data.cart.items.map(item => ({
+              id: item.product._id,
+              itemId: item._id,
+              name: item.product.name,
+              price: item.product.price,
+              img: item.product.image || 'assets/images/product_surge.png',
+              size: item.size,
+              qty: item.qty
+            }));
+          }
+        } catch (e) {
+          console.error("Fetch cart failed", e);
+        }
+      }
       try {
         return JSON.parse(localStorage.getItem('nova_cart')) || [];
       } catch (e) {
         return [];
       }
     },
-    save(cart) {
+    async save(cart) {
       localStorage.setItem('nova_cart', JSON.stringify(cart));
       window.dispatchEvent(new CustomEvent('cartUpdated'));
     },
-    add(id, name, price, img, size) {
-      const cart = this.get();
+    async add(id, name, price, img, size) {
+      const token = localStorage.getItem('nova_user_token');
+      if (token) {
+        try {
+          await window.novaFetch('/cart', {
+            method: 'POST',
+            body: JSON.stringify({ productId: id, size: size || 9, qty: 1 })
+          });
+          window.dispatchEvent(new CustomEvent('cartUpdated'));
+          return;
+        } catch (e) {
+          console.error("Add to cart failed", e);
+        }
+      }
+      const cart = await this.get();
       const existing = cart.find(item => item.id === id && item.size === size);
       if (existing) {
         existing.qty++;
       } else {
         cart.push({ id, name, price: Number(price), img, size: size || 9, qty: 1 });
       }
-      this.save(cart);
+      await this.save(cart);
+    },
+    async remove(id, size, itemId) {
+      const token = localStorage.getItem('nova_user_token');
+      if (token && itemId) {
+        try {
+          await window.novaFetch(`/cart/${itemId}`, { method: 'DELETE' });
+          window.dispatchEvent(new CustomEvent('cartUpdated'));
+          return;
+        } catch (e) {
+          console.error("Delete cart item failed", e);
+        }
+      }
+      const cart = await this.get();
+      const filtered = cart.filter(item => !(item.id === id && item.size === size));
+      await this.save(filtered);
+    },
+    async updateQty(id, size, itemId, change) {
+      const cart = await this.get();
+      const item = cart.find(i => i.id === id && i.size === size);
+      if (item) {
+        const newQty = item.qty + change;
+        if (newQty <= 0) {
+          await this.remove(id, size, itemId);
+          return;
+        }
+        const token = localStorage.getItem('nova_user_token');
+        if (token && itemId) {
+          try {
+            await window.novaFetch(`/cart/${itemId}`, {
+              method: 'PUT',
+              body: JSON.stringify({ qty: newQty })
+            });
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
+            return;
+          } catch (e) {
+            console.error("Update cart qty failed", e);
+          }
+        }
+        item.qty = newQty;
+        await this.save(cart);
+      }
     }
   };
+
+  const wishlistState = window.novaWishlistState;
+  const cartState = window.novaCartState;
 
   // Helper: Toast Message Notification (Dynamic Creation)
   function showToast(message) {
@@ -86,9 +202,9 @@
   }
 
   // Update Global Navbar Wishlist & Cart Count Badges
-  function updateGlobalNavbarBadges() {
-    const list = wishlistState.get();
-    const cart = cartState.get();
+  async function updateGlobalNavbarBadges() {
+    const list = await wishlistState.get();
+    const cart = await cartState.get();
     
     // Wishlist Badge
     const wishlistBadges = document.querySelectorAll('.nav__wish-count, #wishlistCountGlobal');
@@ -107,8 +223,10 @@
   }
 
   // Scan & sync heart icon states on product cards
-  function syncProductHeartStates() {
+  async function syncProductHeartStates() {
     const buttons = document.querySelectorAll('.wishlist-btn');
+    if (!buttons.length) return;
+    const list = await wishlistState.get();
     buttons.forEach(btn => {
       const card = btn.closest('.product-card');
       if (!card) return;
@@ -116,13 +234,13 @@
       if (!titleEl) return;
       const name = titleEl.textContent.trim();
       
-      const inWishlist = wishlistState.has(name);
+      const inWishlist = list.some(item => item.name === name);
       btn.classList.toggle('is-active', inWishlist);
     });
   }
 
   // Event Delegation for Wishlist Heart button clicks on product cards
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', async (e) => {
     const btn = e.target.closest('.wishlist-btn');
     if (!btn) return;
     
@@ -170,10 +288,10 @@
     }
 
     const item = { id, name, category, img, price: priceRaw, badge, badgeClass, size: 9, color: 'Black' };
-    const added = wishlistState.toggle(item);
+    const added = await wishlistState.toggle(item);
 
     btn.classList.toggle('is-active', added);
-    updateGlobalNavbarBadges();
+    await updateGlobalNavbarBadges();
 
     if (added) {
       showToast(`Added "${name}" to Wishlist!`);
@@ -183,15 +301,15 @@
   });
 
   // Listen to wishlist updates
-  window.addEventListener('wishlistUpdated', () => {
-    updateGlobalNavbarBadges();
-    syncProductHeartStates();
+  window.addEventListener('wishlistUpdated', async () => {
+    await updateGlobalNavbarBadges();
+    await syncProductHeartStates();
   });
   window.addEventListener('cartUpdated', updateGlobalNavbarBadges);
 
   // Global add-to-cart handler (for pages that don't load collection.js, e.g. index.html)
   // collection.js has its own handler; this one covers all other pages.
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', async (e) => {
     const btn = e.target.closest('.add-to-cart-btn');
     if (!btn) return;
     // Skip if collection.js is already handling this (it defines cartState as an IIFE-scoped var)
@@ -202,7 +320,7 @@
       if (!window.requireLogin('Sign in to add items to your cart and start shopping.')) return;
     }
     // Add to cart
-    cartState.add(btn.dataset.id, btn.dataset.name, btn.dataset.price, btn.dataset.img, 9);
+    await cartState.add(btn.dataset.id, btn.dataset.name, btn.dataset.price, btn.dataset.img, 9);
     // Animate button
     btn.style.transform = 'scale(0.85)';
     setTimeout(() => { btn.style.transform = ''; }, 150);
@@ -253,8 +371,8 @@
     const moveAllToBagBtn = document.getElementById('moveAllToBagBtn');
     const layoutGrid = document.getElementById('wishlistContentGrid');
 
-    function renderWishlistPage() {
-      const items = wishlistState.get();
+    async function renderWishlistPage() {
+      const items = await wishlistState.get();
 
       // If wishlist is empty, render the empty state layout
       if (items.length === 0) {
@@ -271,8 +389,6 @@
               <a href="collection.html" class="btn btn--solid" data-magnetic><span>Start Shopping</span></a>
             </div>
           `;
-          
-
         }
         if (subtitle) subtitle.textContent = '0 items saved for later';
         return;
@@ -343,7 +459,7 @@
     });
 
     // Event Delegation inside items container on Wishlist page
-    container?.addEventListener('click', (e) => {
+    container?.addEventListener('click', async (e) => {
       const card = e.target.closest('.wishlist-item-card');
       if (!card) return;
 
@@ -352,8 +468,7 @@
 
       // 1. Remove Item Button (X)
       if (e.target.closest('.wishlist-item-remove-btn')) {
-        const list = wishlistState.get().filter(i => i.name !== name);
-        wishlistState.save(list);
+        await wishlistState.toggle({ id, name });
         
         if (typeof gsap !== 'undefined') {
           gsap.to(card, {
@@ -373,16 +488,15 @@
 
       // 2. Move to Bag Button
       if (e.target.closest('.btn--bag')) {
-        const list = wishlistState.get().filter(i => i.name !== name);
-        wishlistState.save(list);
+        await wishlistState.toggle({ id, name });
 
         // Parse price to number
         const priceText = card.querySelector('.wishlist-item-price').textContent;
         const priceNum = Number(priceText.replace(/[^0-9]/g, '')) || 2500;
         const img = card.querySelector('.wishlist-item-img').getAttribute('src');
         
-        // Add to cart in localStorage
-        cartState.add(id, name, priceNum, img, 9);
+        // Add to cart
+        await cartState.add(id, name, priceNum, img, 9);
         
         if (typeof gsap !== 'undefined') {
           gsap.to(card, {
@@ -402,8 +516,7 @@
 
       // 3. Heart Button click
       if (e.target.closest('.wishlist-item-heart-btn')) {
-        const list = wishlistState.get().filter(i => i.name !== name);
-        wishlistState.save(list);
+        await wishlistState.toggle({ id, name });
         
         if (typeof gsap !== 'undefined') {
           gsap.to(card, {
@@ -423,18 +536,16 @@
     });
 
     // Move All To Bag Action button
-    moveAllToBagBtn?.addEventListener('click', () => {
-      const items = wishlistState.get();
+    moveAllToBagBtn?.addEventListener('click', async () => {
+      const items = await wishlistState.get();
       if (items.length === 0) return;
 
-      // Add all to cart
-      items.forEach(item => {
+      // Add all to cart and remove from wishlist
+      for (const item of items) {
         const priceNum = Number(item.price.replace(/[^0-9]/g, '')) || 2500;
-        cartState.add(item.id, item.name, priceNum, item.img, 9);
-      });
-
-      // Clear wishlist
-      wishlistState.save([]);
+        await cartState.add(item.id, item.name, priceNum, item.img, 9);
+        await wishlistState.toggle(item);
+      }
 
       const cards = container?.querySelectorAll('.wishlist-item-card');
       if (cards && cards.length > 0 && typeof gsap !== 'undefined') {
@@ -455,19 +566,46 @@
     renderWishlistPage();
   }
 
-  // ── Global Hamburger Menu Toggle for women.html and wishlist.html ──
+  // ── Global Responsive Navbar Hamburger Toggle Override ──
   document.addEventListener('DOMContentLoaded', () => {
     const burger = document.getElementById('navBurger');
     const links = document.querySelector('.nav__links');
     if (burger && links) {
-      const path = window.location.pathname.toLowerCase();
-      if (path.includes('women.html') || path.includes('wishlist.html')) {
-        burger.addEventListener('click', () => {
-          const expanded = burger.getAttribute('aria-expanded') === 'true';
-          burger.setAttribute('aria-expanded', String(!expanded));
-          links.style.display = expanded ? '' : 'flex';
+      // Clear any inline styles or previous listeners by replacing the node
+      const newBurger = burger.cloneNode(true);
+      burger.parentNode.replaceChild(newBurger, burger);
+
+      newBurger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const expanded = newBurger.getAttribute('aria-expanded') === 'true';
+        newBurger.setAttribute('aria-expanded', String(!expanded));
+        document.body.classList.toggle('nav-open', !expanded);
+      });
+
+      // Cleanup on resize
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 940) {
+          document.body.classList.remove('nav-open');
+          links.removeAttribute('style');
+          newBurger.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Auto-close menu when a link is clicked
+      links.querySelectorAll('.nav__link').forEach(link => {
+        link.addEventListener('click', () => {
+          document.body.classList.remove('nav-open');
+          newBurger.setAttribute('aria-expanded', 'false');
         });
-      }
+      });
+    }
+
+    // Dynamic routing for mobile bottom nav account link
+    const mobileAcc = document.getElementById('mobileAccountLink');
+    if (mobileAcc) {
+      const isLoggedIn = !!localStorage.getItem('nova_user_token');
+      mobileAcc.setAttribute('href', isLoggedIn ? 'dashboard.html' : 'login.html');
     }
   });
 

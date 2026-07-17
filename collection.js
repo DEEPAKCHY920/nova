@@ -71,45 +71,7 @@
   /* ---------------------------------------------------------
      STATE MANAGEMENT
   --------------------------------------------------------- */
-  const cartState = {
-    get() {
-      try {
-        return JSON.parse(localStorage.getItem('nova_cart')) || [];
-      } catch (e) {
-        return [];
-      }
-    },
-    save(cart) {
-      localStorage.setItem('nova_cart', JSON.stringify(cart));
-      window.dispatchEvent(new CustomEvent('cartUpdated'));
-    },
-    add(id, name, price, img, size) {
-      const cart = this.get();
-      const existing = cart.find((item) => item.id === id && item.size === size);
-      if (existing) {
-        existing.qty++;
-      } else {
-        cart.push({ id, name, price: Number(price), img, size: size || 9, qty: 1 });
-      }
-      this.save(cart);
-    },
-    remove(id, size) {
-      const cart = this.get().filter((item) => !(item.id === id && item.size === size));
-      this.save(cart);
-    },
-    updateQty(id, size, change) {
-      const cart = this.get();
-      const item = cart.find((i) => i.id === id && i.size === size);
-      if (item) {
-        item.qty += change;
-        if (item.qty <= 0) {
-          this.remove(id, size);
-          return;
-        }
-      }
-      this.save(cart);
-    }
-  };
+  const cartState = window.novaCartState;
 
   /* ---------------------------------------------------------
      UI INITIALIZATION
@@ -333,8 +295,8 @@
   const cartFooter = document.getElementById('cartFooter');
   const cartSubtotalAmount = document.getElementById('cartSubtotalAmount');
 
-  function openCart() {
-    renderCartDrawer();
+  async function openCart() {
+    await renderCartDrawer();
     cartDrawer.classList.add('is-open');
   }
 
@@ -346,8 +308,8 @@
   if (cartCloseBtn) cartCloseBtn.addEventListener('click', closeCart);
   if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
-  function renderCartDrawer() {
-    const cart = cartState.get();
+  async function renderCartDrawer() {
+    const cart = await cartState.get();
     const count = cart.reduce((acc, item) => acc + item.qty, 0);
     const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
 
@@ -398,18 +360,23 @@
 
   // Handle drawer quantity edits
   if (cartItemsList) {
-    cartItemsList.addEventListener('click', (e) => {
+    cartItemsList.addEventListener('click', async (e) => {
       const target = e.target;
       const dec = target.closest('.dec-qty');
       const inc = target.closest('.inc-qty');
       const remove = target.closest('.remove-item');
 
+      const cart = await cartState.get();
+
       if (dec) {
-        cartState.updateQty(dec.dataset.id, Number(dec.dataset.size), -1);
+        const item = cart.find(i => i.id === dec.dataset.id && i.size === Number(dec.dataset.size));
+        await cartState.updateQty(dec.dataset.id, Number(dec.dataset.size), item ? item.itemId : null, -1);
       } else if (inc) {
-        cartState.updateQty(inc.dataset.id, Number(inc.dataset.size), 1);
+        const item = cart.find(i => i.id === inc.dataset.id && i.size === Number(inc.dataset.size));
+        await cartState.updateQty(inc.dataset.id, Number(inc.dataset.size), item ? item.itemId : null, 1);
       } else if (remove) {
-        cartState.remove(remove.dataset.id, Number(remove.dataset.size));
+        const item = cart.find(i => i.id === remove.dataset.id && i.size === Number(remove.dataset.size));
+        await cartState.remove(remove.dataset.id, Number(remove.dataset.size), item ? item.itemId : null);
       }
     });
   }
@@ -417,8 +384,8 @@
   // checkout button
   const checkoutBtn = document.getElementById('checkoutBtn');
   if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', () => {
-      const cart = cartState.get();
+    checkoutBtn.addEventListener('click', async () => {
+      const cart = await cartState.get();
       if (cart.length === 0) {
         alert('Your shopping cart is empty!');
         return;
@@ -488,13 +455,13 @@
 
     // Add to cart click inside modal
     const modalAddBtn = modalContent.querySelector('.modal-add-to-cart-btn');
-    modalAddBtn.addEventListener('click', (e) => {
+    modalAddBtn.addEventListener('click', async (e) => {
       // Auth guard
       if (typeof window.requireLogin === 'function') {
         if (!window.requireLogin('Sign in to add items to your cart and start shopping.')) return;
       }
       const selectedSize = Number(modalContent.querySelector('input[name="modal-size"]:checked').value);
-      cartState.add(prod.id, prod.name, prod.price, prod.img, selectedSize);
+      await cartState.add(prod.id, prod.name, prod.price, prod.img, selectedSize);
 
       // visual animation feedback
       modalAddBtn.querySelector('span').textContent = 'Added to Bag!';
@@ -634,7 +601,7 @@
   }
 
   // Add to cart buttons globally (product cards)
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', async (e) => {
     const btn = e.target.closest('.add-to-cart-btn');
     if (btn) {
       e.preventDefault();
@@ -643,7 +610,7 @@
         if (!window.requireLogin('Sign in to add items to your cart and start shopping.')) return;
       }
       // If it's the product card cart button, we add default size 9
-      cartState.add(btn.dataset.id, btn.dataset.name, btn.dataset.price, btn.dataset.img, 9);
+      await cartState.add(btn.dataset.id, btn.dataset.name, btn.dataset.price, btn.dataset.img, 9);
 
       // Animate card count update
       btn.style.transform = 'scale(0.85)';

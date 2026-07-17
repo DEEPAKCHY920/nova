@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
+  <script src="api-config.js"></script>
   <link rel="stylesheet" href="admin-responsive.css" />
   <style>
     *,
@@ -1647,14 +1648,30 @@
 
   <script>
     /* AUTH */
+    function getSession() {
+      try {
+        const token = localStorage.getItem('nova_admin_token');
+        if (!token) return null;
+        return JSON.parse(localStorage.getItem('nova_admin_session') || sessionStorage.getItem('nova_admin_session') || 'null');
+      } catch (e) { return null; }
+    }
+    
     (function () {
-      const s = localStorage.getItem('nova_admin_session');
+      const s = getSession();
       if (!s) { window.location.href = 'admin-login.html'; return; }
-      try { const d = JSON.parse(s); document.getElementById('hdrName').textContent = d.name || 'Admin'; document.getElementById('hdrAvatar').textContent = (d.name || 'A')[0].toUpperCase(); } catch (e) { }
+      try {
+        document.getElementById('hdrName').textContent = s.name || 'Admin';
+        document.getElementById('hdrAvatar').textContent = (s.name || 'A')[0].toUpperCase();
+      } catch (e) { }
     })();
-    document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.removeItem('nova_admin_session'); window.location.href = 'admin-login.html'; });
+    
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('nova_admin_session');
+      localStorage.removeItem('nova_admin_token');
+      window.location.href = 'admin-login.html';
+    });
 
-    /* CANONICAL DATA */
+    /* CANONICAL DATA FOR RESET */
     const CANONICAL = [
       { id: 'nova-surge-x1', name: 'Nova Surge X1', category: 'Running', gender: 'men', size: [8, 9, 10, 11], price: 8999, oldPrice: null, img: 'assets/images/product_surge.png', stars: 5, reviews: 128, new: false, bestseller: true, discount: 0, color: 'orange', features: ['air', 'lightweight', 'breathable'], status: 'Active', stock: 22, featured: true, sku: 'NOVA-SX-001', desc: "Men's Running Shoes" },
       { id: 'nova-phantom', name: 'Nova Phantom', category: 'Running', gender: 'men', size: [7, 8, 9, 10], price: 7999, oldPrice: null, img: 'assets/images/product_phantom.png', stars: 5, reviews: 96, new: false, bestseller: true, discount: 0, color: 'white', features: ['lightweight', 'breathable'], status: 'Active', stock: 18, featured: true, sku: 'NOVA-PH-002', desc: "Men's Running Shoes" },
@@ -1670,21 +1687,65 @@
       { id: 'nova-flex', name: 'Nova Flex', category: 'Training', gender: 'unisex', size: [6, 7, 8, 9, 10], price: 4799, oldPrice: 5499, img: 'assets/images/product_flex.png', stars: 5, reviews: 22, new: false, bestseller: false, discount: 0, color: 'purple', features: ['lightweight', 'grip'], status: 'Active', stock: 11, featured: false, sku: 'NOVA-FX-012', desc: 'Unisex Training Shoes' }
     ];
 
-    function loadProducts() { try { const r = localStorage.getItem('nova_admin_products'); if (!r) { localStorage.setItem('nova_admin_products', JSON.stringify(CANONICAL)); return JSON.parse(JSON.stringify(CANONICAL)); } return JSON.parse(r); } catch (e) { return JSON.parse(JSON.stringify(CANONICAL)); } }
-    function saveProducts(l) {
-      localStorage.setItem('nova_admin_products', JSON.stringify(l));
-      /* Broadcast to other open tabs (collection.html, men.html, etc.) */
-      try {
-        const ev = new StorageEvent('storage', {
-          key: 'nova_admin_products',
-          newValue: JSON.stringify(l),
-          url: window.location.href,
-          storageArea: localStorage
-        });
-        window.dispatchEvent(ev);
-      } catch (e) { }
+    function dbToFe(p) {
+      const sizesArray = (p.sizes || []).map(s => s.size);
+      const totalStock = (p.sizes || []).reduce((acc, s) => acc + s.stock, 0);
+      return {
+        id: p._id,
+        _id: p._id,
+        name: p.name,
+        sku: p.sku,
+        desc: p.desc || '',
+        category: p.category,
+        gender: p.gender || 'unisex',
+        size: sizesArray,
+        price: p.price,
+        oldPrice: p.oldPrice || null,
+        discount: p.discount || 0,
+        img: (p.images && p.images.length) ? p.images[0] : 'assets/images/product_surge.png',
+        color: p.color || 'white',
+        featured: p.featured || false,
+        status: p.status || 'Active',
+        stock: totalStock,
+        bestseller: p.bestseller || false
+      };
     }
-    let products = loadProducts();
+
+    function feToDb(fe) {
+      const sizesArray = fe.size || [7, 8, 9, 10];
+      const sizeStockList = sizesArray.map(sz => ({
+        size: Number(sz),
+        stock: Math.max(0, Math.round((fe.stock || 0) / sizesArray.length))
+      }));
+      return {
+        name: fe.name,
+        sku: fe.sku,
+        desc: fe.desc || '',
+        price: fe.price,
+        oldPrice: fe.oldPrice || null,
+        category: fe.category,
+        gender: fe.gender || 'unisex',
+        color: fe.color || 'white',
+        sizes: sizeStockList,
+        images: fe.img ? [fe.img] : [],
+        featured: fe.featured || false,
+        status: fe.status || 'Active'
+      };
+    }
+
+    let products = [];
+    async function refreshProducts() {
+      try {
+        const data = await window.novaFetch('/products');
+        if (data.success && data.products) {
+          products = data.products.map(dbToFe);
+        }
+      } catch (err) {
+        console.error("Failed to load products", err);
+        toast("Failed to load products from database.", "err");
+      }
+    }
+
     let searchQ = '', filterCat = '', filterGender = '', filterStatus = '', filterFeat = '', sortKey = 'default', currentPage = 1, perPage = 10;
 
     function filtered() {
@@ -1703,16 +1764,18 @@
       return l;
     }
 
-    function updateStats() {
+    async function updateStats() {
       document.getElementById('statTotal').textContent = products.length;
       document.getElementById('statActive').textContent = products.filter(p => p.status !== 'Inactive').length;
       document.getElementById('statLow').textContent = products.filter(p => p.stock > 0 && p.stock <= 10).length;
       document.getElementById('statOut').textContent = products.filter(p => p.stock === 0).length;
       document.getElementById('sbTotalBadge').textContent = products.length;
+      
       try {
-        const orders = JSON.parse(localStorage.getItem('nova_orders') || '[]');
-        const pendingCount = orders.filter(o => o.status === 'Pending').length;
-        document.getElementById('sbOrdersBadge').textContent = pendingCount;
+        const data = await window.novaFetch('/admin/stats');
+        if (data.success && data.stats) {
+          document.getElementById('sbOrdersBadge').textContent = data.stats.totalOrders || 0;
+        }
       } catch(e) {}
     }
 
@@ -1722,8 +1785,8 @@
       return (p.status || 'Active') === 'Inactive' ? '<span class="badge badge-inactive">Inactive</span>' : '<span class="badge badge-active">Active</span>';
     }
 
-    function renderTable() {
-      updateStats();
+    async function renderTable() {
+      await updateStats();
       const list = filtered(), total = list.length, totalPages = Math.max(1, Math.ceil(total / perPage));
       if (currentPage > totalPages) currentPage = 1;
       const start = (currentPage - 1) * perPage, page = list.slice(start, start + perPage);
@@ -1766,22 +1829,78 @@
 
     document.getElementById('searchInput').addEventListener('input', e => { searchQ = e.target.value; currentPage = 1; renderTable(); });
     document.getElementById('hdrSearch').addEventListener('input', e => { searchQ = e.target.value; document.getElementById('searchInput').value = e.target.value; currentPage = 1; renderTable(); });
-    ['filterCat', 'filterGender', 'filterStatus', 'filterFeat'].forEach(id => document.getElementById(id).addEventListener('change', e => { window[id.replace('filter', 'filter')] = e.target.value; if (id === 'filterCat') filterCat = e.target.value; if (id === 'filterGender') filterGender = e.target.value; if (id === 'filterStatus') filterStatus = e.target.value; if (id === 'filterFeat') filterFeat = e.target.value; currentPage = 1; renderTable(); }));
+    ['filterCat', 'filterGender', 'filterStatus', 'filterFeat'].forEach(id => document.getElementById(id).addEventListener('change', e => { if (id === 'filterCat') filterCat = e.target.value; if (id === 'filterGender') filterGender = e.target.value; if (id === 'filterStatus') filterStatus = e.target.value; if (id === 'filterFeat') filterFeat = e.target.value; currentPage = 1; renderTable(); }));
     document.getElementById('sortBy').addEventListener('change', e => { sortKey = e.target.value; renderTable(); });
     document.getElementById('perPage').addEventListener('change', e => { perPage = parseInt(e.target.value); currentPage = 1; renderTable(); });
 
     function resetFilters() { searchQ = ''; filterCat = ''; filterGender = ''; filterStatus = ''; filterFeat = ''; sortKey = 'default'; currentPage = 1;['searchInput', 'hdrSearch'].forEach(id => document.getElementById(id).value = '');['filterCat', 'filterGender', 'filterStatus', 'filterFeat'].forEach(id => document.getElementById(id).value = ''); document.getElementById('sortBy').value = 'default'; renderTable(); }
 
-    function toggleFeatured(idx, btn) { products[idx].featured = !products[idx].featured; btn.classList.toggle('on', products[idx].featured); saveProducts(products); toast(products[idx].featured ? `"${products[idx].name}" featured!` : `"${products[idx].name}" unfeatured.`); }
-    function toggleStatus(idx) { const p = products[idx]; p.status = (p.status || 'Active') === 'Active' ? 'Inactive' : 'Active'; saveProducts(products); renderTable(); toast(`"${p.name}" is now ${p.status}.`, p.status === 'Active' ? 'ok' : 'war'); }
-    function duplicateProduct(idx) { const s = products[idx]; const c = { ...s, id: s.id + '-copy-' + Date.now(), name: s.name + ' (Copy)', sku: (s.sku || '') + '-C', featured: false, stock: 0, status: 'Inactive' }; products.splice(idx + 1, 0, c); saveProducts(products); renderTable(); toast(`"${c.name}" duplicated.`); }
+    async function toggleFeatured(idx, btn) {
+      const p = products[idx];
+      const nextVal = !p.featured;
+      try {
+        const data = await window.novaFetch(`/products/${p._id}`, {
+          method: 'PUT',
+          body: JSON.stringify({ featured: nextVal })
+        });
+        if (data.success) {
+          p.featured = nextVal;
+          btn.classList.toggle('on', nextVal);
+          toast(nextVal ? `"${p.name}" featured!` : `"${p.name}" unfeatured.`);
+        }
+      } catch (err) {
+        toast("Failed to update featured setting: " + err.message, "err");
+      }
+    }
+
+    async function toggleStatus(idx) {
+      const p = products[idx];
+      const nextStatus = p.status === 'Active' ? 'Inactive' : 'Active';
+      try {
+        const data = await window.novaFetch(`/products/${p._id}`, {
+          method: 'PUT',
+          body: JSON.stringify({ status: nextStatus })
+        });
+        if (data.success) {
+          p.status = nextStatus;
+          await renderTable();
+          toast(`"${p.name}" status updated to ${nextStatus}.`, nextStatus === 'Active' ? 'ok' : 'war');
+        }
+      } catch (err) {
+        toast("Failed to update status: " + err.message, "err");
+      }
+    }
+
+    async function duplicateProduct(idx) {
+      const s = products[idx];
+      const copied = feToDb({
+        ...s,
+        name: s.name + ' (Copy)',
+        sku: s.sku + '-C',
+        featured: false,
+        status: 'Inactive'
+      });
+      try {
+        const data = await window.novaFetch('/products', {
+          method: 'POST',
+          body: JSON.stringify(copied)
+        });
+        if (data.success) {
+          await refreshProducts();
+          await renderTable();
+          toast(`"${copied.name}" duplicated.`);
+        }
+      } catch (err) {
+        toast("Failed to duplicate: " + err.message, "err");
+      }
+    }
 
     function updateImgPrev(v) { const pv = document.getElementById('imgPrev'); pv.src = v; pv.style.display = v ? 'block' : 'none'; }
     function openAddModal() { document.getElementById('moTitle').textContent = 'Add Product'; document.getElementById('editIdx').value = '';['fName', 'fSKU', 'fDesc', 'fImg', 'fColor'].forEach(id => document.getElementById(id).value = '');['fPrice', 'fOldPrice', 'fStock'].forEach(id => document.getElementById(id).value = ''); document.getElementById('fCat').value = 'Running'; document.getElementById('fGender').value = 'men'; document.getElementById('fStatus').value = 'Active'; document.getElementById('fFeatured').value = 'false'; document.getElementById('fSizes').value = '7, 8, 9, 10'; document.getElementById('fColor').value = 'white'; document.getElementById('imgPrev').style.display = 'none'; document.getElementById('prodModal').classList.add('open'); }
     function openEditModal(idx) { const p = products[idx]; document.getElementById('moTitle').textContent = 'Edit: ' + p.name; document.getElementById('editIdx').value = idx; document.getElementById('fName').value = p.name || ''; document.getElementById('fSKU').value = p.sku || ''; document.getElementById('fDesc').value = p.desc || ''; document.getElementById('fImg').value = p.img || ''; document.getElementById('fPrice').value = p.price || ''; document.getElementById('fOldPrice').value = p.oldPrice || ''; document.getElementById('fStock').value = p.stock ?? ''; document.getElementById('fCat').value = p.category || 'Running'; document.getElementById('fGender').value = p.gender || 'men'; document.getElementById('fStatus').value = p.status === 'Inactive' ? 'Inactive' : 'Active'; document.getElementById('fFeatured').value = p.featured ? 'true' : 'false'; document.getElementById('fColor').value = p.color || ''; document.getElementById('fSizes').value = Array.isArray(p.size) ? p.size.join(', ') : (p.size || '7, 8, 9, 10'); const pv = document.getElementById('imgPrev'); if (p.img) { pv.src = p.img; pv.style.display = 'block'; } else pv.style.display = 'none'; document.getElementById('prodModal').classList.add('open'); }
     function closeModal() { document.getElementById('prodModal').classList.remove('open'); }
 
-    function saveProduct() {
+    async function saveProduct() {
       const name = document.getElementById('fName').value.trim();
       const sku = document.getElementById('fSKU').value.trim();
       const price = parseFloat(document.getElementById('fPrice').value);
@@ -1791,21 +1910,90 @@
       if (!price || price <= 0) { toast('Valid price is required.', 'err'); return; }
       const oldPrice = parseFloat(document.getElementById('fOldPrice').value) || null;
       const sizes = document.getElementById('fSizes').value.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
-      const disc = oldPrice ? Math.round((1 - price / oldPrice) * 100) : 0;
-      const obj = { id: sku.toLowerCase().replace(/[^a-z0-9]+/g, '-'), name, sku, desc: document.getElementById('fDesc').value.trim(), img: document.getElementById('fImg').value.trim(), category: document.getElementById('fCat').value, gender: document.getElementById('fGender').value, size: sizes.length ? sizes : [7, 8, 9, 10], color: document.getElementById('fColor').value.trim() || 'white', price, oldPrice, discount: disc, stock, status: document.getElementById('fStatus').value, featured: document.getElementById('fFeatured').value === 'true', features: ['lightweight'], stars: 5, reviews: 0, new: false, bestseller: false };
+      const desc = document.getElementById('fDesc').value.trim();
+      const img = document.getElementById('fImg').value.trim();
+      const category = document.getElementById('fCat').value;
+      const gender = document.getElementById('fGender').value;
+      const status = document.getElementById('fStatus').value;
+      const featured = document.getElementById('fFeatured').value === 'true';
+      const color = document.getElementById('fColor').value.trim() || 'white';
+
+      const feObj = { name, sku, price, oldPrice, stock, size: sizes, desc, img, category, gender, status, featured, color };
+      const dbObj = feToDb(feObj);
       const ei = document.getElementById('editIdx').value;
-      if (ei !== '') { const orig = products[parseInt(ei)]; obj.stars = orig.stars || 5; obj.reviews = orig.reviews || 0; obj.new = orig.new || false; obj.features = orig.features || ['lightweight']; obj.bestseller = orig.bestseller || false; products[parseInt(ei)] = obj; toast(`"${name}" updated!`, 'ok'); }
-      else { obj.new = true; products.unshift(obj); toast(`"${name}" added!`, 'ok'); }
-      saveProducts(products); closeModal(); renderTable();
+      
+      try {
+        if (ei !== '') {
+          const originalId = products[parseInt(ei)]._id;
+          const data = await window.novaFetch(`/products/${originalId}`, {
+            method: 'PUT',
+            body: JSON.stringify(dbObj)
+          });
+          if (data.success) {
+            toast(`"${name}" updated!`, 'ok');
+          }
+        } else {
+          const data = await window.novaFetch('/products', {
+            method: 'POST',
+            body: JSON.stringify(dbObj)
+          });
+          if (data.success) {
+            toast(`"${name}" added!`, 'ok');
+          }
+        }
+        closeModal();
+        await refreshProducts();
+        await renderTable();
+      } catch (err) {
+        toast("Failed to save product: " + err.message, "err");
+      }
     }
 
     let _dIdx = -1;
     function confirmDelete(idx) { _dIdx = idx; document.getElementById('delMsg').textContent = `"${products[idx].name}" will be permanently removed.`; document.getElementById('confirmDel').classList.add('open'); }
     function closeConfirm() { document.getElementById('confirmDel').classList.remove('open'); _dIdx = -1; }
-    document.getElementById('confirmDelBtn').addEventListener('click', () => { if (_dIdx < 0) return; const n = products[_dIdx].name; products.splice(_dIdx, 1); saveProducts(products); closeConfirm(); renderTable(); toast(`"${n}" deleted.`, 'err'); });
+    
+    document.getElementById('confirmDelBtn').addEventListener('click', async () => {
+      if (_dIdx < 0) return;
+      const p = products[_dIdx];
+      try {
+        const data = await window.novaFetch(`/products/${p._id}`, {
+          method: 'DELETE'
+        });
+        if (data.success) {
+          closeConfirm();
+          await refreshProducts();
+          await renderTable();
+          toast(`"${p.name}" deleted.`, 'err');
+        }
+      } catch (err) {
+        toast("Failed to delete product: " + err.message, "err");
+      }
+    });
+
     function resetToDefaults() { document.getElementById('confirmReset').classList.add('open'); }
     function closeResetConfirm() { document.getElementById('confirmReset').classList.remove('open'); }
-    function doReset() { localStorage.setItem('nova_admin_products', JSON.stringify(CANONICAL)); products = JSON.parse(JSON.stringify(CANONICAL)); closeResetConfirm(); resetFilters(); toast('Catalogue reset to defaults.', 'ok'); }
+    
+    async function doReset() {
+      try {
+        // Delete all products
+        for (const p of products) {
+          await window.novaFetch(`/products/${p._id}`, { method: 'DELETE' });
+        }
+        // Add canonicals
+        for (const item of CANONICAL) {
+          const dbObj = feToDb(item);
+          await window.novaFetch('/products', { method: 'POST', body: JSON.stringify(dbObj) });
+        }
+        closeResetConfirm();
+        await refreshProducts();
+        resetFilters();
+        await renderTable();
+        toast('Catalogue reset to defaults.', 'ok');
+      } catch (err) {
+        toast("Failed to reset catalogue: " + err.message, "err");
+      }
+    }
 
     function exportCSV() { const rows = [['Name', 'SKU', 'Category', 'Gender', 'Price', 'Old Price', 'Stock', 'Status', 'Featured'], ...products.map(p => [`"${p.name}"`, p.sku || '', p.category, p.gender || 'unisex', p.price, p.oldPrice || '', p.stock, p.status || 'Active', p.featured ? 'Yes' : 'No'].join(','))].join('\n'); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([rows], { type: 'text/csv' })); a.download = `nova-products-${new Date().toISOString().slice(0, 10)}.csv`; a.click(); toast('Exported as CSV!'); }
 
@@ -1815,7 +2003,11 @@
     let _tt;
     function toast(msg, type = '') { const el = document.getElementById('adToast'); const ic = { ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>', err: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>', war: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>' }; el.className = type ? type : ''; el.innerHTML = (ic[type] || ic['ok']) + msg; el.classList.add('show'); clearTimeout(_tt); _tt = setTimeout(() => el.classList.remove('show'), 3000); }
 
-    renderTable();
+    async function init() {
+      await refreshProducts();
+      await renderTable();
+    }
+    init();
   </script>
   <script src="admin-responsive.js"></script>
 </body>

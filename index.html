@@ -16,6 +16,7 @@
 
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="animations.css" />
+  <link rel="stylesheet" href="mobile-home.css" />
   <script>window.disablePreloaderAutoRun = true;</script>
   <script src="preloader.js"></script>
 </head>
@@ -157,6 +158,70 @@
           <div class="stage__gradient"></div>
           <canvas id="fxCanvas" class="stage__fx" aria-hidden="true"></canvas>
           <canvas id="shoeCanvas" class="stage__shoe" aria-hidden="true"></canvas>
+          
+          <!-- Mobile Slideshow Banners (Visible only on mobile) -->
+          <div class="mobile-hero-slideshow">
+            <!-- Slide 1 -->
+            <div class="mobile-hero-slide active">
+              <div class="mobile-hero-slide__bg" style="background-image: url('assets/images/running_card.png');"></div>
+              <div class="mobile-hero-slide__content">
+                <p class="mobile-hero-slide__badge">New Collection</p>
+                <h2 class="mobile-hero-slide__title">STEP INTO GREATNESS</h2>
+                <p class="mobile-hero-slide__desc">Premium comfort. Next level performance.</p>
+                <a href="collection.html" class="btn btn--solid mobile-hero-slide__btn"><span>Shop Now</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-left:4px;vertical-align:middle;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+              </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="mobile-hero-slide">
+              <div class="mobile-hero-slide__bg" style="background-image: url('assets/images/product_surge.png');"></div>
+              <div class="mobile-hero-slide__content">
+                <p class="mobile-hero-slide__badge">Luxury Speed</p>
+                <h2 class="mobile-hero-slide__title">DEFY GRAVITY</h2>
+                <p class="mobile-hero-slide__desc">Carbon plate response, ultra lightweight mesh.</p>
+                <a href="collection.html" class="btn btn--solid mobile-hero-slide__btn"><span>Shop Collection</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-left:4px;vertical-align:middle;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+              </div>
+            </div>
+            <!-- Slide 3 -->
+            <div class="mobile-hero-slide">
+              <div class="mobile-hero-slide__bg" style="background-image: url('assets/images/product_phantom.png');"></div>
+              <div class="mobile-hero-slide__content">
+                <p class="mobile-hero-slide__badge">Daily Trainer</p>
+                <h2 class="mobile-hero-slide__title">NOVA PHANTOM</h2>
+                <p class="mobile-hero-slide__desc">Pure comfort designed for long daily mileage.</p>
+                <a href="collection.html" class="btn btn--solid mobile-hero-slide__btn"><span>Explore Now</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-left:4px;vertical-align:middle;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+              </div>
+            </div>
+            <!-- Slide 4 -->
+            <div class="mobile-hero-slide">
+              <div class="mobile-hero-slide__bg" style="background-image: url('assets/images/cat_basketball.png');"></div>
+              <div class="mobile-hero-slide__content">
+                <p class="mobile-hero-slide__badge">Court Ready</p>
+                <h2 class="mobile-hero-slide__title">DOMINATE THE COURT</h2>
+                <p class="mobile-hero-slide__desc">Engineered grip and ankle lockdown for the game.</p>
+                <a href="collection.html?category=Basketball" class="btn btn--solid mobile-hero-slide__btn"><span>View More</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-left:4px;vertical-align:middle;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+              </div>
+            </div>
+            <!-- Slide 5 -->
+            <div class="mobile-hero-slide">
+              <div class="mobile-hero-slide__bg" style="background-image: url('assets/images/cat_hiking.png');"></div>
+              <div class="mobile-hero-slide__content">
+                <p class="mobile-hero-slide__badge">Outdoor Series</p>
+                <h2 class="mobile-hero-slide__title">CONQUER THE TRAIL</h2>
+                <p class="mobile-hero-slide__desc">Built for every terrain, designed to endure.</p>
+                <a href="collection.html?category=Hiking" class="btn btn--solid mobile-hero-slide__btn"><span>Explore</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-left:4px;vertical-align:middle;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+              </div>
+            </div>
+            
+            <!-- Slide Indicators Dots -->
+            <div class="mobile-hero-dots">
+              <span class="mobile-hero-dot active"></span>
+              <span class="mobile-hero-dot"></span>
+              <span class="mobile-hero-dot"></span>
+              <span class="mobile-hero-dot"></span>
+              <span class="mobile-hero-dot"></span>
+            </div>
+          </div>
+          
           <div class="stage__vignette"></div>
           <div class="stage__grain"></div>
         </div>
@@ -247,6 +312,246 @@
 
       </div>
     </section>
+
+    <!-- ============================================ -->
+    <!-- MOBILE HOME PAGE — Only visible on ≤ 768px  -->
+    <!-- ============================================ -->
+    <div class="mobile-home-page" style="display:none;">
+
+      <!-- SHOP BY CATEGORY -->
+      <div class="m-section">
+        <div class="m-section-hd">
+          <h2 class="m-section-title">Shop By Category</h2>
+          <a href="collection.html" class="m-section-viewall">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+        <div class="m-cats-row">
+          <a href="collection.html?gender=men" class="m-cat-card">
+            <img src="assets/images/MEN_HERO_BG.png" alt="Men" loading="lazy" />
+            <div class="m-cat-card__overlay"><span class="m-cat-card__lbl">Men</span></div>
+          </a>
+          <a href="collection.html?gender=women" class="m-cat-card">
+            <img src="assets/images/WOMEN_HERO_BG.png" alt="Women" loading="lazy" />
+            <div class="m-cat-card__overlay"><span class="m-cat-card__lbl">Women</span></div>
+          </a>
+          <a href="collection.html?category=Running" class="m-cat-card">
+            <img src="assets/images/running_card.png" alt="Running" loading="lazy" />
+            <div class="m-cat-card__overlay"><span class="m-cat-card__lbl">Running</span></div>
+          </a>
+          <a href="collection.html?category=Training" class="m-cat-card">
+            <img src="assets/images/cat_training.png" alt="Training" loading="lazy" />
+            <div class="m-cat-card__overlay"><span class="m-cat-card__lbl">Training</span></div>
+          </a>
+          <a href="collection.html?category=Hiking" class="m-cat-card">
+            <img src="assets/images/cat_hiking.png" alt="Outdoor" loading="lazy" />
+            <div class="m-cat-card__overlay"><span class="m-cat-card__lbl">Outdoor</span></div>
+          </a>
+          <a href="collection.html?category=Lifestyle" class="m-cat-card">
+            <img src="assets/images/cat_lifestyle.png" alt="Lifestyle" loading="lazy" />
+            <div class="m-cat-card__overlay"><span class="m-cat-card__lbl">Lifestyle</span></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- BEST SELLERS -->
+      <div class="m-section">
+        <div class="m-section-hd">
+          <h2 class="m-section-title">Best Sellers</h2>
+          <a href="collection.html" class="m-section-viewall">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+        <div class="m-products-row">
+          <!-- Card 1 -->
+          <div class="m-prod-card">
+            <button class="m-prod-card__wish wishlist-btn" data-id="nova-phantom" data-name="Nova Phantom" data-price="7999" data-img="assets/images/product_phantom.png" aria-label="Wishlist">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <div class="m-prod-card__img-area">
+              <img src="assets/images/product_phantom.png" alt="Nova Phantom" class="m-prod-card__img" loading="lazy" />
+            </div>
+            <div class="m-prod-card__info">
+              <p class="m-prod-card__name">Nova Phantom</p>
+              <p class="m-prod-card__cat">Running</p>
+              <div class="m-prod-card__stars">
+                <span class="m-prod-card__star-val">★★★★★</span>
+                <span class="m-prod-card__star-count">(128)</span>
+              </div>
+              <div class="m-prod-card__footer">
+                <div class="m-prod-card__prices">
+                  <span class="m-prod-card__price">₹7,999</span>
+                  <span class="m-prod-card__orig">₹11,999</span>
+                  <span class="m-prod-card__disc">33% OFF</span>
+                </div>
+                <button class="m-prod-card__add add-to-cart-btn" data-id="nova-phantom" data-name="Nova Phantom" data-price="7999" data-img="assets/images/product_phantom.png" aria-label="Add to cart">+</button>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="m-prod-card">
+            <button class="m-prod-card__wish wishlist-btn" data-id="nova-surge" data-name="Nova Surge" data-price="8499" data-img="assets/images/product_surge.png" aria-label="Wishlist">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <div class="m-prod-card__img-area">
+              <img src="assets/images/product_surge.png" alt="Nova Surge" class="m-prod-card__img" loading="lazy" />
+            </div>
+            <div class="m-prod-card__info">
+              <p class="m-prod-card__name">Nova Surge</p>
+              <p class="m-prod-card__cat">Training</p>
+              <div class="m-prod-card__stars">
+                <span class="m-prod-card__star-val">★★★★★</span>
+                <span class="m-prod-card__star-count">(96)</span>
+              </div>
+              <div class="m-prod-card__footer">
+                <div class="m-prod-card__prices">
+                  <span class="m-prod-card__price">₹8,499</span>
+                  <span class="m-prod-card__orig">₹13,999</span>
+                  <span class="m-prod-card__disc">39% OFF</span>
+                </div>
+                <button class="m-prod-card__add add-to-cart-btn" data-id="nova-surge" data-name="Nova Surge" data-price="8499" data-img="assets/images/product_surge.png" aria-label="Add to cart">+</button>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="m-prod-card">
+            <button class="m-prod-card__wish wishlist-btn" data-id="nova-x1" data-name="Nova X1" data-price="8999" data-img="assets/images/product_nova_x1.png" aria-label="Wishlist">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <div class="m-prod-card__img-area">
+              <img src="assets/images/product_nova_x1.png" alt="Nova X1" class="m-prod-card__img" loading="lazy" />
+            </div>
+            <div class="m-prod-card__info">
+              <p class="m-prod-card__name">Nova X1</p>
+              <p class="m-prod-card__cat">Performance</p>
+              <div class="m-prod-card__stars">
+                <span class="m-prod-card__star-val">★★★★★</span>
+                <span class="m-prod-card__star-count">(214)</span>
+              </div>
+              <div class="m-prod-card__footer">
+                <div class="m-prod-card__prices">
+                  <span class="m-prod-card__price">₹8,999</span>
+                  <span class="m-prod-card__orig">₹14,999</span>
+                  <span class="m-prod-card__disc">40% OFF</span>
+                </div>
+                <button class="m-prod-card__add add-to-cart-btn" data-id="nova-x1" data-name="Nova X1" data-price="8999" data-img="assets/images/product_nova_x1.png" aria-label="Add to cart">+</button>
+              </div>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="m-prod-card">
+            <button class="m-prod-card__wish wishlist-btn" data-id="nova-boost" data-name="Nova Boost" data-price="7499" data-img="assets/images/product_boost.png" aria-label="Wishlist">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            </button>
+            <div class="m-prod-card__img-area">
+              <img src="assets/images/product_boost.png" alt="Nova Boost" class="m-prod-card__img" loading="lazy" />
+            </div>
+            <div class="m-prod-card__info">
+              <p class="m-prod-card__name">Nova Boost</p>
+              <p class="m-prod-card__cat">Lifestyle</p>
+              <div class="m-prod-card__stars">
+                <span class="m-prod-card__star-val">★★★★☆</span>
+                <span class="m-prod-card__star-count">(142)</span>
+              </div>
+              <div class="m-prod-card__footer">
+                <div class="m-prod-card__prices">
+                  <span class="m-prod-card__price">₹7,499</span>
+                  <span class="m-prod-card__orig">₹10,999</span>
+                  <span class="m-prod-card__disc">32% OFF</span>
+                </div>
+                <button class="m-prod-card__add add-to-cart-btn" data-id="nova-boost" data-name="Nova Boost" data-price="7499" data-img="assets/images/product_boost.png" aria-label="Add to cart">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRUST BANNER -->
+      <div class="m-trust">
+        <div class="m-trust-inner">
+          <div class="m-trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            <span class="m-trust-lbl">Free Delivery</span>
+            <span class="m-trust-sub">Over ₹999</span>
+          </div>
+          <div class="m-trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+            <span class="m-trust-lbl">Easy Returns</span>
+            <span class="m-trust-sub">30 Days</span>
+          </div>
+          <div class="m-trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span class="m-trust-lbl">100% Original</span>
+            <span class="m-trust-sub">Guaranteed</span>
+          </div>
+          <div class="m-trust-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span class="m-trust-lbl">Secure Pay</span>
+            <span class="m-trust-sub">100% Safe</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMO BANNER -->
+      <div class="m-promo">
+        <img src="assets/images/product_nova_x1.png" alt="Sale Shoes" class="m-promo__bg" loading="lazy" />
+        <div class="m-promo__content">
+          <p class="m-promo__eyebrow">🔥 Limited Time Offer</p>
+          <h3 class="m-promo__title">UP TO <span class="accent">40%</span><br>OFF</h3>
+          <p class="m-promo__sub">On selected items</p>
+          <a href="collection.html" class="m-promo__btn">
+            SHOP THE DEAL
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- REVIEWS -->
+      <div class="m-section">
+        <div class="m-section-hd">
+          <h2 class="m-section-title">What Our Customers Say</h2>
+          <a href="#reviews" class="m-section-viewall">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+        <div class="m-review-card" id="mobileReviewCard">
+          <div class="m-review-card__body">
+            <div class="m-review-user">
+              <div class="m-review-avatar" id="mobileReviewAvatar">AV</div>
+              <div class="m-review-userinfo">
+                <p class="m-review-name" id="mobileReviewName">
+                  Arjun Verma
+                  <span class="m-review-verified">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                </p>
+                <span class="m-review-stars">★★★★★</span>
+              </div>
+            </div>
+            <p class="m-review-text" id="mobileReviewText">"The grip, comfort and bounce are unreal. Nova shoes took my running to the next level. Absolutely love them!"</p>
+          </div>
+          <img src="assets/images/product_phantom.png" alt="Reviewed Product" class="m-review-shoe" id="mobileReviewShoe" loading="lazy" />
+        </div>
+        <div class="m-review-dots">
+          <div class="m-review-dot active" data-ridx="0"></div>
+          <div class="m-review-dot" data-ridx="1"></div>
+          <div class="m-review-dot" data-ridx="2"></div>
+        </div>
+      </div>
+
+      <!-- NEWSLETTER -->
+      <div class="m-newsletter">
+        <div class="m-newsletter__icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="m-newsletter__body">
+          <p class="m-newsletter__title">Join the Nova Community</p>
+          <p class="m-newsletter__sub">Get exclusive drops, offers & tips</p>
+          <form class="m-newsletter__form" id="mobileNewsletterForm">
+            <input type="email" class="m-newsletter__input" placeholder="Enter your email" required />
+            <button type="submit" class="m-newsletter__btn" aria-label="Subscribe">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+    <!-- END MOBILE HOME PAGE -->
 
     <!-- ============================= -->
     <!-- TRUST BADGES SECTION          -->
@@ -1104,6 +1409,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="api-config.js"></script>
   <script src="app.js"></script>
   <script src="wishlist-sync.js"></script>
 
@@ -1135,7 +1441,129 @@
     }
     tick();
   })();
+
+  // Mobile Hero Slideshow Auto-Cycle
+  (() => {
+    const slides = document.querySelectorAll('.mobile-hero-slide');
+    const dots = document.querySelectorAll('.mobile-hero-dot');
+    if (!slides.length) return;
+    
+    let currentIdx = 0;
+    function showSlide(idx) {
+      slides[currentIdx].classList.remove('active');
+      dots[currentIdx].classList.remove('active');
+      
+      currentIdx = idx;
+      
+      slides[currentIdx].classList.add('active');
+      dots[currentIdx].classList.add('active');
+    }
+    
+    setInterval(() => {
+      let next = (currentIdx + 1) % slides.length;
+      showSlide(next);
+    }, 5000);
+    
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        showSlide(idx);
+      });
+    });
+  })();
+
+  // Mobile home page show/hide toggle
+  (function() {
+    const mobilePage = document.querySelector('.mobile-home-page');
+    if (!mobilePage) return;
+    function checkWidth() {
+      if (window.innerWidth <= 768) {
+        mobilePage.style.display = 'block';
+      } else {
+        mobilePage.style.display = 'none';
+      }
+    }
+    checkWidth();
+    window.addEventListener('resize', checkWidth);
+  })();
+
+  // Mobile review carousel
+  (function() {
+    const reviews = [
+      { initials: 'AV', name: 'Arjun Verma', text: '"The grip, comfort and bounce are unreal. Nova shoes took my running to the next level. Absolutely love them!"', img: 'assets/images/product_phantom.png', bg: 'linear-gradient(135deg,#bdfc24,#6ef78e)', color: '#050506' },
+      { initials: 'RS', name: 'Rohit Singh', text: '"Perfect for both gym and daily wear. Stylish, lightweight and super durable — worth every rupee!"', img: 'assets/images/product_surge.png', bg: 'linear-gradient(135deg,#7c3aed,#c4b5fd)', color: '#fff' },
+      { initials: 'KM', name: 'Karan M.', text: '"Best basketball shoes I\'ve ever used. Great ankle support and amazing grip on the court!"', img: 'assets/images/product_nova_x1.png', bg: 'linear-gradient(135deg,#e8442f,#f5b942)', color: '#fff' }
+    ];
+    let ri = 0;
+    const avatar = document.getElementById('mobileReviewAvatar');
+    const rname = document.getElementById('mobileReviewName');
+    const rtext = document.getElementById('mobileReviewText');
+    const rshoe = document.getElementById('mobileReviewShoe');
+    const rdots = document.querySelectorAll('.m-review-dot');
+    if (!avatar) return;
+    function showReview(idx) {
+      const r = reviews[idx];
+      avatar.textContent = r.initials;
+      avatar.style.background = r.bg;
+      avatar.style.color = r.color;
+      // Keep verified badge, update name text node
+      const vBadge = rname.querySelector('.m-review-verified');
+      rname.textContent = r.name + ' ';
+      if (vBadge) rname.appendChild(vBadge);
+      rtext.textContent = r.text;
+      rshoe.src = r.img;
+      rdots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      ri = idx;
+    }
+    rdots.forEach((dot, i) => dot.addEventListener('click', () => showReview(i)));
+    setInterval(() => showReview((ri + 1) % reviews.length), 5000);
+  })();
   </script>
+  <!-- ============================= -->
+  <!-- MOBILE BOTTOM NAVIGATION      -->
+  <!-- ============================= -->
+  <div class="mobile-bottom-nav">
+    <a href="index.html" class="mobile-bottom-nav__item is-active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>HOME</span>
+    </a>
+    <a href="collection.html" class="mobile-bottom-nav__item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>SHOP</span>
+    </a>
+    <a href="collection.html#categories" class="mobile-bottom-nav__item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+      <span>CATEGORIES</span>
+    </a>
+    <a href="wishlist.html" class="mobile-bottom-nav__item">
+      <div class="mobile-bottom-nav__icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <span class="mobile-bottom-nav__badge nav__wish-count" id="wishlistCountMobile">0</span>
+      </div>
+      <span>WISHLIST</span>
+    </a>
+    <a href="dashboard.html" class="mobile-bottom-nav__item" id="mobileAccountLink">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      <span>ACCOUNT</span>
+    </a>
+  </div>
+
   <script src="products-bridge.js"></script>
 </body>
 </html>

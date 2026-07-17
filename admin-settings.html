@@ -6,6 +6,7 @@
   <title>NOVA Admin — Settings</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="api-config.js"></script>
   <link rel="stylesheet" href="admin-responsive.css" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -238,20 +239,44 @@
 <div id="adToast"></div>
 
 <script>
+function getSession() {
+  try {
+    const token = localStorage.getItem('nova_admin_token');
+    if (!token) return null;
+    return JSON.parse(localStorage.getItem('nova_admin_session') || sessionStorage.getItem('nova_admin_session') || 'null');
+  } catch (e) { return null; }
+}
+
 (function(){
-  const s=localStorage.getItem('nova_admin_session')||sessionStorage.getItem('nova_admin_session');
+  const s = getSession();
   if(!s){window.location.href='admin-login.html';return;}
   try{
-    const d=JSON.parse(s);
-    document.getElementById('hdrName').textContent=d.name||'Admin';
-    document.getElementById('hdrAvatar').textContent=(d.name||'A')[0].toUpperCase();
-    document.getElementById('currentAdminName').textContent=d.name||'Admin User';
-    document.getElementById('currentAdminEmail').textContent=d.email||'admin@novasports.in';
+    document.getElementById('hdrName').textContent=s.name||'Admin';
+    document.getElementById('hdrAvatar').textContent=(s.name||'A')[0].toUpperCase();
+    document.getElementById('currentAdminName').textContent=s.name||'Admin User';
+    document.getElementById('currentAdminEmail').textContent=s.email||'admin@novasports.in';
   }catch(e){}
 })();
-document.getElementById('logoutBtn').addEventListener('click',()=>{localStorage.removeItem('nova_admin_session');sessionStorage.removeItem('nova_admin_session');window.location.href='admin-login.html';});
-try{const p=JSON.parse(localStorage.getItem('nova_admin_products')||'[]');document.getElementById('sbProdBadge').textContent=p.length;}catch(e){}
-try{const o=JSON.parse(localStorage.getItem('nova_orders')||'[]');document.getElementById('sbOrderBadge').textContent=o.filter(x=>x.status==='Pending').length;}catch(e){}
+
+document.getElementById('logoutBtn').addEventListener('click',()=>{
+  localStorage.removeItem('nova_admin_session');
+  localStorage.removeItem('nova_admin_token');
+  sessionStorage.removeItem('nova_admin_session');
+  window.location.href='admin-login.html';
+});
+
+async function updateSidebarBadges() {
+  try {
+    const prodData = await window.novaFetch('/products');
+    if (prodData.success) {
+      document.getElementById('sbProdBadge').textContent = prodData.products.length;
+    }
+    const statsData = await window.novaFetch('/admin/stats');
+    if (statsData.success && statsData.stats) {
+      document.getElementById('sbOrderBadge').textContent = statsData.stats.totalOrders || 0;
+    }
+  } catch (e) {}
+}
 
 /* Load saved settings */
 function loadSettings(){
@@ -289,38 +314,84 @@ function saveSettings(section){
   toast('Settings saved!','ok');
 }
 
-function changePassword(){
+async function changePassword(){
   const old=document.getElementById('sOldPass').value;
   const nw=document.getElementById('sNewPass').value;
   const cf=document.getElementById('sConfPass').value;
   if(!old||!nw){toast('Please fill in all fields.','err');return;}
   if(nw.length<8){toast('New password must be at least 8 characters.','err');return;}
   if(nw!==cf){toast('Passwords do not match.','err');return;}
-  toast('Password updated successfully!','ok');
-  ['sOldPass','sNewPass','sConfPass'].forEach(id=>document.getElementById(id).value='');
+  
+  try {
+    const data = await window.novaFetch('/auth/change-password', {
+      method: 'PUT',
+      body: JSON.stringify({ oldPassword: old, newPassword: nw })
+    });
+    if (data.success) {
+      toast('Password updated successfully!','ok');
+      ['sOldPass','sNewPass','sConfPass'].forEach(id=>document.getElementById(id).value='');
+    }
+  } catch (err) {
+    toast(err.message || 'Password update failed.', 'err');
+  }
 }
 
-function clearOrders(){
+async function clearOrders(){
   if(!confirm('Delete ALL orders? This cannot be undone.'))return;
-  localStorage.removeItem('nova_orders');
-  toast('All orders cleared.','war');
+  try {
+    const data = await window.novaFetch('/orders');
+    if (data.success && data.orders) {
+      for (const o of data.orders) {
+        await window.novaFetch(`/orders/${o._id}`, { method: 'DELETE' });
+      }
+    }
+    await updateSidebarBadges();
+    toast('All orders cleared from MongoDB.','war');
+  } catch (err) {
+    toast('Failed to clear orders: ' + err.message, 'err');
+  }
 }
-function resetProducts(){
+
+async function resetProducts(){
   if(!confirm('Reset product catalogue to defaults?'))return;
-  localStorage.removeItem('nova_admin_products');
-  toast('Product catalogue reset to defaults.','ok');
+  try {
+    const data = await window.novaFetch('/products');
+    if (data.success && data.products) {
+      for (const p of data.products) {
+        await window.novaFetch(`/products/${p._id}`, { method: 'DELETE' });
+      }
+    }
+    // Seed canonicals
+    const CANONICAL = [
+      { name: 'Nova Surge X1', sku: 'NOVA-SX-001', category: 'Running', gender: 'men', price: 8999, sizes: [{size:8, stock:10}, {size:9, stock:12}], images: ['assets/images/product_surge.png'], color: 'orange', featured: true, status: 'Active' },
+      { name: 'Nova Phantom', sku: 'NOVA-PH-002', category: 'Running', gender: 'men', price: 7999, sizes: [{size:7, stock:9}, {size:8, stock:9}], images: ['assets/images/product_phantom.png'], color: 'white', featured: true, status: 'Active' },
+      { name: 'Nova Air Pro', sku: 'NOVA-AP-003', category: 'Training', gender: 'unisex', price: 8499, sizes: [{size:9, stock:15}, {size:10, stock:15}], images: ['assets/images/product_air_pro.png'], color: 'white', featured: false, status: 'Active' }
+    ];
+    for (const item of CANONICAL) {
+      await window.novaFetch('/products', { method: 'POST', body: JSON.stringify(item) });
+    }
+    await updateSidebarBadges();
+    toast('Product catalogue reset to defaults in database.','ok');
+  } catch (err) {
+    toast('Failed to reset catalogue: ' + err.message, 'err');
+  }
 }
+
 function clearUserData(){
   if(!confirm('Clear all cart and wishlist data?'))return;
   localStorage.removeItem('nova_cart');
   localStorage.removeItem('nova_wishlist');
-  toast('Cart and wishlist data cleared.','ok');
+  toast('Cart and wishlist local data cleared.','ok');
 }
 
 let _tt;
 function toast(msg,type=''){const el=document.getElementById('adToast');el.className=type?type:'';el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
 
-loadSettings();
+async function init() {
+  loadSettings();
+  await updateSidebarBadges();
+}
+init();
 </script>
 <script src="admin-responsive.js"></script>
 </body>

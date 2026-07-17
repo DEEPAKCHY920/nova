@@ -6,6 +6,7 @@
   <title>NOVA Admin — Customers</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="api-config.js"></script>
   <link rel="stylesheet" href="admin-responsive.css" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -185,30 +186,88 @@
 <div id="adToast"></div>
 
 <script>
-(function(){
-  const s=localStorage.getItem('nova_admin_session')||sessionStorage.getItem('nova_admin_session');
-  if(!s){window.location.href='admin-login.html';return;}
-  try{const d=JSON.parse(s);document.getElementById('hdrName').textContent=d.name||'Admin';document.getElementById('hdrAvatar').textContent=(d.name||'A')[0].toUpperCase();}catch(e){}
-})();
-document.getElementById('logoutBtn').addEventListener('click',()=>{localStorage.removeItem('nova_admin_session');sessionStorage.removeItem('nova_admin_session');window.location.href='admin-login.html';});
-
-try{const p=JSON.parse(localStorage.getItem('nova_admin_products')||'[]');document.getElementById('sbProdBadge').textContent=p.length;}catch(e){}
-try{const o=JSON.parse(localStorage.getItem('nova_orders')||'[]');document.getElementById('sbOrderBadge').textContent=o.filter(x=>x.status==='Pending').length;}catch(e){}
-
-function buildCustomers(){
-  const orders=JSON.parse(localStorage.getItem('nova_orders')||'[]');
-  const map={};
-  orders.forEach(o=>{
-    if(!map[o.email]){map[o.email]={name:o.customer,email:o.email,city:o.city,phone:o.phone||'-',orders:[],totalSpent:0,lastOrderDate:o.date};}
-    map[o.email].orders.push(o);
-    map[o.email].totalSpent+=o.total;
-    if(new Date(o.date)>new Date(map[o.email].lastOrderDate))map[o.email].lastOrderDate=o.date;
-  });
-  return Object.values(map).map(c=>({...c,orderCount:c.orders.length,avgOrder:Math.round(c.totalSpent/c.orders.length),tier:c.orders.length>=3?'VIP':c.orders.length>=1?'Regular':'New'}));
+/* AUTH */
+function getSession() {
+  try {
+    const token = localStorage.getItem('nova_admin_token');
+    if (!token) return null;
+    return JSON.parse(localStorage.getItem('nova_admin_session') || sessionStorage.getItem('nova_admin_session') || 'null');
+  } catch (e) { return null; }
 }
 
-let customers=buildCustomers();
+(function(){
+  const s = getSession();
+  if(!s){window.location.href='admin-login.html';return;}
+  try{
+    document.getElementById('hdrName').textContent=s.name||'Admin';
+    document.getElementById('hdrAvatar').textContent=(s.name||'A')[0].toUpperCase();
+  }catch(e){}
+})();
+
+document.getElementById('logoutBtn').addEventListener('click',()=>{
+  localStorage.removeItem('nova_admin_session');
+  localStorage.removeItem('nova_admin_token');
+  sessionStorage.removeItem('nova_admin_session');
+  window.location.href='admin-login.html';
+});
+
+let dbOrders = [];
+let customers = [];
 let searchQ='',filterTier='',sortKey='orders_desc',currentPage=1,perPage=15;
+
+function buildCustomers(ordersList){
+  const map={};
+  ordersList.forEach(o=>{
+    const customerEmail = o.user ? o.user.email : (o.shippingAddress ? o.shippingAddress.email : 'guest@gmail.com');
+    const customerName = o.shippingAddress ? o.shippingAddress.fullName : (o.user ? o.user.name : 'Guest Customer');
+    const city = o.shippingAddress ? o.shippingAddress.city : 'Mumbai';
+    const phone = o.shippingAddress ? o.shippingAddress.phone : (o.user ? o.user.phone : '-');
+    const orderDateStr = new Date(o.createdAt).toLocaleDateString('en-IN');
+    const orderIdStr = '#' + o._id.substring(18).toUpperCase();
+    
+    if(!map[customerEmail]){
+      map[customerEmail]={
+        name: customerName,
+        email: customerEmail,
+        city: city,
+        phone: phone || '-',
+        orders: [],
+        totalSpent: 0,
+        lastOrderDate: o.createdAt
+      };
+    }
+    map[customerEmail].orders.push({
+      id: orderIdStr,
+      date: o.createdAt,
+      status: o.orderStatus || 'placed',
+      total: o.total || 0
+    });
+    map[customerEmail].totalSpent += (o.total || 0);
+    if(new Date(o.createdAt) > new Date(map[customerEmail].lastOrderDate)) {
+      map[customerEmail].lastOrderDate = o.createdAt;
+    }
+  });
+  
+  return Object.values(map).map(c=>({
+    ...c,
+    orderCount: c.orders.length,
+    avgOrder: Math.round(c.totalSpent/c.orders.length),
+    tier: c.orders.length>=3?'VIP':c.orders.length>=1?'Regular':'New'
+  }));
+}
+
+async function refreshData() {
+  try {
+    const data = await window.novaFetch('/orders');
+    if (data.success && data.orders) {
+      dbOrders = data.orders;
+      customers = buildCustomers(dbOrders);
+    }
+  } catch (err) {
+    console.error("Failed to load orders for customer calculations", err);
+    toast("Failed to load customer list.", "err");
+  }
+}
 
 function filtered(){
   let l=[...customers];
@@ -225,24 +284,34 @@ const COLORS=['#bdfc24','#3b82f6','#22c55e','#f59e0b','#8b5cf6','#ef4444','#ec48
 function getColor(name){return COLORS[name.charCodeAt(0)%COLORS.length];}
 function tierBadge(t){return{VIP:'b-vip',Regular:'b-regular',New:'b-new'}[t]||'b-new';}
 
-function updateStats(){
+async function updateStats(){
   document.getElementById('statTotal').textContent=customers.length;
   document.getElementById('statVIP').textContent=customers.filter(c=>c.tier==='VIP').length;
   const spent=customers.reduce((s,c)=>s+c.totalSpent,0);
   document.getElementById('statSpent').textContent='₹'+spent.toLocaleString();
-  const orders=JSON.parse(localStorage.getItem('nova_orders')||'[]');
-  const avg=orders.length?Math.round(orders.reduce((s,o)=>s+o.total,0)/orders.length):0;
+  const avg=dbOrders.length?Math.round(dbOrders.reduce((s,o)=>s+(o.total||0),0)/dbOrders.length):0;
   document.getElementById('statAvg').textContent='₹'+avg.toLocaleString();
+  
+  try {
+    const prodData = await window.novaFetch('/products');
+    if (prodData.success) {
+      document.getElementById('sbProdBadge').textContent = prodData.products.length;
+    }
+    const statsData = await window.novaFetch('/admin/stats');
+    if (statsData.success && statsData.stats) {
+      document.getElementById('sbOrderBadge').textContent = statsData.stats.totalOrders || 0;
+    }
+  } catch (e) {}
 }
 
-function renderTable(){
-  updateStats();
+async function renderTable(){
+  await updateStats();
   const list=filtered(),total=list.length,totalPages=Math.max(1,Math.ceil(total/perPage));
   if(currentPage>totalPages)currentPage=1;
   const start=(currentPage-1)*perPage,page=list.slice(start,start+perPage);
   const body=document.getElementById('custBody');
   if(!page.length){
-    body.innerHTML='<tr><td colspan="9"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><h3>No customers yet</h3><p>Generate demo orders in the Orders page to populate customers.</p></div></td></tr>';
+    body.innerHTML='<tr><td colspan="9"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><h3>No customers yet</h3><p>Active customers will appear here after orders are placed.</p></div></td></tr>';
   } else {
     body.innerHTML=page.map((c,i)=>{
       const color=getColor(c.name);
@@ -288,7 +357,7 @@ function openCustomer(idx){
     <div class="detail-row"><span class="lbl">Last Order</span><span class="val">${new Date(c.lastOrderDate).toLocaleDateString('en-IN')}</span></div>
     <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd)">
       <div style="font-size:11px;font-weight:700;color:var(--txf);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Recent Orders</div>
-      ${c.orders.slice(-3).reverse().map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd2);font-size:12.5px"><span style="color:var(--ac);font-weight:700">${o.id}</span><span style="color:var(--txd)">${new Date(o.date).toLocaleDateString('en-IN')}</span><span class="badge b-${o.status.toLowerCase()}" style="font-size:10px">${o.status}</span><span style="font-weight:700">₹${o.total.toLocaleString()}</span></div>`).join('')}
+      ${c.orders.slice(-3).reverse().map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd2);font-size:12.5px"><span style="color:var(--ac);font-weight:700">${o.id}</span><span style="color:var(--txd)">${new Date(o.date).toLocaleDateString('en-IN')}</span><span class="badge b-${(o.status || 'placed').toLowerCase()}" style="font-size:10px">${o.status.toUpperCase()}</span><span style="font-weight:700">₹${o.total.toLocaleString()}</span></div>`).join('')}
     </div>
   `;
   document.getElementById('custModal').classList.add('open');
@@ -311,7 +380,11 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 let _tt;
 function toast(msg,type=''){const el=document.getElementById('adToast');el.className=type?type:'';el.innerHTML=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
 
-renderTable();
+async function init() {
+  await refreshData();
+  await renderTable();
+}
+init();
 </script>
 <script src="admin-responsive.js"></script>
 </body>
