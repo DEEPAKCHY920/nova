@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NOVA Admin — Customers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="admin-responsive.css" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --sb:220px;--hh:60px;
+      --bg:#0c0c0e;--sbg:#101013;--sur:#161619;--su2:#1e1e23;--su3:#252529;
+      --bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.04);
+      --tx:#f0f0f2;--txd:rgba(240,240,242,.55);--txf:rgba(240,240,242,.3);
+      --ac:#bdfc24;--acd:rgba(189,252,36,.12);--act:#0a0a0c;
+      --gr:#22c55e;--rd:#ef4444;--yl:#f59e0b;--bl:#3b82f6;--pu:#8b5cf6;
+      --f:"Inter",sans-serif;--r:12px;--rs:8px;
+    }
+    html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden}
+    a{text-decoration:none;color:inherit}button{font-family:var(--f);cursor:pointer;border:none;background:none}
+    img{display:block;object-fit:cover}select,input,textarea{font-family:var(--f)}
+    .wrap{display:flex;height:100vh;overflow:hidden}
+    .sb{width:var(--sb);background:var(--sbg);border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb::-webkit-scrollbar{width:3px}.sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.05)}
+    .sb-logo{display:flex;align-items:center;gap:9px;padding:20px 18px;border-bottom:1px solid var(--bd)}
+    .sb-logo svg{width:28px;height:28px;color:var(--ac)}.sb-logo-n{font-size:17px;font-weight:800;letter-spacing:.08em}
+    .sb-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:1px}
+    .ni{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rs);font-size:13px;font-weight:500;color:var(--txd);cursor:pointer;transition:background .15s,color .15s;width:100%;text-align:left}
+    .ni:hover{background:rgba(255,255,255,.05);color:var(--tx)}.ni.act{background:var(--acd);color:var(--ac);font-weight:600}
+    .ni svg{width:16px;height:16px;flex-shrink:0}
+    .nbadge{margin-left:auto;background:var(--ac);color:var(--act);font-size:10px;font-weight:700;border-radius:20px;padding:1px 6px;min-width:18px;text-align:center}
+    .sb-up{margin:12px 10px;background:rgba(189,252,36,.06);border:1px solid rgba(189,252,36,.15);border-radius:var(--r);padding:14px}
+    .up-t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--ac);margin-bottom:5px}
+    .up-d{font-size:11px;color:var(--txd);line-height:1.5;margin-bottom:10px}
+    .up-btn{display:block;width:100%;text-align:center;padding:7px 0;background:transparent;border:1px solid var(--ac);border-radius:7px;font-size:12px;font-weight:700;color:var(--ac);cursor:pointer;transition:background .2s}
+    .up-btn:hover{background:var(--acd)}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+    .hdr{height:var(--hh);background:var(--sbg);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0}
+    .hdr-search{flex:1;max-width:440px;display:flex;align-items:center;gap:10px;background:var(--su2);border:1px solid var(--bd);border-radius:10px;padding:8px 14px;transition:border-color .2s}
+    .hdr-search:focus-within{border-color:rgba(189,252,36,.3)}.hdr-search svg{width:15px;height:15px;color:var(--txf);flex-shrink:0}
+    .hdr-search input{background:none;border:none;outline:none;font-size:13px;color:var(--tx);flex:1;min-width:0}.hdr-search input::placeholder{color:var(--txf)}
+    .hsp{flex:1}.hacts{display:flex;align-items:center;gap:8px}
+    .hib{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--su2);border:1px solid var(--bd);border-radius:10px;color:var(--txd);cursor:pointer;transition:border-color .2s,color .2s}
+    .hib:hover{border-color:rgba(189,252,36,.3);color:var(--tx)}.hib svg{width:16px;height:16px}
+    .hav{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--su2);border:1px solid var(--bd);border-radius:10px;cursor:pointer}
+    .avc{width:28px;height:28px;background:var(--ac);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--act);flex-shrink:0}
+    .avn{font-size:12.5px;font-weight:600}.avr{font-size:10.5px;color:var(--txf)}
+    .pg{flex:1;overflow-y:auto;padding:24px}.pg::-webkit-scrollbar{width:4px}.pg::-webkit-scrollbar-thumb{background:rgba(255,255,255,.07);border-radius:2px}
+    .bc{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--txf);margin-bottom:16px}
+    .bc a{color:var(--txf);transition:color .2s}.bc a:hover{color:var(--tx)}.bc svg{width:12px;height:12px;opacity:.5}
+    .pgh{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .pgt{font-size:22px;font-weight:700}.pgs{font-size:13px;color:var(--txd);margin-top:3px}.pgh-btns{display:flex;gap:10px;align-items:center}
+    .btn{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+    .btn-ghost{background:var(--su2);border:1px solid var(--bd);color:var(--txd)}.btn-ghost:hover{border-color:rgba(255,255,255,.15);color:var(--tx)}
+    .btn-primary{background:var(--ac);color:var(--act)}.btn-primary:hover{box-shadow:0 4px 16px rgba(189,252,36,.3);transform:translateY(-1px)}
+    .btn svg{width:15px;height:15px}
+    .srow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+    .sc{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:14px}
+    .sci-wrap{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.sci-wrap svg{width:22px;height:22px}
+    .sc-info{flex:1}.sc-lbl{font-size:12px;color:var(--txf);margin-bottom:3px}.sc-val{font-size:22px;font-weight:800;line-height:1;letter-spacing:-.02em;margin-bottom:4px}.sc-sub{font-size:11.5px;color:var(--txd)}
+    .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+    .search-box{display:flex;align-items:center;gap:8px;background:var(--su2);border:1px solid var(--bd);border-radius:var(--rs);padding:8px 12px;min-width:200px;flex:1;max-width:280px;transition:border-color .2s}
+    .search-box:focus-within{border-color:rgba(189,252,36,.3)}.search-box svg{width:14px;height:14px;color:var(--txf);flex-shrink:0}
+    .search-box input{background:none;border:none;outline:none;font-size:13px;color:var(--tx);width:100%}.search-box input::placeholder{color:var(--txf)}
+    .fsel{appearance:none;background:var(--su2);border:1px solid var(--bd);border-radius:var(--rs);padding:8px 32px 8px 12px;font-size:13px;color:var(--txd);cursor:pointer;outline:none;transition:border-color .2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(240,240,242,.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:14px}
+    .fsel:focus{border-color:rgba(189,252,36,.3)}.fsel option{background:var(--su2)}
+    .toolbar-right{margin-left:auto}
+    .tbl-wrap{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+    table{width:100%;border-collapse:collapse}thead{background:rgba(255,255,255,.02);border-bottom:1px solid var(--bd)}
+    th{padding:12px 14px;font-size:11px;font-weight:600;color:var(--txf);text-align:left;white-space:nowrap;letter-spacing:.05em;text-transform:uppercase}
+    th:first-child,td:first-child{padding-left:16px}
+    tbody tr{border-bottom:1px solid var(--bd2);transition:background .15s}tbody tr:last-child{border-bottom:none}tbody tr:hover{background:rgba(255,255,255,.025)}
+    td{padding:12px 14px;font-size:13px;vertical-align:middle}
+    .badge{font-size:11px;font-weight:600;border-radius:20px;padding:3px 10px;white-space:nowrap}
+    .b-vip{background:rgba(189,252,36,.12);color:var(--ac)}
+    .b-regular{background:rgba(59,130,246,.12);color:var(--bl)}
+    .b-new{background:rgba(34,197,94,.12);color:var(--gr)}
+    .actions{display:flex;align-items:center;gap:5px}
+    .abn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:7px;background:var(--su2);border:1px solid var(--bd);cursor:pointer;transition:all .2s;color:var(--txd)}
+    .abn:hover{border-color:rgba(255,255,255,.15);color:var(--tx)}.abn svg{width:13px;height:13px}
+    .cb{width:16px;height:16px;accent-color:var(--ac);cursor:pointer}
+    .pg-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-top:1px solid var(--bd)}
+    .pg-info{font-size:12.5px;color:var(--txf)}.pg-right{display:flex;align-items:center;gap:8px}
+    .pg-btns{display:flex;align-items:center;gap:4px}
+    .pgb{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:7px;background:var(--su2);border:1px solid var(--bd);font-size:12.5px;font-weight:500;color:var(--txd);cursor:pointer;transition:all .2s}
+    .pgb:hover{border-color:rgba(255,255,255,.15);color:var(--tx)}.pgb.act{background:var(--ac);color:var(--act);border-color:var(--ac);font-weight:700}.pgb:disabled{opacity:.3;cursor:not-allowed}
+    .cust-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+    .mlo{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;background:rgba(5,5,6,.85);backdrop-filter:blur(8px)}
+    .mlo.open{opacity:1;visibility:visible}
+    .mo{background:var(--su2);border:1px solid var(--bd);border-radius:16px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;animation:su .3s cubic-bezier(.16,1,.3,1)}
+    @keyframes su{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+    .mo-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--bd)}
+    .mo-title{font-size:16px;font-weight:700}
+    .mo-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--txf);cursor:pointer;transition:all .2s}
+    .mo-close:hover{background:rgba(255,255,255,.06);color:var(--tx)}.mo-close svg{width:16px;height:16px}
+    .mo-body{padding:24px}
+    .mo-ftr{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--bd)}
+    .detail-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:13px;border-bottom:1px solid var(--bd2)}
+    .detail-row:last-child{border-bottom:none}
+    .detail-row .lbl{color:var(--txd)}.detail-row .val{font-weight:600}
+    #adToast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--su2);border:1px solid var(--bd);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:500;color:var(--tx);display:flex;align-items:center;gap:10px;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+    #adToast.show{opacity:1;transform:translateX(-50%) translateY(0)}#adToast svg{width:16px;height:16px;flex-shrink:0}
+    #adToast.ok{border-color:rgba(34,197,94,.3);color:var(--gr)}
+    .empty{text-align:center;padding:60px 24px;color:var(--txf)}.empty svg{width:52px;height:52px;margin:0 auto 16px;opacity:.25}.empty h3{font-size:15px;font-weight:600;color:var(--txd);margin-bottom:6px}.empty p{font-size:13px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sb">
+    <a href="admin.html" class="sb-logo">
+      <svg viewBox="0 0 48 48" fill="none"><path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="sb-logo-n">NOVA</span>
+    </a>
+    <nav class="sb-nav">
+      <a class="ni" href="admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a class="ni" href="admin-products.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Products<span class="nbadge" id="sbProdBadge">0</span></a>
+      <a class="ni" href="admin-orders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Orders<span class="nbadge" id="sbOrderBadge">0</span></a>
+      <a class="ni act" href="admin-customers.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Customers</a>
+      <a class="ni" href="admin-settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+      <button class="ni" id="logoutBtn" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ef4444"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span style="color:#ef4444">Sign Out</span></button>
+    </nav>
+    <div class="sb-up">
+      <div class="up-t">&#9733; Customers</div>
+      <p class="up-d">View customer profiles and purchase history.</p>
+      <a href="collection.html" target="_blank" class="up-btn">&#128279; View Storefront</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="hdr">
+      <div class="hdr-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="hdrSearch" placeholder="Search customers..."/>
+      </div>
+      <div class="hsp"></div>
+      <div class="hacts">
+        <div class="hav"><div class="avc" id="hdrAvatar">A</div><div><div class="avn" id="hdrName">Admin</div><div class="avr">Super Admin</div></div></div>
+      </div>
+    </header>
+
+    <div class="pg">
+      <div class="bc"><a href="admin.html">Dashboard</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span>Customers</span></div>
+      <div class="pgh">
+        <div><div class="pgt">Customers</div><div class="pgs">Customer profiles built from order data</div></div>
+        <div class="pgh-btns">
+          <button class="btn btn-ghost" onclick="exportCustomers()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
+        </div>
+      </div>
+
+      <div class="srow">
+        <div class="sc"><div class="sci-wrap" style="background:rgba(189,252,36,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#bdfc24" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="sc-info"><div class="sc-lbl">Total Customers</div><div class="sc-val" id="statTotal">0</div><div class="sc-sub">Unique buyers</div></div></div>
+        <div class="sc"><div class="sci-wrap" style="background:rgba(189,252,36,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#bdfc24" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg></div><div class="sc-info"><div class="sc-lbl">VIP (3+ orders)</div><div class="sc-val" id="statVIP">0</div><div class="sc-sub">Loyal customers</div></div></div>
+        <div class="sc"><div class="sci-wrap" style="background:rgba(34,197,94,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="sc-info"><div class="sc-lbl">Total Spent</div><div class="sc-val" id="statSpent">₹0</div><div class="sc-sub">All customers</div></div></div>
+        <div class="sc"><div class="sci-wrap" style="background:rgba(59,130,246,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="sc-info"><div class="sc-lbl">Avg. Order Value</div><div class="sc-val" id="statAvg">₹0</div><div class="sc-sub">Per order</div></div></div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="searchInput" placeholder="Name, email, city..."/></div>
+        <select class="fsel" id="filterTier"><option value="">All Tiers</option><option value="VIP">VIP</option><option value="Regular">Regular</option><option value="New">New</option></select>
+        <select class="fsel" id="sortBy"><option value="orders_desc">Most Orders</option><option value="spent_desc">Highest Spend</option><option value="name_asc">Name A-Z</option></select>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Customer</th><th>Email</th><th>City</th><th>Orders</th><th>Total Spent</th><th>Avg Order</th><th>Tier</th><th>Last Order</th><th>Action</th></tr></thead>
+          <tbody id="custBody"></tbody>
+        </table>
+        <div class="pg-bar"><div class="pg-info" id="pgInfo">-</div><div class="pg-right"><div class="pg-btns" id="pgBtns"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOMER DETAIL MODAL -->
+<div class="mlo" id="custModal">
+  <div class="mo">
+    <div class="mo-hdr"><div class="mo-title" id="moTitle">Customer Profile</div><button class="mo-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="mo-body" id="moBody"></div>
+    <div class="mo-ftr"><button class="btn btn-ghost" onclick="closeModal()">Close</button></div>
+  </div>
+</div>
+
+<div id="adToast"></div>
+
+<script>
+(function(){
+  const s=localStorage.getItem('nova_admin_session')||sessionStorage.getItem('nova_admin_session');
+  if(!s){window.location.href='admin-login.html';return;}
+  try{const d=JSON.parse(s);document.getElementById('hdrName').textContent=d.name||'Admin';document.getElementById('hdrAvatar').textContent=(d.name||'A')[0].toUpperCase();}catch(e){}
+})();
+document.getElementById('logoutBtn').addEventListener('click',()=>{localStorage.removeItem('nova_admin_session');sessionStorage.removeItem('nova_admin_session');window.location.href='admin-login.html';});
+
+try{const p=JSON.parse(localStorage.getItem('nova_admin_products')||'[]');document.getElementById('sbProdBadge').textContent=p.length;}catch(e){}
+try{const o=JSON.parse(localStorage.getItem('nova_orders')||'[]');document.getElementById('sbOrderBadge').textContent=o.filter(x=>x.status==='Pending').length;}catch(e){}
+
+function buildCustomers(){
+  const orders=JSON.parse(localStorage.getItem('nova_orders')||'[]');
+  const map={};
+  orders.forEach(o=>{
+    if(!map[o.email]){map[o.email]={name:o.customer,email:o.email,city:o.city,phone:o.phone||'-',orders:[],totalSpent:0,lastOrderDate:o.date};}
+    map[o.email].orders.push(o);
+    map[o.email].totalSpent+=o.total;
+    if(new Date(o.date)>new Date(map[o.email].lastOrderDate))map[o.email].lastOrderDate=o.date;
+  });
+  return Object.values(map).map(c=>({...c,orderCount:c.orders.length,avgOrder:Math.round(c.totalSpent/c.orders.length),tier:c.orders.length>=3?'VIP':c.orders.length>=1?'Regular':'New'}));
+}
+
+let customers=buildCustomers();
+let searchQ='',filterTier='',sortKey='orders_desc',currentPage=1,perPage=15;
+
+function filtered(){
+  let l=[...customers];
+  const q=searchQ.toLowerCase();
+  if(q)l=l.filter(c=>c.name.toLowerCase().includes(q)||c.email.toLowerCase().includes(q)||c.city.toLowerCase().includes(q));
+  if(filterTier)l=l.filter(c=>c.tier===filterTier);
+  if(sortKey==='orders_desc')l.sort((a,b)=>b.orderCount-a.orderCount);
+  else if(sortKey==='spent_desc')l.sort((a,b)=>b.totalSpent-a.totalSpent);
+  else if(sortKey==='name_asc')l.sort((a,b)=>a.name.localeCompare(b.name));
+  return l;
+}
+
+const COLORS=['#bdfc24','#3b82f6','#22c55e','#f59e0b','#8b5cf6','#ef4444','#ec4899'];
+function getColor(name){return COLORS[name.charCodeAt(0)%COLORS.length];}
+function tierBadge(t){return{VIP:'b-vip',Regular:'b-regular',New:'b-new'}[t]||'b-new';}
+
+function updateStats(){
+  document.getElementById('statTotal').textContent=customers.length;
+  document.getElementById('statVIP').textContent=customers.filter(c=>c.tier==='VIP').length;
+  const spent=customers.reduce((s,c)=>s+c.totalSpent,0);
+  document.getElementById('statSpent').textContent='₹'+spent.toLocaleString();
+  const orders=JSON.parse(localStorage.getItem('nova_orders')||'[]');
+  const avg=orders.length?Math.round(orders.reduce((s,o)=>s+o.total,0)/orders.length):0;
+  document.getElementById('statAvg').textContent='₹'+avg.toLocaleString();
+}
+
+function renderTable(){
+  updateStats();
+  const list=filtered(),total=list.length,totalPages=Math.max(1,Math.ceil(total/perPage));
+  if(currentPage>totalPages)currentPage=1;
+  const start=(currentPage-1)*perPage,page=list.slice(start,start+perPage);
+  const body=document.getElementById('custBody');
+  if(!page.length){
+    body.innerHTML='<tr><td colspan="9"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><h3>No customers yet</h3><p>Generate demo orders in the Orders page to populate customers.</p></div></td></tr>';
+  } else {
+    body.innerHTML=page.map((c,i)=>{
+      const color=getColor(c.name);
+      const lastDate=new Date(c.lastOrderDate).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+      return`<tr>
+        <td><div style="display:flex;align-items:center;gap:10px"><div class="cust-av" style="background:${color}20;color:${color}">${c.name[0]}</div><div><div style="font-weight:600">${c.name}</div><div style="font-size:11px;color:var(--txf)">${c.phone}</div></div></div></td>
+        <td style="font-size:12px;color:var(--txd)">${c.email}</td>
+        <td>${c.city}</td>
+        <td><span style="font-weight:700;color:var(--ac)">${c.orderCount}</span></td>
+        <td style="font-weight:700">₹${c.totalSpent.toLocaleString()}</td>
+        <td>₹${c.avgOrder.toLocaleString()}</td>
+        <td><span class="badge ${tierBadge(c.tier)}">${c.tier}</span></td>
+        <td style="font-size:12px;color:var(--txd)">${lastDate}</td>
+        <td><div class="actions">
+          <button class="abn" onclick="openCustomer(${start+i})" title="View Profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div></td>
+      </tr>`;
+    }).join('');
+  }
+  document.getElementById('pgInfo').textContent=total===0?'No customers':`Showing ${start+1}-${Math.min(start+perPage,total)} of ${total}`;
+  const pb=document.getElementById('pgBtns');pb.innerHTML='';
+  const pv=document.createElement('button');pv.className='pgb';pv.innerHTML='&#8249;';pv.disabled=currentPage===1;pv.onclick=()=>{currentPage--;renderTable();};pb.appendChild(pv);
+  for(let i=1;i<=totalPages;i++){const b=document.createElement('button');b.className='pgb'+(i===currentPage?' act':'');b.textContent=i;b.onclick=()=>{currentPage=i;renderTable();};pb.appendChild(b);}
+  const nx=document.createElement('button');nx.className='pgb';nx.innerHTML='&#8250;';nx.disabled=currentPage===totalPages;nx.onclick=()=>{currentPage++;renderTable();};pb.appendChild(nx);
+}
+
+function openCustomer(idx){
+  const list=filtered();
+  const c=list[idx];
+  if(!c)return;
+  const color=getColor(c.name);
+  document.getElementById('moTitle').textContent=c.name;
+  document.getElementById('moBody').innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--bd)">
+      <div style="width:56px;height:56px;border-radius:50%;background:${color}20;color:${color};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700">${c.name[0]}</div>
+      <div><div style="font-size:16px;font-weight:700">${c.name}</div><div style="font-size:12px;color:var(--txd);margin-top:2px">${c.email}</div><span class="badge ${tierBadge(c.tier)}" style="margin-top:6px;display:inline-block">${c.tier}</span></div>
+    </div>
+    <div class="detail-row"><span class="lbl">Phone</span><span class="val">${c.phone}</span></div>
+    <div class="detail-row"><span class="lbl">City</span><span class="val">${c.city}</span></div>
+    <div class="detail-row"><span class="lbl">Total Orders</span><span class="val" style="color:var(--ac)">${c.orderCount}</span></div>
+    <div class="detail-row"><span class="lbl">Total Spent</span><span class="val" style="color:var(--ac)">₹${c.totalSpent.toLocaleString()}</span></div>
+    <div class="detail-row"><span class="lbl">Avg. Order</span><span class="val">₹${c.avgOrder.toLocaleString()}</span></div>
+    <div class="detail-row"><span class="lbl">Last Order</span><span class="val">${new Date(c.lastOrderDate).toLocaleDateString('en-IN')}</span></div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd)">
+      <div style="font-size:11px;font-weight:700;color:var(--txf);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Recent Orders</div>
+      ${c.orders.slice(-3).reverse().map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd2);font-size:12.5px"><span style="color:var(--ac);font-weight:700">${o.id}</span><span style="color:var(--txd)">${new Date(o.date).toLocaleDateString('en-IN')}</span><span class="badge b-${o.status.toLowerCase()}" style="font-size:10px">${o.status}</span><span style="font-weight:700">₹${o.total.toLocaleString()}</span></div>`).join('')}
+    </div>
+  `;
+  document.getElementById('custModal').classList.add('open');
+}
+function closeModal(){document.getElementById('custModal').classList.remove('open');}
+
+document.getElementById('searchInput').addEventListener('input',e=>{searchQ=e.target.value;currentPage=1;renderTable();});
+document.getElementById('hdrSearch').addEventListener('input',e=>{searchQ=e.target.value;document.getElementById('searchInput').value=e.target.value;currentPage=1;renderTable();});
+document.getElementById('filterTier').addEventListener('change',e=>{filterTier=e.target.value;currentPage=1;renderTable();});
+document.getElementById('sortBy').addEventListener('change',e=>{sortKey=e.target.value;renderTable();});
+
+function exportCustomers(){
+  const rows=[['Name','Email','City','Orders','Total Spent','Avg Order','Tier'],...customers.map(c=>[`"${c.name}"`,c.email,c.city,c.orderCount,c.totalSpent,c.avgOrder,c.tier].join(','))].join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows],{type:'text/csv'}));a.download=`nova-customers-${new Date().toISOString().slice(0,10)}.csv`;a.click();
+}
+
+document.getElementById('custModal').addEventListener('click',e=>{if(e.target===document.getElementById('custModal'))closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+let _tt;
+function toast(msg,type=''){const el=document.getElementById('adToast');el.className=type?type:'';el.innerHTML=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
+
+renderTable();
+</script>
+<script src="admin-responsive.js"></script>
+</body>
+</html>

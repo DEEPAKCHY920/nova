@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NOVA Admin — Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="admin-responsive.css" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --sb:220px;--hh:60px;
+      --bg:#0c0c0e;--sbg:#101013;--sur:#161619;--su2:#1e1e23;--su3:#252529;
+      --bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.04);
+      --tx:#f0f0f2;--txd:rgba(240,240,242,.55);--txf:rgba(240,240,242,.3);
+      --ac:#bdfc24;--acd:rgba(189,252,36,.12);--act:#0a0a0c;
+      --gr:#22c55e;--rd:#ef4444;--yl:#f59e0b;--bl:#3b82f6;
+      --f:"Inter",sans-serif;--r:12px;--rs:8px;
+    }
+    html,body{height:100%;font-family:var(--f);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;overflow:hidden}
+    a{text-decoration:none;color:inherit}button{font-family:var(--f);cursor:pointer;border:none;background:none}
+    input,select,textarea{font-family:var(--f)}
+    .wrap{display:flex;height:100vh;overflow:hidden}
+    .sb{width:var(--sb);background:var(--sbg);border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb::-webkit-scrollbar{width:3px}.sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.05)}
+    .sb-logo{display:flex;align-items:center;gap:9px;padding:20px 18px;border-bottom:1px solid var(--bd)}
+    .sb-logo svg{width:28px;height:28px;color:var(--ac)}.sb-logo-n{font-size:17px;font-weight:800;letter-spacing:.08em}
+    .sb-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:1px}
+    .ni{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rs);font-size:13px;font-weight:500;color:var(--txd);cursor:pointer;transition:background .15s,color .15s;width:100%;text-align:left}
+    .ni:hover{background:rgba(255,255,255,.05);color:var(--tx)}.ni.act{background:var(--acd);color:var(--ac);font-weight:600}
+    .ni svg{width:16px;height:16px;flex-shrink:0}
+    .nbadge{margin-left:auto;background:var(--ac);color:var(--act);font-size:10px;font-weight:700;border-radius:20px;padding:1px 6px;min-width:18px;text-align:center}
+    .sb-up{margin:12px 10px;background:rgba(189,252,36,.06);border:1px solid rgba(189,252,36,.15);border-radius:var(--r);padding:14px}
+    .up-t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--ac);margin-bottom:5px}
+    .up-d{font-size:11px;color:var(--txd);line-height:1.5;margin-bottom:10px}
+    .up-btn{display:block;width:100%;text-align:center;padding:7px 0;background:transparent;border:1px solid var(--ac);border-radius:7px;font-size:12px;font-weight:700;color:var(--ac);cursor:pointer;transition:background .2s}
+    .up-btn:hover{background:var(--acd)}
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+    .hdr{height:var(--hh);background:var(--sbg);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:14px;flex-shrink:0}
+    .hsp{flex:1}.hacts{display:flex;align-items:center;gap:8px}
+    .hav{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--su2);border:1px solid var(--bd);border-radius:10px;cursor:pointer}
+    .avc{width:28px;height:28px;background:var(--ac);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--act);flex-shrink:0}
+    .avn{font-size:12.5px;font-weight:600}.avr{font-size:10.5px;color:var(--txf)}
+    .pg{flex:1;overflow-y:auto;padding:24px}.pg::-webkit-scrollbar{width:4px}.pg::-webkit-scrollbar-thumb{background:rgba(255,255,255,.07);border-radius:2px}
+    .bc{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--txf);margin-bottom:16px}
+    .bc a{color:var(--txf);transition:color .2s}.bc a:hover{color:var(--tx)}.bc svg{width:12px;height:12px;opacity:.5}
+    .pgt{font-size:22px;font-weight:700}.pgs{font-size:13px;color:var(--txd);margin-top:3px;margin-bottom:24px}
+    /* SETTINGS LAYOUT */
+    .set-layout{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start}
+    .set-nav{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);padding:8px;position:sticky;top:0}
+    .sni{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--rs);font-size:13px;font-weight:500;color:var(--txd);cursor:pointer;transition:all .15s}
+    .sni:hover{background:rgba(255,255,255,.05);color:var(--tx)}.sni.act{background:var(--acd);color:var(--ac);font-weight:600}
+    .sni svg{width:15px;height:15px;flex-shrink:0}
+    .set-panel{display:none}.set-panel.act{display:block}
+    .set-card{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);padding:24px;margin-bottom:16px}
+    .set-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
+    .set-card p{font-size:12.5px;color:var(--txd);margin-bottom:20px;line-height:1.5}
+    .fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .fgrp{display:flex;flex-direction:column;gap:5px}.fgrp.full{grid-column:1/-1}
+    .flbl{font-size:11.5px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.04em}
+    .finp{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--tx);outline:none;transition:border-color .2s;width:100%}
+    .finp:focus{border-color:rgba(189,252,36,.4)}.finp::placeholder{color:var(--txf)}
+    textarea.finp{resize:vertical;min-height:80px}
+    select.finp{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(240,240,242,.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px;padding-right:32px}
+    select.finp option{background:var(--su2)}
+    .btn{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+    .btn-ghost{background:var(--su2);border:1px solid var(--bd);color:var(--txd)}.btn-ghost:hover{border-color:rgba(255,255,255,.15);color:var(--tx)}
+    .btn-primary{background:var(--ac);color:var(--act)}.btn-primary:hover{box-shadow:0 4px 16px rgba(189,252,36,.3);transform:translateY(-1px)}
+    .btn-danger{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:var(--rd)}.btn-danger:hover{background:rgba(239,68,68,.2)}
+    .btn svg{width:15px;height:15px}
+    .btn-row{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--bd)}
+    /* TOGGLE SWITCH */
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bd2)}
+    .toggle-row:last-child{border-bottom:none}
+    .toggle-info h4{font-size:13px;font-weight:600;margin-bottom:2px}
+    .toggle-info p{font-size:12px;color:var(--txd)}
+    .tog{width:42px;height:24px;border-radius:12px;background:rgba(255,255,255,.1);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none;outline:none}
+    .tog.on{background:var(--ac)}.tog::after{content:"";position:absolute;top:4px;left:4px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}.tog.on::after{left:22px}
+    /* ADMIN ACCOUNTS */
+    .admin-card{background:var(--su2);border:1px solid var(--bd);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+    .admin-av{width:36px;height:36px;border-radius:50%;background:var(--acd);color:var(--ac);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+    .admin-info{flex:1}.admin-name{font-size:13px;font-weight:600}.admin-role{font-size:11px;color:var(--txf)}
+    .admin-badge{font-size:10px;font-weight:700;border-radius:20px;padding:2px 8px}
+    .role-super{background:rgba(189,252,36,.12);color:var(--ac)}.role-editor{background:rgba(59,130,246,.12);color:var(--bl)}.role-viewer{background:rgba(240,240,242,.08);color:var(--txf)}
+    /* DANGER ZONE */
+    .danger-card{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);border-radius:var(--r);padding:20px 24px;margin-bottom:16px}
+    .danger-card h3{color:var(--rd);font-size:14px;font-weight:700;margin-bottom:4px}
+    .danger-card p{font-size:12.5px;color:var(--txd);margin-bottom:16px;line-height:1.5}
+    /* TOAST */
+    #adToast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--su2);border:1px solid var(--bd);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:500;color:var(--tx);display:flex;align-items:center;gap:10px;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+    #adToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    #adToast.ok{border-color:rgba(34,197,94,.3);color:var(--gr)}#adToast.err{border-color:rgba(239,68,68,.3);color:var(--rd)}#adToast.war{border-color:rgba(245,158,11,.3);color:var(--yl)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sb">
+    <a href="admin.html" class="sb-logo">
+      <svg viewBox="0 0 48 48" fill="none"><path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="sb-logo-n">NOVA</span>
+    </a>
+    <nav class="sb-nav">
+      <a class="ni" href="admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a class="ni" href="admin-products.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Products<span class="nbadge" id="sbProdBadge">0</span></a>
+      <a class="ni" href="admin-orders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Orders<span class="nbadge" id="sbOrderBadge">0</span></a>
+      <a class="ni" href="admin-customers.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Customers</a>
+      <a class="ni act" href="admin-settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+      <button class="ni" id="logoutBtn" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ef4444"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span style="color:#ef4444">Sign Out</span></button>
+    </nav>
+    <div class="sb-up">
+      <div class="up-t">&#9733; Settings</div>
+      <p class="up-d">Configure your store and admin preferences.</p>
+      <a href="collection.html" target="_blank" class="up-btn">&#128279; View Storefront</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="hdr">
+      <div style="font-size:15px;font-weight:700">Settings</div>
+      <div class="hsp"></div>
+      <div class="hacts">
+        <div class="hav"><div class="avc" id="hdrAvatar">A</div><div><div class="avn" id="hdrName">Admin</div><div class="avr">Super Admin</div></div></div>
+      </div>
+    </header>
+
+    <div class="pg">
+      <div class="bc"><a href="admin.html">Dashboard</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span>Settings</span></div>
+      <div class="pgt">Settings</div>
+      <div class="pgs">Manage your store configuration</div>
+
+      <div class="set-layout">
+        <!-- Settings Nav -->
+        <div class="set-nav">
+          <div class="sni act" onclick="showPanel('store',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Store</div>
+          <div class="sni" onclick="showPanel('shipping',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Shipping</div>
+          <div class="sni" onclick="showPanel('notifications',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifications</div>
+          <div class="sni" onclick="showPanel('account',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Admin Accounts</div>
+          <div class="sni" onclick="showPanel('danger',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--rd)"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span style="color:var(--rd)">Danger Zone</span></div>
+        </div>
+
+        <!-- Panels -->
+        <div>
+          <!-- STORE -->
+          <div class="set-panel act" id="panel-store">
+            <div class="set-card">
+              <h3>Store Information</h3>
+              <p>Update your store's public-facing details</p>
+              <div class="fg">
+                <div class="fgrp"><label class="flbl">Store Name</label><input type="text" class="finp" id="sStoreName" value="NOVA Sports"/></div>
+                <div class="fgrp"><label class="flbl">Store URL</label><input type="text" class="finp" id="sStoreUrl" value="www.novasports.in"/></div>
+                <div class="fgrp"><label class="flbl">Support Email</label><input type="email" class="finp" id="sSupportEmail" value="support@novasports.in"/></div>
+                <div class="fgrp"><label class="flbl">Support Phone</label><input type="text" class="finp" id="sSupportPhone" value="+91 98765 43210"/></div>
+                <div class="fgrp full"><label class="flbl">Store Description</label><textarea class="finp" id="sStoreDesc">Premium footwear engineered for performance and style. Defy gravity with NOVA.</textarea></div>
+                <div class="fgrp"><label class="flbl">Currency</label><select class="finp" id="sCurrency"><option value="INR" selected>INR (₹)</option><option value="USD">USD ($)</option><option value="EUR">EUR (€)</option></select></div>
+                <div class="fgrp"><label class="flbl">Timezone</label><select class="finp" id="sTimezone"><option value="IST" selected>IST (UTC+5:30)</option><option value="UTC">UTC</option></select></div>
+              </div>
+              <div class="btn-row"><button class="btn btn-primary" onclick="saveSettings('store')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save Changes</button></div>
+            </div>
+          </div>
+
+          <!-- SHIPPING -->
+          <div class="set-panel" id="panel-shipping">
+            <div class="set-card">
+              <h3>Shipping Configuration</h3>
+              <p>Set your default shipping rules and thresholds</p>
+              <div class="fg">
+                <div class="fgrp"><label class="flbl">Free Shipping Above (₹)</label><input type="number" class="finp" id="sFreeAbove" value="999"/></div>
+                <div class="fgrp"><label class="flbl">Flat Shipping Fee (₹)</label><input type="number" class="finp" id="sShipFee" value="99"/></div>
+                <div class="fgrp"><label class="flbl">Express Fee (₹)</label><input type="number" class="finp" id="sExpressFee" value="199"/></div>
+                <div class="fgrp"><label class="flbl">Estimated Days</label><input type="text" class="finp" id="sShipDays" value="3-5 business days"/></div>
+                <div class="fgrp full"><label class="flbl">Delivery Regions (comma-separated)</label><input type="text" class="finp" id="sRegions" value="Pan India"/></div>
+              </div>
+              <div class="btn-row"><button class="btn btn-primary" onclick="saveSettings('shipping')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save Shipping Settings</button></div>
+            </div>
+          </div>
+
+          <!-- NOTIFICATIONS -->
+          <div class="set-panel" id="panel-notifications">
+            <div class="set-card">
+              <h3>Notification Preferences</h3>
+              <p>Control which events trigger admin notifications</p>
+              <div class="toggle-row"><div class="toggle-info"><h4>New Order Alert</h4><p>Get notified when a new order is placed</p></div><button class="tog on" id="togNewOrder" onclick="this.classList.toggle('on')"></button></div>
+              <div class="toggle-row"><div class="toggle-info"><h4>Low Stock Warning</h4><p>Alert when product stock drops below 10</p></div><button class="tog on" id="togLowStock" onclick="this.classList.toggle('on')"></button></div>
+              <div class="toggle-row"><div class="toggle-info"><h4>Out of Stock Alert</h4><p>Immediate alert when a product hits 0 stock</p></div><button class="tog on" id="togOutStock" onclick="this.classList.toggle('on')"></button></div>
+              <div class="toggle-row"><div class="toggle-info"><h4>Order Status Updates</h4><p>Notify when order status changes</p></div><button class="tog" id="togStatusUpdate" onclick="this.classList.toggle('on')"></button></div>
+              <div class="toggle-row"><div class="toggle-info"><h4>Customer Reviews</h4><p>Alert when a new review is submitted</p></div><button class="tog" id="togReviews" onclick="this.classList.toggle('on')"></button></div>
+              <div class="toggle-row"><div class="toggle-info"><h4>Marketing Emails</h4><p>Receive promotional and campaign updates</p></div><button class="tog" id="togMarketing" onclick="this.classList.toggle('on')"></button></div>
+              <div class="btn-row"><button class="btn btn-primary" onclick="saveSettings('notifications')">Save Preferences</button></div>
+            </div>
+          </div>
+
+          <!-- ADMIN ACCOUNTS -->
+          <div class="set-panel" id="panel-account">
+            <div class="set-card">
+              <h3>Admin Accounts</h3>
+              <p>Manage who has access to the admin panel</p>
+              <div id="adminList">
+                <div class="admin-card"><div class="admin-av">A</div><div class="admin-info"><div class="admin-name" id="currentAdminName">Admin User</div><div class="admin-role" id="currentAdminEmail">admin@novasports.in</div></div><span class="admin-badge role-super">Super Admin</span></div>
+              </div>
+            </div>
+            <div class="set-card">
+              <h3>Change Password</h3>
+              <p>Update your admin account password</p>
+              <div class="fg">
+                <div class="fgrp full"><label class="flbl">Current Password</label><input type="password" class="finp" id="sOldPass" placeholder="••••••••"/></div>
+                <div class="fgrp"><label class="flbl">New Password</label><input type="password" class="finp" id="sNewPass" placeholder="Min 8 characters"/></div>
+                <div class="fgrp"><label class="flbl">Confirm Password</label><input type="password" class="finp" id="sConfPass" placeholder="Repeat new password"/></div>
+              </div>
+              <div class="btn-row"><button class="btn btn-primary" onclick="changePassword()">Update Password</button></div>
+            </div>
+          </div>
+
+          <!-- DANGER ZONE -->
+          <div class="set-panel" id="panel-danger">
+            <div class="danger-card">
+              <h3>⚠ Clear All Orders</h3>
+              <p>Permanently delete all order history from the system. This cannot be undone.</p>
+              <button class="btn btn-danger" onclick="clearOrders()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Clear All Orders</button>
+            </div>
+            <div class="danger-card">
+              <h3>⚠ Reset Product Catalogue</h3>
+              <p>Restore all products to default canonical data. All custom products will be deleted.</p>
+              <button class="btn btn-danger" onclick="resetProducts()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.27"/></svg>Reset Products</button>
+            </div>
+            <div class="danger-card">
+              <h3>⚠ Clear All Wishlists & Carts</h3>
+              <p>Delete all customer wishlist and cart data from localStorage.</p>
+              <button class="btn btn-danger" onclick="clearUserData()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Clear User Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="adToast"></div>
+
+<script>
+(function(){
+  const s=localStorage.getItem('nova_admin_session')||sessionStorage.getItem('nova_admin_session');
+  if(!s){window.location.href='admin-login.html';return;}
+  try{
+    const d=JSON.parse(s);
+    document.getElementById('hdrName').textContent=d.name||'Admin';
+    document.getElementById('hdrAvatar').textContent=(d.name||'A')[0].toUpperCase();
+    document.getElementById('currentAdminName').textContent=d.name||'Admin User';
+    document.getElementById('currentAdminEmail').textContent=d.email||'admin@novasports.in';
+  }catch(e){}
+})();
+document.getElementById('logoutBtn').addEventListener('click',()=>{localStorage.removeItem('nova_admin_session');sessionStorage.removeItem('nova_admin_session');window.location.href='admin-login.html';});
+try{const p=JSON.parse(localStorage.getItem('nova_admin_products')||'[]');document.getElementById('sbProdBadge').textContent=p.length;}catch(e){}
+try{const o=JSON.parse(localStorage.getItem('nova_orders')||'[]');document.getElementById('sbOrderBadge').textContent=o.filter(x=>x.status==='Pending').length;}catch(e){}
+
+/* Load saved settings */
+function loadSettings(){
+  try{const s=JSON.parse(localStorage.getItem('nova_admin_settings')||'{}');
+    ['sStoreName','sStoreUrl','sSupportEmail','sSupportPhone','sStoreDesc','sCurrency','sTimezone',
+     'sFreeAbove','sShipFee','sExpressFee','sShipDays','sRegions'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el&&s[id]!==undefined)el.value=s[id];
+    });
+    if(s.notif){Object.keys(s.notif).forEach(k=>{const el=document.getElementById(k);if(el){el.classList.toggle('on',s.notif[k]);}});}
+  }catch(e){}
+}
+
+function showPanel(id,btn){
+  document.querySelectorAll('.set-panel').forEach(p=>p.classList.remove('act'));
+  document.querySelectorAll('.sni').forEach(n=>n.classList.remove('act'));
+  document.getElementById('panel-'+id).classList.add('act');
+  btn.classList.add('act');
+}
+
+function saveSettings(section){
+  const s=JSON.parse(localStorage.getItem('nova_admin_settings')||'{}');
+  if(section==='store'){
+    ['sStoreName','sStoreUrl','sSupportEmail','sSupportPhone','sStoreDesc','sCurrency','sTimezone'].forEach(id=>{
+      s[id]=document.getElementById(id).value;
+    });
+  } else if(section==='shipping'){
+    ['sFreeAbove','sShipFee','sExpressFee','sShipDays','sRegions'].forEach(id=>{
+      s[id]=document.getElementById(id).value;
+    });
+  } else if(section==='notifications'){
+    s.notif={togNewOrder:document.getElementById('togNewOrder').classList.contains('on'),togLowStock:document.getElementById('togLowStock').classList.contains('on'),togOutStock:document.getElementById('togOutStock').classList.contains('on'),togStatusUpdate:document.getElementById('togStatusUpdate').classList.contains('on'),togReviews:document.getElementById('togReviews').classList.contains('on'),togMarketing:document.getElementById('togMarketing').classList.contains('on')};
+  }
+  localStorage.setItem('nova_admin_settings',JSON.stringify(s));
+  toast('Settings saved!','ok');
+}
+
+function changePassword(){
+  const old=document.getElementById('sOldPass').value;
+  const nw=document.getElementById('sNewPass').value;
+  const cf=document.getElementById('sConfPass').value;
+  if(!old||!nw){toast('Please fill in all fields.','err');return;}
+  if(nw.length<8){toast('New password must be at least 8 characters.','err');return;}
+  if(nw!==cf){toast('Passwords do not match.','err');return;}
+  toast('Password updated successfully!','ok');
+  ['sOldPass','sNewPass','sConfPass'].forEach(id=>document.getElementById(id).value='');
+}
+
+function clearOrders(){
+  if(!confirm('Delete ALL orders? This cannot be undone.'))return;
+  localStorage.removeItem('nova_orders');
+  toast('All orders cleared.','war');
+}
+function resetProducts(){
+  if(!confirm('Reset product catalogue to defaults?'))return;
+  localStorage.removeItem('nova_admin_products');
+  toast('Product catalogue reset to defaults.','ok');
+}
+function clearUserData(){
+  if(!confirm('Clear all cart and wishlist data?'))return;
+  localStorage.removeItem('nova_cart');
+  localStorage.removeItem('nova_wishlist');
+  toast('Cart and wishlist data cleared.','ok');
+}
+
+let _tt;
+function toast(msg,type=''){const el=document.getElementById('adToast');el.className=type?type:'';el.textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3000);}
+
+loadSettings();
+</script>
+<script src="admin-responsive.js"></script>
+</body>
+</html>

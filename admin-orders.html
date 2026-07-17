@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOVA Admin — Orders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="admin-responsive.css" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --sb: 220px;
+      --hh: 60px;
+      --bg: #0c0c0e;
+      --sbg: #101013;
+      --sur: #161619;
+      --su2: #1e1e23;
+      --su3: #252529;
+      --bd: rgba(255, 255, 255, .07);
+      --bd2: rgba(255, 255, 255, .04);
+      --tx: #f0f0f2;
+      --txd: rgba(240, 240, 242, .55);
+      --txf: rgba(240, 240, 242, .3);
+      --ac: #bdfc24;
+      --acd: rgba(189, 252, 36, .12);
+      --act: #0a0a0c;
+      --gr: #22c55e;
+      --rd: #ef4444;
+      --yl: #f59e0b;
+      --bl: #3b82f6;
+      --pu: #8b5cf6;
+      --f: "Inter", sans-serif;
+      --r: 12px;
+      --rs: 8px;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: var(--f);
+      background: var(--bg);
+      color: var(--tx);
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit
+    }
+
+    button {
+      font-family: var(--f);
+      cursor: pointer;
+      border: none;
+      background: none
+    }
+
+    img {
+      display: block;
+      object-fit: cover
+    }
+
+    select,
+    input,
+    textarea {
+      font-family: var(--f)
+    }
+
+    .wrap {
+      display: flex;
+      height: 100vh;
+      overflow: hidden
+    }
+
+    /* SIDEBAR */
+    .sb {
+      width: var(--sb);
+      background: var(--sbg);
+      border-right: 1px solid var(--bd);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto
+    }
+
+    .sb::-webkit-scrollbar {
+      width: 3px
+    }
+
+    .sb::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .05)
+    }
+
+    .sb-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 20px 18px;
+      border-bottom: 1px solid var(--bd)
+    }
+
+    .sb-logo svg {
+      width: 28px;
+      height: 28px;
+      color: var(--ac)
+    }
+
+    .sb-logo-n {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: .08em
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px
+    }
+
+    .ni {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: var(--rs);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--txd);
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      width: 100%;
+      text-align: left
+    }
+
+    .ni:hover {
+      background: rgba(255, 255, 255, .05);
+      color: var(--tx)
+    }
+
+    .ni.act {
+      background: var(--acd);
+      color: var(--ac);
+      font-weight: 600
+    }
+
+    .ni svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0
+    }
+
+    .nbadge {
+      margin-left: auto;
+      background: var(--ac);
+      color: var(--act);
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 20px;
+      padding: 1px 6px;
+      min-width: 18px;
+      text-align: center
+    }
+
+    .sb-up {
+      margin: 12px 10px;
+      background: rgba(189, 252, 36, .06);
+      border: 1px solid rgba(189, 252, 36, .15);
+      border-radius: var(--r);
+      padding: 14px
+    }
+
+    .up-t {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ac);
+      margin-bottom: 5px
+    }
+
+    .up-d {
+      font-size: 11px;
+      color: var(--txd);
+      line-height: 1.5;
+      margin-bottom: 10px
+    }
+
+    .up-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 7px 0;
+      background: transparent;
+      border: 1px solid var(--ac);
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ac);
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    .up-btn:hover {
+      background: var(--acd)
+    }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0
+    }
+
+    .hdr {
+      height: var(--hh);
+      background: var(--sbg);
+      border-bottom: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 14px;
+      flex-shrink: 0
+    }
+
+    .hdr-search {
+      flex: 1;
+      max-width: 440px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 8px 14px;
+      transition: border-color .2s
+    }
+
+    .hdr-search:focus-within {
+      border-color: rgba(189, 252, 36, .3)
+    }
+
+    .hdr-search svg {
+      width: 15px;
+      height: 15px;
+      color: var(--txf);
+      flex-shrink: 0
+    }
+
+    .hdr-search input {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      color: var(--tx);
+      flex: 1;
+      min-width: 0
+    }
+
+    .hdr-search input::placeholder {
+      color: var(--txf)
+    }
+
+    .hsp {
+      flex: 1
+    }
+
+    .hacts {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .hib {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      color: var(--txd);
+      cursor: pointer;
+      transition: border-color .2s, color .2s
+    }
+
+    .hib:hover {
+      border-color: rgba(189, 252, 36, .3);
+      color: var(--tx)
+    }
+
+    .hib svg {
+      width: 16px;
+      height: 16px
+    }
+
+    .hav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      cursor: pointer
+    }
+
+    .avc {
+      width: 28px;
+      height: 28px;
+      background: var(--ac);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--act);
+      flex-shrink: 0
+    }
+
+    .avn {
+      font-size: 12.5px;
+      font-weight: 600
+    }
+
+    .avr {
+      font-size: 10.5px;
+      color: var(--txf)
+    }
+
+    /* PAGE */
+    .pg {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px
+    }
+
+    .pg::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .pg::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .07);
+      border-radius: 2px
+    }
+
+    .bc {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      color: var(--txf);
+      margin-bottom: 16px
+    }
+
+    .bc a {
+      color: var(--txf);
+      transition: color .2s
+    }
+
+    .bc a:hover {
+      color: var(--tx)
+    }
+
+    .bc svg {
+      width: 12px;
+      height: 12px;
+      opacity: .5
+    }
+
+    .pgh {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px
+    }
+
+    .pgt {
+      font-size: 22px;
+      font-weight: 700
+    }
+
+    .pgs {
+      font-size: 13px;
+      color: var(--txd);
+      margin-top: 3px
+    }
+
+    .pgh-btns {
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: var(--rs);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      border: none
+    }
+
+    .btn-ghost {
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      color: var(--txd)
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(255, 255, 255, .15);
+      color: var(--tx)
+    }
+
+    .btn-primary {
+      background: var(--ac);
+      color: var(--act)
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 4px 16px rgba(189, 252, 36, .3);
+      transform: translateY(-1px)
+    }
+
+    .btn svg {
+      width: 15px;
+      height: 15px
+    }
+
+    /* STATS */
+    .srow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px
+    }
+
+    .sc {
+      background: var(--sur);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px
+    }
+
+    .sci-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .sci-wrap svg {
+      width: 22px;
+      height: 22px
+    }
+
+    .sc-info {
+      flex: 1
+    }
+
+    .sc-lbl {
+      font-size: 12px;
+      color: var(--txf);
+      margin-bottom: 3px
+    }
+
+    .sc-val {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.02em;
+      margin-bottom: 4px
+    }
+
+    .sc-sub {
+      font-size: 11.5px;
+      color: var(--txd)
+    }
+
+    /* TABS */
+    .tab-row {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      background: var(--sur);
+      border: 1px solid var(--bd);
+      border-radius: var(--rs);
+      padding: 4px;
+      width: fit-content
+    }
+
+    .tab-btn {
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--txd);
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .tab-btn.act {
+      background: var(--su2);
+      color: var(--tx);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .3)
+    }
+
+    /* TOOLBAR */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: var(--rs);
+      padding: 8px 12px;
+      min-width: 200px;
+      flex: 1;
+      max-width: 280px;
+      transition: border-color .2s
+    }
+
+    .search-box:focus-within {
+      border-color: rgba(189, 252, 36, .3)
+    }
+
+    .search-box svg {
+      width: 14px;
+      height: 14px;
+      color: var(--txf);
+      flex-shrink: 0
+    }
+
+    .search-box input {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      color: var(--tx);
+      width: 100%
+    }
+
+    .search-box input::placeholder {
+      color: var(--txf)
+    }
+
+    .fsel {
+      appearance: none;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: var(--rs);
+      padding: 8px 32px 8px 12px;
+      font-size: 13px;
+      color: var(--txd);
+      cursor: pointer;
+      outline: none;
+      transition: border-color .2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(240,240,242,.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 14px
+    }
+
+    .fsel:focus {
+      border-color: rgba(189, 252, 36, .3)
+    }
+
+    .fsel option {
+      background: var(--su2)
+    }
+
+    .toolbar-right {
+      margin-left: auto;
+      display: flex;
+      gap: 8px
+    }
+
+    /* TABLE */
+    .tbl-wrap {
+      background: var(--sur);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      overflow: hidden
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    thead {
+      background: rgba(255, 255, 255, .02);
+      border-bottom: 1px solid var(--bd)
+    }
+
+    th {
+      padding: 12px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--txf);
+      text-align: left;
+      white-space: nowrap;
+      letter-spacing: .05em;
+      text-transform: uppercase
+    }
+
+    th:first-child,
+    td:first-child {
+      padding-left: 16px
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--bd2);
+      transition: background .15s
+    }
+
+    tbody tr:last-child {
+      border-bottom: none
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, .025)
+    }
+
+    td {
+      padding: 12px 14px;
+      font-size: 13px;
+      vertical-align: middle
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 20px;
+      padding: 3px 10px;
+      white-space: nowrap
+    }
+
+    .b-pending {
+      background: rgba(245, 158, 11, .12);
+      color: var(--yl)
+    }
+
+    .b-processing {
+      background: rgba(59, 130, 246, .12);
+      color: var(--bl)
+    }
+
+    .b-shipped {
+      background: rgba(139, 92, 246, .12);
+      color: var(--pu)
+    }
+
+    .b-delivered {
+      background: rgba(34, 197, 94, .12);
+      color: var(--gr)
+    }
+
+    .b-cancelled {
+      background: rgba(239, 68, 68, .12);
+      color: var(--rd)
+    }
+
+    .b-refunded {
+      background: rgba(240, 240, 242, .08);
+      color: var(--txf)
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 5px
+    }
+
+    .abn {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 7px;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      cursor: pointer;
+      transition: all .2s;
+      color: var(--txd)
+    }
+
+    .abn:hover {
+      border-color: rgba(255, 255, 255, .15);
+      color: var(--tx)
+    }
+
+    .abn svg {
+      width: 13px;
+      height: 13px
+    }
+
+    .cb {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--ac);
+      cursor: pointer
+    }
+
+    /* PAGINATION */
+    .pg-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-top: 1px solid var(--bd)
+    }
+
+    .pg-info {
+      font-size: 12.5px;
+      color: var(--txf)
+    }
+
+    .pg-right {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .per-sel {
+      appearance: none;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 7px;
+      padding: 5px 26px 5px 9px;
+      font-size: 12px;
+      color: var(--txd);
+      cursor: pointer;
+      outline: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(240,240,242,.3)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 6px center;
+      background-size: 12px
+    }
+
+    .per-sel option {
+      background: var(--su2)
+    }
+
+    .pg-btns {
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .pgb {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 7px;
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--txd);
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .pgb:hover {
+      border-color: rgba(255, 255, 255, .15);
+      color: var(--tx)
+    }
+
+    .pgb.act {
+      background: var(--ac);
+      color: var(--act);
+      border-color: var(--ac);
+      font-weight: 700
+    }
+
+    .pgb:disabled {
+      opacity: .3;
+      cursor: not-allowed
+    }
+
+    /* MODAL */
+    .mlo {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s, visibility .25s;
+      background: rgba(5, 5, 6, .85);
+      backdrop-filter: blur(8px)
+    }
+
+    .mlo.open {
+      opacity: 1;
+      visibility: visible
+    }
+
+    .mo {
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: su .3s cubic-bezier(.16, 1, .3, 1)
+    }
+
+    @keyframes su {
+      from {
+        transform: translateY(18px);
+        opacity: 0
+      }
+
+      to {
+        transform: none;
+        opacity: 1
+      }
+    }
+
+    .mo::-webkit-scrollbar {
+      width: 4px
+    }
+
+    .mo::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .07);
+      border-radius: 2px
+    }
+
+    .mo-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--bd)
+    }
+
+    .mo-title {
+      font-size: 16px;
+      font-weight: 700
+    }
+
+    .mo-close {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: var(--txf);
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .mo-close:hover {
+      background: rgba(255, 255, 255, .06);
+      color: var(--tx)
+    }
+
+    .mo-close svg {
+      width: 16px;
+      height: 16px
+    }
+
+    .mo-body {
+      padding: 24px
+    }
+
+    .mo-ftr {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 16px 24px;
+      border-top: 1px solid var(--bd)
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px
+    }
+
+    .detail-section {
+      background: var(--sur);
+      border: 1px solid var(--bd);
+      border-radius: var(--rs);
+      padding: 16px
+    }
+
+    .detail-section h4 {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--txf);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 12px
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      font-size: 13px;
+      border-bottom: 1px solid var(--bd2)
+    }
+
+    .detail-row:last-child {
+      border-bottom: none
+    }
+
+    .detail-row .lbl {
+      color: var(--txd)
+    }
+
+    .detail-row .val {
+      font-weight: 600
+    }
+
+    .item-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--bd2)
+    }
+
+    .item-row:last-child {
+      border-bottom: none
+    }
+
+    .item-img {
+      width: 40px;
+      height: 40px;
+      background: var(--su3);
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px
+    }
+
+    .item-name {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px
+    }
+
+    .item-meta {
+      font-size: 11px;
+      color: var(--txf)
+    }
+
+    .item-price {
+      margin-left: auto;
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap
+    }
+
+    .status-sel {
+      appearance: none;
+      background: var(--su3);
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      padding: 9px 32px 9px 12px;
+      font-size: 13px;
+      color: var(--tx);
+      outline: none;
+      transition: border-color .2s;
+      width: 100%;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(240,240,242,.5)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 14px
+    }
+
+    .status-sel:focus {
+      border-color: rgba(189, 252, 36, .4)
+    }
+
+    .status-sel option {
+      background: var(--su2)
+    }
+
+    .flbl {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--txd);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 5px;
+      display: block
+    }
+
+    /* TOAST */
+    #adToast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--su2);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--tx);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 9999;
+      opacity: 0;
+      transition: all .3s;
+      pointer-events: none;
+      white-space: nowrap
+    }
+
+    #adToast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0)
+    }
+
+    #adToast svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0
+    }
+
+    #adToast.ok {
+      border-color: rgba(34, 197, 94, .3);
+      color: var(--gr)
+    }
+
+    #adToast.err {
+      border-color: rgba(239, 68, 68, .3);
+      color: var(--rd)
+    }
+
+    #adToast.war {
+      border-color: rgba(245, 158, 11, .3);
+      color: var(--yl)
+    }
+
+    .empty {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--txf)
+    }
+
+    .empty svg {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 16px;
+      opacity: .25
+    }
+
+    .empty h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--txd);
+      margin-bottom: 6px
+    }
+
+    .empty p {
+      font-size: 13px
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <!-- SIDEBAR -->
+    <aside class="sb">
+      <a href="admin.html" class="sb-logo">
+        <svg viewBox="0 0 48 48" fill="none">
+          <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span class="sb-logo-n">NOVA</span>
+      </a>
+      <nav class="sb-nav">
+        <a class="ni" href="admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>Dashboard</a>
+        <a class="ni" href="admin-products.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 0 1-8 0" />
+          </svg>Products<span class="nbadge" id="sbProdBadge">0</span></a>
+        <a class="ni act" href="admin-orders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>Orders<span class="nbadge" id="sbOrderBadge">0</span></a>
+        <a class="ni" href="admin-customers.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+          </svg>Customers</a>
+        <a class="ni" href="admin-settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>Settings</a>
+        <button class="ni" id="logoutBtn" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" style="color:#ef4444">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg><span style="color:#ef4444">Sign Out</span></button>
+      </nav>
+      <div class="sb-up">
+        <div class="up-t">&#9733; Admin Panel</div>
+        <p class="up-d">Manage orders, update statuses, and track shipments.</p>
+        <a href="collection.html" target="_blank" class="up-btn">&#128279; View Storefront</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <header class="hdr">
+        <div class="hdr-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="hdrSearch" placeholder="Search by order ID or customer..." />
+        </div>
+        <div class="hsp"></div>
+        <div class="hacts">
+          <a href="collection.html" target="_blank" class="hib" title="View storefront"><svg viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg></a>
+          <div class="hav">
+            <div class="avc" id="hdrAvatar">A</div>
+            <div>
+              <div class="avn" id="hdrName">Admin</div>
+              <div class="avr">Super Admin</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="pg">
+        <div class="bc">
+          <a href="admin.html">Dashboard</a>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+          <span>Orders</span>
+        </div>
+        <div class="pgh">
+          <div>
+            <div class="pgt">Orders</div>
+            <div class="pgs">Manage customer orders and update fulfilment status</div>
+          </div>
+          <div class="pgh-btns">
+            <button class="btn btn-ghost" onclick="exportOrders()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Export CSV
+            </button>
+            <button class="btn btn-primary" onclick="generateDemoOrders()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Generate Demo Orders
+            </button>
+          </div>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="srow">
+          <div class="sc">
+            <div class="sci-wrap" style="background:rgba(189,252,36,.1)"><svg viewBox="0 0 24 24" fill="none"
+                stroke="#bdfc24" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg></div>
+            <div class="sc-info">
+              <div class="sc-lbl">Total Orders</div>
+              <div class="sc-val" id="statTotal">0</div>
+              <div class="sc-sub">All time</div>
+            </div>
+          </div>
+          <div class="sc">
+            <div class="sci-wrap" style="background:rgba(245,158,11,.1)"><svg viewBox="0 0 24 24" fill="none"
+                stroke="#f59e0b" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg></div>
+            <div class="sc-info">
+              <div class="sc-lbl">Pending</div>
+              <div class="sc-val" id="statPending">0</div>
+              <div class="sc-sub">Need action</div>
+            </div>
+          </div>
+          <div class="sc">
+            <div class="sci-wrap" style="background:rgba(34,197,94,.1)"><svg viewBox="0 0 24 24" fill="none"
+                stroke="#22c55e" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg></div>
+            <div class="sc-info">
+              <div class="sc-lbl">Delivered</div>
+              <div class="sc-val" id="statDelivered">0</div>
+              <div class="sc-sub">Completed</div>
+            </div>
+          </div>
+          <div class="sc">
+            <div class="sci-wrap" style="background:rgba(189,252,36,.1)"><svg viewBox="0 0 24 24" fill="none"
+                stroke="#bdfc24" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg></div>
+            <div class="sc-info">
+              <div class="sc-lbl">Revenue</div>
+              <div class="sc-val" id="statRevenue">₹0</div>
+              <div class="sc-sub">Total earnings</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tab-row">
+          <button class="tab-btn act" onclick="setTab('all', this)">All</button>
+          <button class="tab-btn" onclick="setTab('Pending', this)">Pending</button>
+          <button class="tab-btn" onclick="setTab('Processing', this)">Processing</button>
+          <button class="tab-btn" onclick="setTab('Shipped', this)">Shipped</button>
+          <button class="tab-btn" onclick="setTab('Delivered', this)">Delivered</button>
+          <button class="tab-btn" onclick="setTab('Cancelled', this)">Cancelled</button>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="searchInput" placeholder="Order ID, customer name..." />
+          </div>
+          <select class="fsel" id="filterStatus">
+            <option value="">All Status</option>
+            <option>Pending</option>
+            <option>Processing</option>
+            <option>Shipped</option>
+            <option>Delivered</option>
+            <option>Cancelled</option>
+            <option>Refunded</option>
+          </select>
+          <select class="fsel" id="sortBy">
+            <option value="date_desc">Newest First</option>
+            <option value="date_asc">Oldest First</option>
+            <option value="amount_desc">Amount High-Low</option>
+            <option value="amount_asc">Amount Low-High</option>
+          </select>
+          <div class="toolbar-right">
+            <select class="fsel" id="perPage">
+              <option value="10">10 / page</option>
+              <option value="20">20 / page</option>
+              <option value="50">50 / page</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="cb" id="selectAll"
+                    onchange="document.querySelectorAll('.row-cb').forEach(c=>c.checked=this.checked)" /></th>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+          <div class="pg-bar">
+            <div class="pg-info" id="pgInfo">-</div>
+            <div class="pg-right">
+              <div class="pg-btns" id="pgBtns"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORDER DETAIL MODAL -->
+  <div class="mlo" id="orderModal">
+    <div class="mo">
+      <div class="mo-hdr">
+        <div class="mo-title" id="moTitle">Order Details</div>
+        <button class="mo-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg></button>
+      </div>
+      <div class="mo-body" id="moBody"></div>
+      <div class="mo-ftr">
+        <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+        <button class="btn btn-primary" id="saveStatusBtn" onclick="saveOrderStatus()">Update Status</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="adToast"></div>
+
+  <script>
+    /* AUTH */
+    (function () {
+      const s = localStorage.getItem('nova_admin_session') || sessionStorage.getItem('nova_admin_session');
+      if (!s) { window.location.href = 'admin-login.html'; return; }
+      try { const d = JSON.parse(s); document.getElementById('hdrName').textContent = d.name || 'Admin'; document.getElementById('hdrAvatar').textContent = (d.name || 'A')[0].toUpperCase(); } catch (e) { }
+    })();
+    document.getElementById('logoutBtn').addEventListener('click', () => { localStorage.removeItem('nova_admin_session'); sessionStorage.removeItem('nova_admin_session'); window.location.href = 'admin-login.html'; });
+
+    /* SIDEBAR BADGES */
+    try { const p = JSON.parse(localStorage.getItem('nova_admin_products') || '[]'); document.getElementById('sbProdBadge').textContent = p.length; } catch (e) { }
+
+    /* DEMO DATA GENERATOR */
+    const NAMES = ['Riya Sharma', 'Arjun Mehta', 'Priya Patel', 'Vikram Singh', 'Ananya Nair', 'Rahul Gupta', 'Sneha Joshi', 'Karan Shah', 'Pooja Reddy', 'Amit Kumar', 'Deepika Rao', 'Sanjay Verma', 'Meera Pillai', 'Rohit Das', 'Kavya Menon'];
+    const PRODUCTS_LIST = ['Nova Surge X1', 'Nova Phantom', 'Nova Air Pro', 'Nova Edge', 'Nova Boost', 'Nova Drift', 'Nova Lite', 'Nova Trail', 'Nova Motion', 'Nova Flow', 'Nova Carbon', 'Nova Flex'];
+    const STATUSES = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Delivered', 'Delivered', 'Cancelled'];
+    const PAYMENTS = ['UPI', 'Card', 'COD', 'NetBanking'];
+    const CITIES = ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Hyderabad', 'Pune', 'Kolkata', 'Ahmedabad'];
+
+    function randId() { return 'NOV-' + Math.random().toString(36).substr(2, 8).toUpperCase(); }
+    function randDate(daysAgo) { const d = new Date(); d.setDate(d.getDate() - Math.floor(Math.random() * daysAgo)); return d.toISOString(); }
+    function generateDemoOrders() {
+      const count = Math.floor(Math.random() * 20) + 30;
+      const orders = [];
+      for (let i = 0; i < count; i++) {
+        const items = [];
+        const itemCount = Math.floor(Math.random() * 3) + 1;
+        let total = 0;
+        for (let j = 0; j < itemCount; j++) {
+          const price = Math.floor(Math.random() * 8000) + 2000;
+          const qty = Math.floor(Math.random() * 2) + 1;
+          const prod = PRODUCTS_LIST[Math.floor(Math.random() * PRODUCTS_LIST.length)];
+          items.push({ name: prod, price, qty, size: Math.floor(Math.random() * 5) + 7 });
+          total += price * qty;
+        }
+        orders.push({
+          id: randId(),
+          customer: NAMES[Math.floor(Math.random() * NAMES.length)],
+          email: `user${Math.floor(Math.random() * 9999)}@gmail.com`,
+          phone: `+91 ${Math.floor(Math.random() * 9000000000) + 1000000000}`,
+          city: CITIES[Math.floor(Math.random() * CITIES.length)],
+          address: `${Math.floor(Math.random() * 999) + 1}, Sample Street`,
+          date: randDate(90),
+          items,
+          total,
+          payment: PAYMENTS[Math.floor(Math.random() * PAYMENTS.length)],
+          status: STATUSES[Math.floor(Math.random() * STATUSES.length)],
+          notes: ''
+        });
+      }
+      localStorage.setItem('nova_orders', JSON.stringify(orders));
+      loadOrders();
+      toast(`${count} demo orders generated!`, 'ok');
+    }
+
+    function loadOrders() {
+      try { const r = localStorage.getItem('nova_orders'); return r ? JSON.parse(r) : []; } catch (e) { return []; }
+    }
+    function saveOrders(o) { localStorage.setItem('nova_orders', JSON.stringify(o)); }
+
+    let orders = loadOrders();
+    let searchQ = '', filterStatus = '', sortKey = 'date_desc', currentTab = 'all', currentPage = 1, perPage = 10;
+
+    function filtered() {
+      let l = [...orders];
+      const q = searchQ.toLowerCase();
+      if (q) l = l.filter(o => o.id.toLowerCase().includes(q) || o.customer.toLowerCase().includes(q));
+      if (filterStatus) l = l.filter(o => o.status === filterStatus);
+      if (currentTab !== 'all') l = l.filter(o => o.status === currentTab);
+      if (sortKey === 'date_desc') l.sort((a, b) => new Date(b.date) - new Date(a.date));
+      else if (sortKey === 'date_asc') l.sort((a, b) => new Date(a.date) - new Date(b.date));
+      else if (sortKey === 'amount_desc') l.sort((a, b) => b.total - a.total);
+      else if (sortKey === 'amount_asc') l.sort((a, b) => a.total - b.total);
+      return l;
+    }
+
+    function updateStats() {
+      document.getElementById('statTotal').textContent = orders.length;
+      document.getElementById('statPending').textContent = orders.filter(o => o.status === 'Pending').length;
+      document.getElementById('statDelivered').textContent = orders.filter(o => o.status === 'Delivered').length;
+      const rev = orders.filter(o => o.status !== 'Cancelled' && o.status !== 'Refunded').reduce((s, o) => s + o.total, 0);
+      document.getElementById('statRevenue').textContent = '₹' + rev.toLocaleString();
+      document.getElementById('sbOrderBadge').textContent = orders.filter(o => o.status === 'Pending').length;
+    }
+
+    function statusClass(s) { return { Pending: 'b-pending', Processing: 'b-processing', Shipped: 'b-shipped', Delivered: 'b-delivered', Cancelled: 'b-cancelled', Refunded: 'b-refunded' }[s] || 'b-pending'; }
+
+    function renderTable() {
+      updateStats();
+      const list = filtered(), total = list.length, totalPages = Math.max(1, Math.ceil(total / perPage));
+      if (currentPage > totalPages) currentPage = 1;
+      const start = (currentPage - 1) * perPage, page = list.slice(start, start + perPage);
+      const body = document.getElementById('ordersBody');
+      if (!page.length) {
+        body.innerHTML = '<tr><td colspan="9"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><h3>No orders found</h3><p>Generate demo data or wait for real orders.</p></div></td></tr>';
+      } else {
+        body.innerHTML = page.map(o => {
+          const d = new Date(o.date);
+          const dateStr = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+          const realIdx = orders.indexOf(o);
+          return `<tr>
+        <td><input type="checkbox" class="cb row-cb"/></td>
+        <td><span style="font-weight:700;color:var(--ac);font-size:12px">${o.id}</span></td>
+        <td><div style="font-weight:600">${o.customer}</div><div style="font-size:11px;color:var(--txf)">${o.city}</div></td>
+        <td style="font-size:12px;color:var(--txd)">${dateStr}</td>
+        <td>${o.items.length} item${o.items.length > 1 ? 's' : ''}</td>
+        <td style="font-weight:700">₹${o.total.toLocaleString()}</td>
+        <td style="font-size:12px;color:var(--txd)">${o.payment}</td>
+        <td><span class="badge ${statusClass(o.status)}">${o.status}</span></td>
+        <td><div class="actions">
+          <button class="abn" onclick="openOrder(${realIdx})" title="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="abn" onclick="quickStatus(${realIdx},'Delivered')" title="Mark Delivered" style="color:var(--gr)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></button>
+          <button class="abn" onclick="quickStatus(${realIdx},'Cancelled')" title="Cancel" style="color:rgba(239,68,68,.6)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></button>
+        </div></td>
+      </tr>`;
+        }).join('');
+      }
+      document.getElementById('pgInfo').textContent = total === 0 ? 'No orders' : `Showing ${start + 1}-${Math.min(start + perPage, total)} of ${total}`;
+      const pb = document.getElementById('pgBtns'); pb.innerHTML = '';
+      const pv = document.createElement('button'); pv.className = 'pgb'; pv.innerHTML = '&#8249;'; pv.disabled = currentPage === 1; pv.onclick = () => { currentPage--; renderTable(); }; pb.appendChild(pv);
+      const mk = n => { const b = document.createElement('button'); b.className = 'pgb' + (n === currentPage ? ' act' : ''); b.textContent = n; b.onclick = () => { currentPage = n; renderTable(); }; return b; };
+      const tot = totalPages;
+      if (tot <= 7) { for (let i = 1; i <= tot; i++)pb.appendChild(mk(i)); }
+      else { pb.appendChild(mk(1)); if (currentPage > 3) { const d = document.createElement('span'); d.textContent = '...'; d.style.cssText = 'font-size:12px;color:var(--txf);padding:0 4px'; pb.appendChild(d); } for (let i = Math.max(2, currentPage - 1); i <= Math.min(tot - 1, currentPage + 1); i++)pb.appendChild(mk(i)); if (currentPage < tot - 2) { const d = document.createElement('span'); d.textContent = '...'; d.style.cssText = 'font-size:12px;color:var(--txf);padding:0 4px'; pb.appendChild(d); } pb.appendChild(mk(tot)); }
+      const nx = document.createElement('button'); nx.className = 'pgb'; nx.innerHTML = '&#8250;'; nx.disabled = currentPage === totalPages; nx.onclick = () => { currentPage++; renderTable(); }; pb.appendChild(nx);
+    }
+
+    function setTab(t, btn) { currentTab = t; currentPage = 1; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('act')); btn.classList.add('act'); renderTable(); }
+    document.getElementById('searchInput').addEventListener('input', e => { searchQ = e.target.value; currentPage = 1; renderTable(); });
+    document.getElementById('hdrSearch').addEventListener('input', e => { searchQ = e.target.value; document.getElementById('searchInput').value = e.target.value; currentPage = 1; renderTable(); });
+    document.getElementById('filterStatus').addEventListener('change', e => { filterStatus = e.target.value; currentPage = 1; renderTable(); });
+    document.getElementById('sortBy').addEventListener('change', e => { sortKey = e.target.value; renderTable(); });
+    document.getElementById('perPage').addEventListener('change', e => { perPage = parseInt(e.target.value); currentPage = 1; renderTable(); });
+
+    let _editIdx = -1;
+    function openOrder(idx) {
+      _editIdx = idx;
+      const o = orders[idx];
+      document.getElementById('moTitle').textContent = 'Order: ' + o.id;
+      const d = new Date(o.date).toLocaleString('en-IN');
+      document.getElementById('moBody').innerHTML = `
+    <div class="detail-grid" style="margin-bottom:16px">
+      <div class="detail-section"><h4>Customer</h4>
+        <div class="detail-row"><span class="lbl">Name</span><span class="val">${o.customer}</span></div>
+        <div class="detail-row"><span class="lbl">Email</span><span class="val" style="font-size:11px">${o.email}</span></div>
+        <div class="detail-row"><span class="lbl">Phone</span><span class="val">${o.phone}</span></div>
+        <div class="detail-row"><span class="lbl">City</span><span class="val">${o.city}</span></div>
+      </div>
+      <div class="detail-section"><h4>Order Info</h4>
+        <div class="detail-row"><span class="lbl">Order ID</span><span class="val" style="color:var(--ac)">${o.id}</span></div>
+        <div class="detail-row"><span class="lbl">Date</span><span class="val">${d}</span></div>
+        <div class="detail-row"><span class="lbl">Payment</span><span class="val">${o.payment}</span></div>
+        <div class="detail-row"><span class="lbl">Total</span><span class="val" style="color:var(--ac)">₹${o.total.toLocaleString()}</span></div>
+      </div>
+    </div>
+    <div class="detail-section" style="margin-bottom:16px"><h4>Items</h4>
+      ${o.items.map(it => `<div class="item-row"><div class="item-img">👟</div><div><div class="item-name">${it.name}</div><div class="item-meta">Size ${it.size} · Qty ${it.qty}</div></div><div class="item-price">₹${(it.price * it.qty).toLocaleString()}</div></div>`).join('')}
+    </div>
+    <div><label class="flbl">Update Status</label>
+    <select class="status-sel" id="statusSel">
+      ${['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Refunded'].map(s => `<option value="${s}" ${o.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+    </select></div>
+    ${o.notes ? `<div style="margin-top:12px"><label class="flbl">Notes</label><div style="font-size:13px;color:var(--txd);margin-top:4px">${o.notes}</div></div>` : ''}
+  `;
+      document.getElementById('orderModal').classList.add('open');
+    }
+    function closeModal() { document.getElementById('orderModal').classList.remove('open'); _editIdx = -1; }
+    function saveOrderStatus() {
+      if (_editIdx < 0) return;
+      const sel = document.getElementById('statusSel');
+      if (!sel) return;
+      const newStatus = sel.value;
+      const old = orders[_editIdx].status;
+      orders[_editIdx].status = newStatus;
+      saveOrders(orders);
+      closeModal();
+      renderTable();
+      toast(`Order status: ${old} → ${newStatus}`, 'ok');
+    }
+    function quickStatus(idx, status) {
+      orders[idx].status = status;
+      saveOrders(orders);
+      renderTable();
+      toast(`Order ${orders[idx]?.id || ''} marked as ${status}.`, status === 'Delivered' ? 'ok' : 'war');
+    }
+
+    function exportOrders() {
+      const rows = [['Order ID', 'Customer', 'Email', 'City', 'Date', 'Items', 'Amount', 'Payment', 'Status'], ...orders.map(o => [o.id, `"${o.customer}"`, o.email, o.city, new Date(o.date).toLocaleDateString(), o.items.length, o.total, o.payment, o.status].join(','))].join('\n');
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([rows], { type: 'text/csv' })); a.download = `nova-orders-${new Date().toISOString().slice(0, 10)}.csv`; a.click(); toast('Exported as CSV!');
+    }
+
+    document.getElementById('orderModal').addEventListener('click', e => { if (e.target === document.getElementById('orderModal')) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    let _tt;
+    function toast(msg, type = '') { const el = document.getElementById('adToast'); const ic = { ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>', err: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>', war: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>' }; el.className = type ? type : ''; el.innerHTML = (ic[type] || ic['ok']) + msg; el.classList.add('show'); clearTimeout(_tt); _tt = setTimeout(() => el.classList.remove('show'), 3000); }
+
+    renderTable();
+  </script>
+  <script src="admin-responsive.js"></script>
+</body>
+</html>

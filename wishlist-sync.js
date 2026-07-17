@@ -455,4 +455,20 @@
     renderWishlistPage();
   }
 
+  // ── Global Hamburger Menu Toggle for women.html and wishlist.html ──
+  document.addEventListener('DOMContentLoaded', () => {
+    const burger = document.getElementById('navBurger');
+    const links = document.querySelector('.nav__links');
+    if (burger && links) {
+      const path = window.location.pathname.toLowerCase();
+      if (path.includes('women.html') || path.includes('wishlist.html')) {
+        burger.addEventListener('click', () => {
+          const expanded = burger.getAttribute('aria-expanded') === 'true';
+          burger.setAttribute('aria-expanded', String(!expanded));
+          links.style.display = expanded ? '' : 'flex';
+        });
+      }
+    }
+  });
+
 })();

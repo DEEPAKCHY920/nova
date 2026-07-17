@@ -858,6 +858,30 @@ button {
   border-color: rgba(255, 177, 94, 0.3);
 }
 
+.badge--featured {
+  background: rgba(189, 252, 36, 0.12);
+  color: #bdfc24;
+  border-color: rgba(189, 252, 36, 0.25);
+}
+
+/* ── Bridge product cards (products-bridge.js output) ── */
+.bridge-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+
+.bestsellers-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .bestsellers-row { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+
 /* =========================================================
    TRUST BADGES
 ========================================================= */
@@ -3804,35 +3828,100 @@ button {
   }
 }
 
+@media (max-width:768px) {
+  .hero__left {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+    margin: 0 auto;
+  }
+  
+  .hero__copy {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .hero__actions {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .specs {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 4px 20px 16px !important;
+    width: 100vw;
+    margin-left: -20px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .specs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .specs__card {
+    flex: 0 0 220px;
+    scroll-snap-align: center;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: rgba(19, 19, 22, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+  }
+
+  .specs__icon {
+    margin-bottom: 2px;
+  }
+  
+  .specs__sub {
+    display: block !important;
+    font-size: 11px;
+    color: var(--platinum-faint);
+  }
+
+  .scroll-cue {
+    display: none !important; /* Hide scroll cue on smaller screens to make room */
+  }
+}
+
 @media (max-width:560px) {
   .nav__inner {
     padding: 0 18px;
   }
 
   .headline__line {
-    font-size: 14vw;
+    font-size: 13.5vw;
   }
 
   .hero__copy {
-    font-size: 14px;
+    font-size: 13.5px;
+    margin-bottom: 24px;
   }
 
   .btn {
-    padding: 12px 20px;
+    padding: 11px 18px;
     font-size: 12px;
   }
 
-  .specs__sub {
-    display: none;
-  }
-
   .hero__bottom {
-    padding-bottom: 20px;
+    padding-bottom: 16px;
   }
 }
 
 @media (min-width:1800px) {
-
   .nav__inner,
   .hero__pin {
     max-width: 1800px;

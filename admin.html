@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="admin-responsive.css" />
   <style>
     *,
     *::before,
@@ -1012,7 +1013,7 @@
       </a>
 
       <nav class="sb-nav">
-        <button class="ni act">
+        <a class="ni act" href="admin.html">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="7" height="7" />
             <rect x="14" y="3" width="7" height="7" />
@@ -1020,7 +1021,7 @@
             <rect x="3" y="14" width="7" height="7" />
           </svg>
           Dashboard
-        </button>
+        </a>
         <a class="ni" href="admin-products.html">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
@@ -1028,10 +1029,7 @@
             <path d="M16 10a4 4 0 0 1-8 0" />
           </svg>
           Products
-          <svg style="margin-left:auto;width:13px;height:13px;color:var(--txf)" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
+          <span class="nbadge" id="sbProdBadge">0</span>
         </a>
         <a class="ni" href="admin-orders.html">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1041,66 +1039,21 @@
           Orders
           <span class="nbadge" id="sbOrdersBadge">0</span>
         </a>
-        <button class="ni">
+        <a class="ni" href="admin-customers.html">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
           </svg>
           Customers
-        </button>
-        <button class="ni">
+        </a>
+        <a class="ni" href="admin-settings.html">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon
-              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
           </svg>
-          Reviews
-        </button>
-        <button class="ni">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-            <line x1="7" y1="7" x2="7.01" y2="7" />
-          </svg>
-          Coupons
-        </button>
-        <button class="ni">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <path d="M3 9h18M9 21V9" />
-          </svg>
-          Banners
-        </button>
-        <button class="ni">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="20" x2="18" y2="10" />
-            <line x1="12" y1="20" x2="12" y2="4" />
-            <line x1="6" y1="20" x2="6" y2="14" />
-          </svg>
-          Analytics
-        </button>
-        <button class="ni">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-            <polyline points="22,6 12,13 2,6" />
-          </svg>
-          Newsletter
-        </button>
-        <button class="ni">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-          Messages
-          <span class="nbadge r" id="sbMsgBadge">0</span>
-        </button>
-        <button class="ni">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="3" width="15" height="13" />
-            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-            <circle cx="5.5" cy="18.5" r="2.5" />
-            <circle cx="18.5" cy="18.5" r="2.5" />
-          </svg>
-          Shipping
-        </button>
-        <button class="ni" id="logoutBtn">
+          Settings
+        </a>
+        <button class="ni" id="logoutBtn" style="margin-top:12px">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#ef4444">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
@@ -1127,7 +1080,7 @@
 
       <!-- HEADER -->
       <header class="hdr">
-        <button style="color:var(--txd);padding:6px;border-radius:8px;display:flex">
+        <button class="hdr-trigger">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="3" y1="6" x2="21" y2="6" />
             <line x1="3" y1="12" x2="21" y2="12" />
@@ -1312,20 +1265,34 @@
     /* =========================================================
        PRODUCT CATALOGUE (source of truth for images/prices)
     ========================================================= */
-    const PRODUCTS = [
-      { id: 'nova-surge-x1', name: 'Nova Surge X1', price: 8999, img: 'assets/images/product_surge.png', stock: 8 },
-      { id: 'nova-phantom', name: 'Nova Phantom', price: 7999, img: 'assets/images/product_phantom.png', stock: 12 },
-      { id: 'nova-air-pro', name: 'Nova Air Pro', price: 8499, img: 'assets/images/product_air_pro.png', stock: 22 },
-      { id: 'nova-edge', name: 'Nova Edge', price: 6999, img: 'assets/images/product_edge.png', stock: 35 },
-      { id: 'nova-boost', name: 'Nova Boost', price: 7499, img: 'assets/images/product_boost.png', stock: 18 },
-      { id: 'nova-drift', name: 'Nova Drift', price: 5499, img: 'assets/images/product_drift.png', stock: 9 },
-      { id: 'nova-lite', name: 'Nova Lite', price: 4999, img: 'assets/images/product_lite.png', stock: 30 },
-      { id: 'nova-trail', name: 'Nova Trail', price: 6799, img: 'assets/images/product_trail.png', stock: 7 },
-      { id: 'nova-motion', name: 'Nova Motion', price: 6299, img: 'assets/images/product_motion.png', stock: 14 },
-      { id: 'nova-flow', name: 'Nova Flow', price: 5999, img: 'assets/images/product_flow.png', stock: 25 },
-      { id: 'nova-carbon', name: 'Nova Carbon', price: 10999, img: 'assets/images/product_carbon.png', stock: 15 },
-      { id: 'nova-flex', name: 'Nova Flex', price: 4799, img: 'assets/images/product_flex.png', stock: 11 }
+    const DEFAULT_PRODUCTS = [
+      { id: 'nova-surge-x1', name: 'Nova Surge X1', price: 8999, img: 'assets/images/product_surge.png', stock: 22, category: 'Running', gender: 'men' },
+      { id: 'nova-phantom', name: 'Nova Phantom', price: 7999, img: 'assets/images/product_phantom.png', stock: 18, category: 'Running', gender: 'men' },
+      { id: 'nova-air-pro', name: 'Nova Air Pro', price: 8499, img: 'assets/images/product_air_pro.png', stock: 30, category: 'Training', gender: 'unisex' },
+      { id: 'nova-edge', name: 'Nova Edge', price: 6999, img: 'assets/images/product_edge.png', stock: 14, category: 'Basketball', gender: 'men' },
+      { id: 'nova-boost', name: 'Nova Boost', price: 7499, img: 'assets/images/product_boost.png', stock: 25, category: 'Running', gender: 'men' },
+      { id: 'nova-drift', name: 'Nova Drift', price: 5499, img: 'assets/images/product_drift.png', stock: 9, category: 'Lifestyle', gender: 'unisex' },
+      { id: 'nova-lite', name: 'Nova Lite', price: 4999, img: 'assets/images/product_lite.png', stock: 35, category: 'Training', gender: 'women' },
+      { id: 'nova-trail', name: 'Nova Trail', price: 6799, img: 'assets/images/product_trail.png', stock: 0, category: 'Hiking', gender: 'men' },
+      { id: 'nova-motion', name: 'Nova Motion', price: 6299, img: 'assets/images/product_motion.png', stock: 12, category: 'Running', gender: 'women' },
+      { id: 'nova-flow', name: 'Nova Flow', price: 5999, img: 'assets/images/product_flow.png', stock: 20, category: 'Lifestyle', gender: 'women' },
+      { id: 'nova-carbon', name: 'Nova Carbon', price: 10999, img: 'assets/images/product_carbon.png', stock: 0, category: 'Running', gender: 'women' },
+      { id: 'nova-flex', name: 'Nova Flex', price: 4799, img: 'assets/images/product_flex.png', stock: 11, category: 'Training', gender: 'unisex' }
     ];
+
+    function getProducts() {
+      try {
+        const raw = localStorage.getItem('nova_admin_products');
+        if (!raw) {
+          localStorage.setItem('nova_admin_products', JSON.stringify(DEFAULT_PRODUCTS));
+          return [...DEFAULT_PRODUCTS];
+        }
+        return JSON.parse(raw);
+      } catch (e) {
+        return [...DEFAULT_PRODUCTS];
+      }
+    }
+    const PRODUCTS = getProducts();
 
     /* =========================================================
        DATA HELPERS
@@ -1422,9 +1389,12 @@
     const topProducts = Object.values(productSales).sort((a, b) => b.sold - a.sold).slice(0, 5);
 
     // --- Sidebar badges ---
-    document.getElementById('sbOrdersBadge').textContent = Math.min(orders.length, 99) || 0;
-    document.getElementById('sbMsgBadge').textContent = 3; // static placeholder
-    document.getElementById('notifBadge').textContent = Math.min(orders.length + wishlist.length, 99);
+    if (document.getElementById('sbOrdersBadge')) {
+      document.getElementById('sbOrdersBadge').textContent = orders.length || 0;
+    }
+    if (document.getElementById('sbProdBadge')) {
+      document.getElementById('sbProdBadge').textContent = PRODUCTS.length || 0;
+    }
 
     /* =========================================================
        STAT CARDS
@@ -1695,6 +1665,6 @@
       });
     })();
   </script>
+  <script src="admin-responsive.js"></script>
 </body>
-
 </html>
