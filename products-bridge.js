@@ -27,7 +27,6 @@
     try {
       const raw = localStorage.getItem('nova_admin_products');
       if (!raw) {
-        localStorage.setItem('nova_admin_products', JSON.stringify(CANONICAL));
         return [...CANONICAL];
       }
       return JSON.parse(raw);
@@ -281,9 +280,8 @@
     });
   }
 
-  /* ── 7. Listen for admin updates ────────────────────────────── */
   window.addEventListener('storage', (e) => {
-    if (e.key === 'nova_admin_products') {
+    if (e.key === 'nova_admin_products' && e.newValue !== e.oldValue) {
       boot(); // Re-render when admin changes products in another tab
     }
   });
