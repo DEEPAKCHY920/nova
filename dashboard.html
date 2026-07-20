@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -8,7 +9,9 @@
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.cdnfonts.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+  <link
+    href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=swap"
+    rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
@@ -25,78 +28,171 @@
 
     /* ── Keyframes ─────────────────────────────────────── */
     @keyframes fadeUpIn {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     @keyframes floatAvatar {
-      0%, 100% { transform: translateY(0px); box-shadow: 0 0 0 0 rgba(189, 252, 36, 0); }
-      50%       { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(189, 252, 36, 0.18); }
+
+      0%,
+      100% {
+        transform: translateY(0px);
+        box-shadow: 0 0 0 0 rgba(189, 252, 36, 0);
+      }
+
+      50% {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(189, 252, 36, 0.18);
+      }
     }
 
     @keyframes avatarPulseRing {
-      0%   { box-shadow: 0 0 0 0   rgba(189, 252, 36, 0.35); }
-      70%  { box-shadow: 0 0 0 12px rgba(189, 252, 36, 0); }
-      100% { box-shadow: 0 0 0 0   rgba(189, 252, 36, 0); }
+      0% {
+        box-shadow: 0 0 0 0 rgba(189, 252, 36, 0.35);
+      }
+
+      70% {
+        box-shadow: 0 0 0 12px rgba(189, 252, 36, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(189, 252, 36, 0);
+      }
     }
 
     @keyframes barFillSlide {
-      from { width: 0%; }
+      from {
+        width: 0%;
+      }
     }
 
     @keyframes progressLineDraw {
-      from { width: 0 !important; }
+      from {
+        width: 0 !important;
+      }
     }
 
     @keyframes tabIndicatorSlide {
-      from { transform: scaleX(0); }
-      to   { transform: scaleX(1); }
+      from {
+        transform: scaleX(0);
+      }
+
+      to {
+        transform: scaleX(1);
+      }
     }
 
     @keyframes cardShimmer {
-      0%   { background-position: -200% center; }
-      100% { background-position:  200% center; }
+      0% {
+        background-position: -200% center;
+      }
+
+      100% {
+        background-position: 200% center;
+      }
     }
 
     @keyframes dotPulse {
-      0%, 100% { transform: scale(1);   box-shadow: 0 0 0 0   rgba(189,252,36,0.6); }
-      50%       { transform: scale(1.25); box-shadow: 0 0 0 8px rgba(189,252,36,0); }
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(189, 252, 36, 0.6);
+      }
+
+      50% {
+        transform: scale(1.25);
+        box-shadow: 0 0 0 8px rgba(189, 252, 36, 0);
+      }
     }
 
     @keyframes pointsCountUp {
-      from { opacity: 0; transform: scale(0.7); }
-      to   { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     @keyframes ripple {
-      from { transform: scale(0); opacity: 0.35; }
-      to   { transform: scale(4); opacity: 0; }
+      from {
+        transform: scale(0);
+        opacity: 0.35;
+      }
+
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
     }
 
     @keyframes perkSlideIn {
-      from { opacity: 0; transform: translateX(-16px); }
-      to   { opacity: 1; transform: translateX(0); }
+      from {
+        opacity: 0;
+        transform: translateX(-16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     @keyframes headerGlow {
-      0%, 100% { opacity: 0.5; }
-      50%       { opacity: 1; }
+
+      0%,
+      100% {
+        opacity: 0.5;
+      }
+
+      50% {
+        opacity: 1;
+      }
     }
 
     @keyframes scanLine {
-      0%   { top: 0%; }
-      100% { top: 100%; }
+      0% {
+        top: 0%;
+      }
+
+      100% {
+        top: 100%;
+      }
     }
 
     @keyframes tierBadgePulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(189,252,36,0.3); }
-      50%       { box-shadow: 0 0 0 6px rgba(189,252,36,0); }
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(189, 252, 36, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 0 6px rgba(189, 252, 36, 0);
+      }
     }
+
     :root {
       --accent: #bdfc24;
       --accent-glow: rgba(189, 252, 36, 0.15);
@@ -123,12 +219,21 @@
     }
 
     /* ── Page entrance stagger ─────────────────────────── */
-    .dashboard-page > * {
-      animation: fadeUpIn 0.6s var(--ease-out, cubic-bezier(.16,1,.3,1)) both;
+    .dashboard-page>* {
+      animation: fadeUpIn 0.6s var(--ease-out, cubic-bezier(.16, 1, .3, 1)) both;
     }
-    .dashboard-page > *:nth-child(1) { animation-delay: 0.05s; }
-    .dashboard-page > *:nth-child(2) { animation-delay: 0.15s; }
-    .dashboard-page > *:nth-child(3) { animation-delay: 0.25s; }
+
+    .dashboard-page>*:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .dashboard-page>*:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .dashboard-page>*:nth-child(3) {
+      animation-delay: 0.25s;
+    }
 
     /* Header Profile Info banner */
     .dashboard-header {
@@ -148,7 +253,7 @@
 
     .dashboard-header:hover {
       border-color: rgba(189, 252, 36, 0.2);
-      box-shadow: 0 0 60px rgba(189, 252, 36, 0.06), 0 24px 80px rgba(0,0,0,0.4);
+      box-shadow: 0 0 60px rgba(189, 252, 36, 0.06), 0 24px 80px rgba(0, 0, 0, 0.4);
     }
 
     .dashboard-header__bg {
@@ -166,12 +271,13 @@
       left: 0;
       width: 100%;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(189,252,36,0.25), transparent);
+      background: linear-gradient(90deg, transparent, rgba(189, 252, 36, 0.25), transparent);
       opacity: 0;
       transition: opacity 0.3s;
       pointer-events: none;
       animation: scanLine 3s linear infinite paused;
     }
+
     .dashboard-header:hover::after {
       opacity: 1;
       animation-play-state: running;
@@ -190,7 +296,7 @@
       height: 80px;
       border-radius: 50%;
       background: linear-gradient(135deg, #1f1f2e, #0d0d15);
-      border: 2px solid rgba(189,252,36,0.3);
+      border: 2px solid rgba(189, 252, 36, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -198,7 +304,7 @@
       font-size: 28px;
       font-weight: 600;
       font-family: 'Clash Display', sans-serif;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       animation: floatAvatar 4s ease-in-out infinite, avatarPulseRing 3s ease-out infinite;
       transition: transform 0.3s ease, border-color 0.3s ease;
       cursor: default;
@@ -243,7 +349,7 @@
     }
 
     .profile-tier:hover {
-      background: rgba(189,252,36,0.22);
+      background: rgba(189, 252, 36, 0.22);
       transform: scale(1.05);
     }
 
@@ -261,7 +367,7 @@
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.35s cubic-bezier(.16,1,.3,1);
+      transition: all 0.35s cubic-bezier(.16, 1, .3, 1);
       position: relative;
       z-index: 2;
       overflow: hidden;
@@ -275,7 +381,7 @@
       background: rgba(255, 107, 107, 0.08);
       transform: scaleX(0);
       transform-origin: left;
-      transition: transform 0.35s cubic-bezier(.16,1,.3,1);
+      transition: transform 0.35s cubic-bezier(.16, 1, .3, 1);
     }
 
     .logout-btn:hover {
@@ -324,7 +430,7 @@
       height: 60px;
       margin-top: -30px;
       margin-left: -30px;
-      background: rgba(243,241,234,0.08);
+      background: rgba(243, 241, 234, 0.08);
       animation: ripple 0.5s linear;
       pointer-events: none;
     }
@@ -333,15 +439,23 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(243,241,234,0.04);
+      background: rgba(243, 241, 234, 0.04);
       opacity: 0;
       transition: opacity 0.25s;
       border-radius: 6px 6px 0 0;
     }
 
-    .tab-btn:hover { color: #fff; }
-    .tab-btn:hover::before { opacity: 1; }
-    .tab-btn:active { transform: scale(0.97); }
+    .tab-btn:hover {
+      color: #fff;
+    }
+
+    .tab-btn:hover::before {
+      opacity: 1;
+    }
+
+    .tab-btn:active {
+      transform: scale(0.97);
+    }
 
     .tab-btn.is-active {
       color: var(--accent);
@@ -356,7 +470,7 @@
       height: 2px;
       background: linear-gradient(90deg, transparent, var(--accent), transparent);
       transform-origin: center;
-      animation: tabIndicatorSlide 0.35s cubic-bezier(.16,1,.3,1) both;
+      animation: tabIndicatorSlide 0.35s cubic-bezier(.16, 1, .3, 1) both;
     }
 
     /* Tab content fade + slide */
@@ -368,7 +482,7 @@
 
     .tab-content.is-active {
       display: block;
-      animation: fadeUpIn 0.45s cubic-bezier(.16,1,.3,1) both;
+      animation: fadeUpIn 0.45s cubic-bezier(.16, 1, .3, 1) both;
     }
 
     /* Section components grid */
@@ -382,15 +496,18 @@
       .dashboard-grid {
         grid-template-columns: 1fr;
       }
+
       .dashboard-header {
         flex-direction: column;
         align-items: flex-start;
         padding: 24px;
       }
+
       .logout-btn {
         width: 100%;
         text-align: center;
       }
+
       .dashboard-tabs {
         overflow-x: auto;
         white-space: nowrap;
@@ -399,6 +516,7 @@
         border-bottom: 1px solid var(--border-color);
         -webkit-overflow-scrolling: touch;
       }
+
       .tab-btn {
         padding: 10px 16px;
         font-size: 13px;
@@ -412,8 +530,8 @@
       border-radius: 12px;
       padding: 32px;
       transition: border-color 0.4s ease,
-                  box-shadow 0.4s ease,
-                  transform 0.35s cubic-bezier(.16,1,.3,1);
+        box-shadow 0.4s ease,
+        transform 0.35s cubic-bezier(.16, 1, .3, 1);
       position: relative;
       overflow: hidden;
     }
@@ -423,12 +541,10 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        110deg,
-        transparent 20%,
-        rgba(189,252,36,0.04) 50%,
-        transparent 80%
-      );
+      background: linear-gradient(110deg,
+          transparent 20%,
+          rgba(189, 252, 36, 0.04) 50%,
+          transparent 80%);
       background-size: 200% 100%;
       opacity: 0;
       transition: opacity 0.3s;
@@ -436,8 +552,8 @@
     }
 
     .dashboard-card:hover {
-      border-color: rgba(189,252,36,0.2);
-      box-shadow: 0 16px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(189,252,36,0.06) inset;
+      border-color: rgba(189, 252, 36, 0.2);
+      box-shadow: 0 16px 60px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(189, 252, 36, 0.06) inset;
       transform: translateY(-4px);
     }
 
@@ -468,14 +584,14 @@
       font-size: 48px;
       font-weight: 700;
       color: var(--accent);
-      animation: pointsCountUp 0.7s cubic-bezier(.16,1,.3,1) both;
+      animation: pointsCountUp 0.7s cubic-bezier(.16, 1, .3, 1) both;
       animation-delay: 0.35s;
       display: inline-block;
       transition: transform 0.2s ease, text-shadow 0.2s ease;
     }
 
     .points-val:hover {
-      text-shadow: 0 0 20px rgba(189,252,36,0.6);
+      text-shadow: 0 0 20px rgba(189, 252, 36, 0.6);
       transform: scale(1.04);
     }
 
@@ -497,9 +613,9 @@
 
     .points-progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--accent), rgba(189,252,36,0.6));
+      background: linear-gradient(90deg, var(--accent), rgba(189, 252, 36, 0.6));
       width: 62%;
-      animation: barFillSlide 1.4s cubic-bezier(.16,1,.3,1) both;
+      animation: barFillSlide 1.4s cubic-bezier(.16, 1, .3, 1) both;
       animation-delay: 0.5s;
       border-radius: 3px;
       position: relative;
@@ -516,7 +632,7 @@
       height: 8px;
       border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 10px 3px rgba(189,252,36,0.5);
+      box-shadow: 0 0 10px 3px rgba(189, 252, 36, 0.5);
     }
 
     .points-next-tier-msg {
@@ -540,16 +656,24 @@
       border-radius: 8px;
       border: 1px solid transparent;
       transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-      animation: perkSlideIn 0.5s cubic-bezier(.16,1,.3,1) both;
+      animation: perkSlideIn 0.5s cubic-bezier(.16, 1, .3, 1) both;
     }
 
-    .perk-item:nth-child(1) { animation-delay: 0.7s; }
-    .perk-item:nth-child(2) { animation-delay: 0.85s; }
-    .perk-item:nth-child(3) { animation-delay: 1.0s; }
+    .perk-item:nth-child(1) {
+      animation-delay: 0.7s;
+    }
+
+    .perk-item:nth-child(2) {
+      animation-delay: 0.85s;
+    }
+
+    .perk-item:nth-child(3) {
+      animation-delay: 1.0s;
+    }
 
     .perk-item:hover {
-      background: rgba(189,252,36,0.05);
-      border-color: rgba(189,252,36,0.15);
+      background: rgba(189, 252, 36, 0.05);
+      border-color: rgba(189, 252, 36, 0.15);
       transform: translateX(6px);
     }
 
@@ -571,9 +695,9 @@
       border-radius: 12px;
       padding: 24px;
       transition: border-color 0.35s ease,
-                  box-shadow   0.35s ease,
-                  transform    0.35s cubic-bezier(.16,1,.3,1);
-      animation: fadeUpIn 0.5s cubic-bezier(.16,1,.3,1) both;
+        box-shadow 0.35s ease,
+        transform 0.35s cubic-bezier(.16, 1, .3, 1);
+      animation: fadeUpIn 0.5s cubic-bezier(.16, 1, .3, 1) both;
       position: relative;
       overflow: hidden;
     }
@@ -588,13 +712,13 @@
       background: linear-gradient(to bottom, var(--accent), transparent);
       transform: scaleY(0);
       transform-origin: top;
-      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+      transition: transform 0.4s cubic-bezier(.16, 1, .3, 1);
       border-radius: 0 2px 2px 0;
     }
 
     .order-card:hover {
-      border-color: rgba(189,252,36,0.2);
-      box-shadow: 0 12px 48px rgba(0,0,0,0.3);
+      border-color: rgba(189, 252, 36, 0.2);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
       transform: translateY(-3px) translateX(2px);
     }
 
@@ -673,7 +797,7 @@
       object-fit: cover;
       border-radius: 4px;
       border: 1px solid var(--border-color);
-      background: rgba(255,255,255,0.01);
+      background: rgba(255, 255, 255, 0.01);
     }
 
     .order-item-details {
@@ -725,13 +849,13 @@
       top: 31px;
       left: 12.5%;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent), rgba(189,252,36,0.5));
+      background: linear-gradient(90deg, var(--accent), rgba(189, 252, 36, 0.5));
       z-index: 2;
       width: 0%;
-      animation: progressLineDraw 1.2s cubic-bezier(.16,1,.3,1) both;
+      animation: progressLineDraw 1.2s cubic-bezier(.16, 1, .3, 1) both;
       animation-delay: 0.3s;
       border-radius: 1px;
-      box-shadow: 0 0 8px rgba(189,252,36,0.4);
+      box-shadow: 0 0 8px rgba(189, 252, 36, 0.4);
     }
 
     .tracking-step {
@@ -749,7 +873,7 @@
       border-radius: 50%;
       background: var(--void-light);
       border: 2px solid rgba(243, 241, 234, 0.1);
-      transition: all 0.4s cubic-bezier(.16,1,.3,1);
+      transition: all 0.4s cubic-bezier(.16, 1, .3, 1);
     }
 
     .tracking-step.is-active .tracking-step__dot {
@@ -761,7 +885,7 @@
     .tracking-step.is-complete .tracking-step__dot {
       border-color: var(--accent);
       background: var(--accent);
-      box-shadow: 0 0 10px rgba(189,252,36,0.4);
+      box-shadow: 0 0 10px rgba(189, 252, 36, 0.4);
     }
 
     .tracking-step__label {
@@ -818,7 +942,7 @@
       left: 50%;
       width: 10px;
       height: 10px;
-      background: rgba(255,255,255,0.3);
+      background: rgba(255, 255, 255, 0.3);
       border-radius: 50%;
       transform: scale(0);
       pointer-events: none;
@@ -826,7 +950,7 @@
 
     .form-submit-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(189,252,36,0.22);
+      box-shadow: 0 8px 28px rgba(189, 252, 36, 0.22);
     }
 
     .form-submit-btn:active {
@@ -859,12 +983,12 @@
       transform: translateX(-50%);
       width: 600px;
       height: 300px;
-      background: radial-gradient(ellipse, rgba(189,252,36,0.06) 0%, transparent 70%);
+      background: radial-gradient(ellipse, rgba(189, 252, 36, 0.06) 0%, transparent 70%);
       pointer-events: none;
     }
 
     .dash-footer__top {
-      border-bottom: 1px solid rgba(243,241,234,0.06);
+      border-bottom: 1px solid rgba(243, 241, 234, 0.06);
       padding: 60px 48px 56px;
       display: flex;
       align-items: center;
@@ -903,7 +1027,7 @@
     .dfooter-tagline {
       font-size: 13px;
       line-height: 1.65;
-      color: rgba(243,241,234,0.4);
+      color: rgba(243, 241, 234, 0.4);
       margin: 0;
     }
 
@@ -917,13 +1041,13 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 1px solid rgba(243,241,234,0.1);
+      border: 1px solid rgba(243, 241, 234, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(243,241,234,0.4);
+      color: rgba(243, 241, 234, 0.4);
       text-decoration: none;
-      transition: all 0.35s cubic-bezier(.16,1,.3,1);
+      transition: all 0.35s cubic-bezier(.16, 1, .3, 1);
       position: relative;
       overflow: hidden;
     }
@@ -933,17 +1057,17 @@
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(189,252,36,0.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(189, 252, 36, 0.12) 0%, transparent 70%);
       transform: scale(0);
-      transition: transform 0.35s cubic-bezier(.16,1,.3,1);
+      transition: transform 0.35s cubic-bezier(.16, 1, .3, 1);
     }
 
     .dfooter-social a:hover {
       border-color: var(--accent);
       color: var(--accent);
-      background: rgba(189,252,36,0.06);
+      background: rgba(189, 252, 36, 0.06);
       transform: translateY(-4px) scale(1.1);
-      box-shadow: 0 8px 20px rgba(189,252,36,0.15);
+      box-shadow: 0 8px 20px rgba(189, 252, 36, 0.15);
     }
 
     .dfooter-social a:hover::before {
@@ -973,17 +1097,17 @@
 
     .dfooter-newsletter-sub {
       font-size: 12px;
-      color: rgba(243,241,234,0.4);
+      color: rgba(243, 241, 234, 0.4);
       margin: 0;
     }
 
     .dfooter-newsletter-form {
       display: flex;
       gap: 0;
-      border: 1px solid rgba(243,241,234,0.12);
+      border: 1px solid rgba(243, 241, 234, 0.12);
       border-radius: 10px;
       overflow: hidden;
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       transition: border-color 0.3s;
     }
 
@@ -1003,7 +1127,7 @@
     }
 
     .dfooter-newsletter-form input::placeholder {
-      color: rgba(243,241,234,0.3);
+      color: rgba(243, 241, 234, 0.3);
     }
 
     .dfooter-newsletter-form button {
@@ -1030,20 +1154,36 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 40px 32px;
       padding: 56px 48px;
-      border-bottom: 1px solid rgba(243,241,234,0.06);
+      border-bottom: 1px solid rgba(243, 241, 234, 0.06);
       position: relative;
       z-index: 2;
     }
 
     @media (max-width: 900px) {
-      .dash-footer__grid { grid-template-columns: repeat(3, 1fr); }
-      .dash-footer__top { flex-direction: column; align-items: flex-start; }
+      .dash-footer__grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .dash-footer__top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
 
     @media (max-width: 600px) {
-      .dash-footer__grid { grid-template-columns: repeat(2, 1fr); padding: 40px 24px; }
-      .dash-footer__top { padding: 40px 24px 36px; }
-      .dash-footer__bottom { padding: 24px; flex-direction: column; }
+      .dash-footer__grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 40px 24px;
+      }
+
+      .dash-footer__top {
+        padding: 40px 24px 36px;
+      }
+
+      .dash-footer__bottom {
+        padding: 24px;
+        flex-direction: column;
+      }
     }
 
     .dfooter-col-head {
@@ -1052,7 +1192,7 @@
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: rgba(243,241,234,0.35);
+      color: rgba(243, 241, 234, 0.35);
       margin: 0 0 20px;
     }
 
@@ -1067,7 +1207,7 @@
 
     .dfooter-col-links a {
       font-size: 13px;
-      color: rgba(243,241,234,0.55);
+      color: rgba(243, 241, 234, 0.55);
       text-decoration: none;
       transition: color 0.25s ease, transform 0.25s ease, letter-spacing 0.25s ease;
       display: inline-flex;
@@ -1102,7 +1242,7 @@
 
     .dfooter-copy {
       font-size: 12px;
-      color: rgba(243,241,234,0.25);
+      color: rgba(243, 241, 234, 0.25);
       margin: 0;
     }
 
@@ -1117,7 +1257,7 @@
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: rgba(243,241,234,0.25);
+      color: rgba(243, 241, 234, 0.25);
     }
 
     .dfooter-pay-icons {
@@ -1129,7 +1269,7 @@
     .dfooter-pay-icon {
       height: 28px;
       width: auto;
-      background: rgba(255,255,255,0.95);
+      background: rgba(255, 255, 255, 0.95);
       padding: 3px 8px;
       border-radius: 5px;
       object-fit: contain;
@@ -1149,16 +1289,17 @@
 
     .dfooter-legal-links a {
       font-size: 11px;
-      color: rgba(243,241,234,0.25);
+      color: rgba(243, 241, 234, 0.25);
       text-decoration: none;
       transition: color 0.2s;
     }
 
     .dfooter-legal-links a:hover {
-      color: rgba(243,241,234,0.6);
+      color: rgba(243, 241, 234, 0.6);
     }
   </style>
 </head>
+
 <body>
 
   <!-- Promo bar -->
@@ -1193,7 +1334,8 @@
     <div class="nav__inner">
       <a href="index.html" class="nav__logo" aria-label="NOVA home">
         <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
         <span>NOVA</span>
       </a>
@@ -1209,20 +1351,26 @@
 
       <div class="nav__right">
         <button class="nav__icon-btn" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-        <a href="login.html" class="nav__icon-btn" aria-label="Account" style="border-bottom-color: var(--accent); color: var(--accent-text);">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <a href="login.html" class="nav__icon-btn" aria-label="Account"
+          style="border-bottom-color: var(--accent); color: var(--accent-text);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
         </a>
         <a href="wishlist.html" class="nav__icon-btn" aria-label="Wishlist">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+            </path>
           </svg>
         </a>
       </div>
@@ -1291,7 +1439,9 @@
             <p style="margin: 4px 0;" id="addressStreet">100 Feet Road, Indiranagar</p>
             <p style="margin: 4px 0;" id="addressCityState">Bangalore, Karnataka, 560038</p>
             <p style="margin: 4px 0;" id="addressCountry">India</p>
-            <p style="margin: 12px 0 0 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent);">Default shipping method: Standard (Free)</p>
+            <p
+              style="margin: 12px 0 0 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent);">
+              Default shipping method: Standard (Free)</p>
           </div>
         </div>
       </div>
@@ -1335,7 +1485,8 @@
             <label class="form-label" for="settingsPhone">Phone Number</label>
             <input type="tel" id="settingsPhone" class="form-input" placeholder="+91 XXXXX XXXXX">
           </div>
-          <p id="settingsMsg" style="color: var(--accent); font-size: 13px; font-weight: 500; display: none; margin-bottom: 16px;"></p>
+          <p id="settingsMsg"
+            style="color: var(--accent); font-size: 13px; font-weight: 500; display: none; margin-bottom: 16px;"></p>
           <button type="submit" class="btn btn--solid form-submit-btn">
             <span>Save Profile Updates</span>
           </button>
@@ -1349,29 +1500,44 @@
   ==================================================== -->
   <footer class="dash-footer">
     <div class="dash-footer__glow"></div>
-
-    <!-- Top: brand + newsletter -->
-    <div class="dash-footer__top">
+    <div class="desktop-footer">
       <div class="dfooter-brand">
         <a href="index.html" class="dfooter-logo">
           <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
           NOVA
         </a>
-        <p class="dfooter-tagline">High-performance footwear built for those who refuse to slow down. Engineered for every stride.</p>
+        <p class="dfooter-tagline">High-performance footwear built for those who refuse to slow down. Engineered for
+          every stride.</p>
         <div class="dfooter-social">
           <a href="#" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
           </a>
           <a href="#" aria-label="Twitter / X">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path
+                d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+            </svg>
           </a>
           <a href="#" aria-label="YouTube">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path
+                d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+              <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
+            </svg>
           </a>
           <a href="#" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+              <rect x="2" y="9" width="4" height="12" />
+              <circle cx="4" cy="4" r="2" />
+            </svg>
           </a>
         </div>
       </div>
@@ -1379,7 +1545,8 @@
       <div class="dfooter-newsletter">
         <h4 class="dfooter-newsletter-title">Get exclusive drops first</h4>
         <p class="dfooter-newsletter-sub">Join 50,000+ Nova members who get early access and special discounts.</p>
-        <form class="dfooter-newsletter-form" onsubmit="event.preventDefault(); this.querySelector('input').value=''; this.querySelector('button').textContent='Subscribed ✓';">
+        <form class="dfooter-newsletter-form"
+          onsubmit="event.preventDefault(); this.querySelector('input').value=''; this.querySelector('button').textContent='Subscribed ✓';">
           <input type="email" placeholder="Enter your email address" required />
           <button type="submit">Subscribe</button>
         </form>
@@ -1441,22 +1608,183 @@
       </div>
     </div>
 
-    <!-- Bottom bar -->
-    <div class="dash-footer__bottom">
-      <p class="dfooter-copy">© 2026 Nova Footwear Pvt. Ltd. All rights reserved.</p>
-
-      <div class="dfooter-legal-links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Cookies</a>
       </div>
+    </div>
 
-      <div class="dfooter-trust">
-        <span class="dfooter-trust-label">Secure Payments</span>
-        <div class="dfooter-pay-icons">
-          <img class="dfooter-pay-icon" src="assets/images/visa.png" alt="Visa">
-          <img class="dfooter-pay-icon" src="assets/images/mastercard.png" alt="Mastercard">
-          <img class="dfooter-pay-icon" src="assets/images/upi.png" alt="UPI">
+    <!-- Mobile Footer Content -->
+    <div class="mobile-footer">
+      <div class="mobile-footer__inner">
+        <!-- Brand & Socials -->
+        <div class="m-footer-brand">
+          <a href="index.html" class="m-footer-logo">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>NOVA</span>
+          </a>
+          <p class="m-footer-desc">
+            Engineered for performance.<br>
+            Designed for champions.<br>
+            Move with Nova.
+          </p>
+          <div class="m-footer-socials">
+            <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+            <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            </a>
+            <a href="https://twitter.com" target="_blank" aria-label="Twitter">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+            </a>
+            <a href="https://youtube.com" target="_blank" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Links Columns Grid -->
+        <div class="m-footer-links-grid">
+          <!-- Column 1: Quick Links -->
+          <div class="m-footer-col">
+            <h4 class="m-footer-heading">Quick Links</h4>
+            <ul class="m-footer-links">
+              <li><a href="about.html">About Us <span class="arrow-icon"></span></a></li>
+              <li><a href="dashboard.html">Track Your Order <span class="arrow-icon"></span></a></li>
+              <li><a href="about.html">Size Guide <span class="arrow-icon"></span></a></li>
+              <li><a href="about.html">Returns & Refunds <span class="arrow-icon"></span></a></li>
+              <li><a href="about.html">FAQs <span class="arrow-icon"></span></a></li>
+              <li><a href="contact.html">Contact Us <span class="arrow-icon"></span></a></li>
+            </ul>
+          </div>
+
+          <!-- Column 2: Shop -->
+          <div class="m-footer-col">
+            <h4 class="m-footer-heading">Shop</h4>
+            <ul class="m-footer-links">
+              <li><a href="men.html">Men <span class="arrow-icon"></span></a></li>
+              <li><a href="women.html">Women <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?category=Running">Running <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?category=Training">Training <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?category=Lifestyle">Lifestyle <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?category=Outdoor">Outdoor <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?tag=new">New Arrivals <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?tag=bestseller">Best Sellers <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html">All Products <span class="arrow-icon"></span></a></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Customer Care -->
+          <div class="m-footer-col">
+            <h4 class="m-footer-heading">Customer Care</h4>
+            <ul class="m-footer-links no-arrows">
+              <li><a href="about.html">Help Center</a></li>
+              <li><a href="about.html">Shipping Policy</a></li>
+              <li><a href="about.html">Return Policy</a></li>
+              <li><a href="about.html">Terms & Conditions</a></li>
+              <li><a href="about.html">Privacy Policy</a></li>
+              <li><a href="about.html">Payment Methods</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Trust Badges Container -->
+        <div class="m-footer-trust-box">
+          <div class="m-footer-trust-grid">
+            <div class="m-footer-trust-item">
+              <svg class="m-footer-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+              <div class="m-footer-trust-content">
+                <h5>FREE SHIPPING</h5>
+                <p>On orders above ₹999</p>
+              </div>
+            </div>
+            <div class="m-footer-trust-item">
+              <svg class="m-footer-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              <div class="m-footer-trust-content">
+                <h5>EASY RETURNS</h5>
+                <p>14 days easy returns</p>
+              </div>
+            </div>
+            <div class="m-footer-trust-item">
+              <svg class="m-footer-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M9 11l2 2 4-4" />
+              </svg>
+              <div class="m-footer-trust-content">
+                <h5>100% ORIGINAL</h5>
+                <p>Authentic Products</p>
+              </div>
+            </div>
+            <div class="m-footer-trust-item">
+              <svg class="m-footer-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <div class="m-footer-trust-content">
+                <h5>SUPPORT 24/7</h5>
+                <p>We're here to help you</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsletter Subscription Box -->
+        <div class="m-footer-newsletter-box">
+          <div class="m-footer-newsletter-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
+          </div>
+          <div class="m-footer-newsletter-content">
+            <h5>JOIN THE NOVA COMMUNITY</h5>
+            <p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
+            <form class="m-footer-newsletter-form">
+              <input type="email" placeholder="Enter your email" required>
+              <button type="submit" aria-label="Subscribe">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- We Accept Section -->
+        <div class="m-footer-accept-section">
+          <h4 class="m-footer-heading">We Accept</h4>
+          <div class="m-footer-payments-row">
+            <div class="m-footer-payment-card">
+              <img src="assets/images/visa.png" alt="Visa">
+            </div>
+            <div class="m-footer-payment-card">
+              <img src="assets/images/mastercard.png" alt="Mastercard">
+            </div>
+            <div class="m-footer-payment-card">
+              <img src="assets/images/upi.png" alt="UPI">
+            </div>
+            <div class="m-footer-payment-card">
+              <span class="paytm-text-logo">paytm</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright Info -->
+        <div class="m-footer-copyright">
+          <div class="m-footer-logo-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <p class="copyright-line">© 2025 NOVA. All rights reserved.</p>
+          <p class="built-line">Built with <span class="heart-icon">💚</span> for performance.</p>
         </div>
       </div>
     </div>
@@ -1475,7 +1803,7 @@
           ripple.className = 'tab-ripple';
           const rect = btn.getBoundingClientRect();
           ripple.style.left = (e.clientX - rect.left) + 'px';
-          ripple.style.top  = (e.clientY - rect.top)  + 'px';
+          ripple.style.top = (e.clientY - rect.top) + 'px';
           btn.appendChild(ripple);
           setTimeout(() => ripple.remove(), 600);
 
@@ -1494,138 +1822,138 @@
         const update = (now) => {
           const elapsed = now - start;
           const progress = Math.min(elapsed / duration, 1);
-                // User session details loader
-      let user = null;
-      async function loadUser() {
-        const token = localStorage.getItem('nova_user_token');
-        if (!token) {
-          window.location.href = 'login.html';
-          return;
-        }
+          // User session details loader
+          let user = null;
+          async function loadUser() {
+            const token = localStorage.getItem('nova_user_token');
+            if (!token) {
+              window.location.href = 'login.html';
+              return;
+            }
 
-        try {
-          const data = await window.novaFetch('/auth/me');
-          if (data && data.success && data.user) {
-            user = data.user;
-            localStorage.setItem('nova_user', JSON.stringify(user));
+            try {
+              const data = await window.novaFetch('/auth/me');
+              if (data && data.success && data.user) {
+                user = data.user;
+                localStorage.setItem('nova_user', JSON.stringify(user));
+              }
+            } catch (err) {
+              console.error("Fetch me failed, using local user cached details", err);
+              try {
+                user = JSON.parse(localStorage.getItem('nova_user'));
+              } catch (e) { }
+            }
+
+            if (!user) {
+              window.location.href = 'login.html';
+              return;
+            }
+
+            // Apply profile values
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileTier').textContent = user.role === 'admin' ? 'Studio Admin' : 'Bronze Member';
+            const joinedDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : 'July 2026';
+            document.getElementById('profileJoined').textContent = `Member since ${joinedDate}`;
+            document.getElementById('avatarDisplay').textContent = user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+
+            // loyalty details
+            const pointsEl = document.getElementById('loyaltyPointsVal');
+            const mockPoints = 1250;
+            animateCounter(pointsEl, mockPoints, 1400);
+            const nextTierPoints = 2000;
+            const remaining = Math.max(0, nextTierPoints - mockPoints);
+            const progressPct = Math.min(100, (mockPoints / nextTierPoints) * 100);
+            document.getElementById('loyaltyBarFill').style.width = progressPct + '%';
+            document.getElementById('loyaltyTierMsg').textContent = remaining > 0
+              ? `${remaining.toLocaleString()} points to unlock Black Diamond drop tier.`
+              : 'Congratulations! You have reached maximum Drop Tier status.';
+
+            // settings form pre-fill
+            document.getElementById('settingsName').value = user.name;
+            document.getElementById('settingsEmail').value = user.email;
+            document.getElementById('settingsPhone').value = user.phone || '';
           }
-        } catch (err) {
-          console.error("Fetch me failed, using local user cached details", err);
-          try {
-            user = JSON.parse(localStorage.getItem('nova_user'));
-          } catch(e) {}
-        }
 
-        if (!user) {
-          window.location.href = 'login.html';
-          return;
-        }
+          // Settings updates
+          const settingsForm = document.getElementById('settingsForm');
+          const settingsMsg = document.getElementById('settingsMsg');
+          settingsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('settingsName').value.trim();
+            const phone = document.getElementById('settingsPhone').value.trim();
 
-        // Apply profile values
-        document.getElementById('profileName').textContent = user.name;
-        document.getElementById('profileTier').textContent = user.role === 'admin' ? 'Studio Admin' : 'Bronze Member';
-        const joinedDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : 'July 2026';
-        document.getElementById('profileJoined').textContent = `Member since ${joinedDate}`;
-        document.getElementById('avatarDisplay').textContent = user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            try {
+              const data = await window.novaFetch('/auth/me', {
+                method: 'PUT',
+                body: JSON.stringify({ name, phone })
+              });
 
-        // loyalty details
-        const pointsEl = document.getElementById('loyaltyPointsVal');
-        const mockPoints = 1250;
-        animateCounter(pointsEl, mockPoints, 1400);
-        const nextTierPoints = 2000;
-        const remaining = Math.max(0, nextTierPoints - mockPoints);
-        const progressPct = Math.min(100, (mockPoints / nextTierPoints) * 100);
-        document.getElementById('loyaltyBarFill').style.width = progressPct + '%';
-        document.getElementById('loyaltyTierMsg').textContent = remaining > 0 
-          ? `${remaining.toLocaleString()} points to unlock Black Diamond drop tier.` 
-          : 'Congratulations! You have reached maximum Drop Tier status.';
-
-        // settings form pre-fill
-        document.getElementById('settingsName').value = user.name;
-        document.getElementById('settingsEmail').value = user.email;
-        document.getElementById('settingsPhone').value = user.phone || '';
-      }
-
-      // Settings updates
-      const settingsForm = document.getElementById('settingsForm');
-      const settingsMsg = document.getElementById('settingsMsg');
-      settingsForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('settingsName').value.trim();
-        const phone = document.getElementById('settingsPhone').value.trim();
-
-        try {
-          const data = await window.novaFetch('/auth/me', {
-            method: 'PUT',
-            body: JSON.stringify({ name, phone })
+              if (data.success) {
+                settingsMsg.style.display = 'block';
+                settingsMsg.textContent = 'Profile successfully updated!';
+                await loadUser();
+                setTimeout(() => {
+                  settingsMsg.style.display = 'none';
+                }, 3000);
+              }
+            } catch (err) {
+              alert(err.message || 'Update failed.');
+            }
           });
 
-          if (data.success) {
-            settingsMsg.style.display = 'block';
-            settingsMsg.textContent = 'Profile successfully updated!';
-            await loadUser();
-            setTimeout(() => {
-              settingsMsg.style.display = 'none';
-            }, 3000);
-          }
-        } catch (err) {
-          alert(err.message || 'Update failed.');
-        }
-      });
-
-      // Address Book Loader
-      function loadAddress() {
-        if (user && user.addresses && user.addresses.length > 0) {
-          const addr = user.addresses[0];
-          document.getElementById('addressName').textContent = addr.fullName;
-          document.getElementById('addressStreet').textContent = addr.line1;
-          document.getElementById('addressCityState').textContent = `${addr.city}, ${addr.state}, ${addr.pincode}`;
-        } else {
-          document.getElementById('addressName').textContent = user ? user.name : 'No address saved yet';
-          document.getElementById('addressStreet').textContent = 'Please place an order to register address details.';
-          document.getElementById('addressCityState').textContent = '';
-        }
-      }
-
-      // Orders Loader
-      async function loadOrders() {
-        const ordersList = document.getElementById('dashboardOrdersList');
-        if (!ordersList) return;
-        
-        let orders = [];
-        const token = localStorage.getItem('nova_user_token');
-        if (token) {
-          try {
-            const data = await window.novaFetch('/orders/mine');
-            if (data.success && data.orders) {
-              orders = data.orders;
+          // Address Book Loader
+          function loadAddress() {
+            if (user && user.addresses && user.addresses.length > 0) {
+              const addr = user.addresses[0];
+              document.getElementById('addressName').textContent = addr.fullName;
+              document.getElementById('addressStreet').textContent = addr.line1;
+              document.getElementById('addressCityState').textContent = `${addr.city}, ${addr.state}, ${addr.pincode}`;
+            } else {
+              document.getElementById('addressName').textContent = user ? user.name : 'No address saved yet';
+              document.getElementById('addressStreet').textContent = 'Please place an order to register address details.';
+              document.getElementById('addressCityState').textContent = '';
             }
-          } catch (err) {
-            console.error("Load orders from API failed", err);
           }
-        }
 
-        if (orders.length === 0) {
-          ordersList.innerHTML = `
+          // Orders Loader
+          async function loadOrders() {
+            const ordersList = document.getElementById('dashboardOrdersList');
+            if (!ordersList) return;
+
+            let orders = [];
+            const token = localStorage.getItem('nova_user_token');
+            if (token) {
+              try {
+                const data = await window.novaFetch('/orders/mine');
+                if (data.success && data.orders) {
+                  orders = data.orders;
+                }
+              } catch (err) {
+                console.error("Load orders from API failed", err);
+              }
+            }
+
+            if (orders.length === 0) {
+              ordersList.innerHTML = `
             <div class="empty-history-state">
               <p>No orders placed yet. Explore the studio catalog to discover new drops.</p>
               <a href="collection.html" class="btn btn--solid" style="margin-top: 16px;"><span>Shop Collection</span></a>
             </div>
           `;
-          return;
-        }
+              return;
+            }
 
-        ordersList.innerHTML = orders.map((order) => {
-          let progressWidth = '0%';
-          if (order.orderStatus === 'placed' || order.orderStatus === 'confirmed') progressWidth = '33%';
-          if (order.orderStatus === 'processing' || order.orderStatus === 'shipped') progressWidth = '66%';
-          if (order.orderStatus === 'delivered') progressWidth = '100%';
+            ordersList.innerHTML = orders.map((order) => {
+              let progressWidth = '0%';
+              if (order.orderStatus === 'placed' || order.orderStatus === 'confirmed') progressWidth = '33%';
+              if (order.orderStatus === 'processing' || order.orderStatus === 'shipped') progressWidth = '66%';
+              if (order.orderStatus === 'delivered') progressWidth = '100%';
 
-          const itemsHtml = (order.items || []).map(item => {
-            const priceNum = item.price || 8999;
-            const pName = item.product ? item.product.name : 'Nova Premium';
-            const pImg = (item.product && item.product.images && item.product.images.length) ? item.product.images[0] : 'assets/images/product_surge.png';
-            return `
+              const itemsHtml = (order.items || []).map(item => {
+                const priceNum = item.price || 8999;
+                const pName = item.product ? item.product.name : 'Nova Premium';
+                const pImg = (item.product && item.product.images && item.product.images.length) ? item.product.images[0] : 'assets/images/product_surge.png';
+                return `
               <div class="order-item-row">
                 <img class="order-item-img" src="${pImg}" alt="${pName}">
                 <div class="order-item-details">
@@ -1635,11 +1963,11 @@
                 <span class="order-item-price">₹${priceNum.toLocaleString()}</span>
               </div>
             `;
-          }).join('');
+              }).join('');
 
-          const orderDateStr = new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+              const orderDateStr = new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 
-          return `
+              return `
             <div class="order-card">
               <div class="order-card__header">
                 <div class="order-card__meta">
@@ -1680,27 +2008,27 @@
               </div>
             </div>
           `;
-        }).reverse().join('');
-      }
+            }).reverse().join('');
+          }
 
-      // Wishlist Loader
-      async function loadWishlist() {
-        const wishlistGrid = document.getElementById('dashboardWishlistGrid');
-        if (!wishlistGrid) return;
-        const wishlist = await window.novaWishlistState.get();
+          // Wishlist Loader
+          async function loadWishlist() {
+            const wishlistGrid = document.getElementById('dashboardWishlistGrid');
+            if (!wishlistGrid) return;
+            const wishlist = await window.novaWishlistState.get();
 
-        if (wishlist.length === 0) {
-          wishlistGrid.innerHTML = `
+            if (wishlist.length === 0) {
+              wishlistGrid.innerHTML = `
             <div class="empty-history-state" style="grid-column: 1 / -1;">
               <p>No items added to your wishlist yet.</p>
               <a href="collection.html" class="btn btn--solid" style="margin-top: 16px;"><span>View Products</span></a>
             </div>
           `;
-          return;
-        }
+              return;
+            }
 
-        wishlistGrid.innerHTML = wishlist.map(prod => {
-          return `
+            wishlistGrid.innerHTML = wishlist.map(prod => {
+              return `
             <div class="product-card" data-id="${prod.id}">
               <button class="wishlist-btn" aria-label="Remove from Wishlist" onclick="removeWishlistItem('${prod.id}', '${prod.name}')" style="color: var(--accent);">
                 <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
@@ -1717,34 +2045,34 @@
               </div>
             </div>
           `;
-        }).join('');
-      }
+            }).join('');
+          }
 
-      // Expose remove item globally
-      window.removeWishlistItem = async (id, name) => {
-        await window.novaWishlistState.toggle({ id, name });
-        await loadWishlist();
-      };
+          // Expose remove item globally
+          window.removeWishlistItem = async (id, name) => {
+            await window.novaWishlistState.toggle({ id, name });
+            await loadWishlist();
+          };
 
-      // Logout handler
-      document.getElementById('logoutBtn').addEventListener('click', async () => {
-        try {
-          await window.novaFetch('/auth/logout', { method: 'POST' });
-        } catch (e) {}
-        localStorage.removeItem('nova_user');
-        localStorage.removeItem('nova_user_token');
-        window.location.href = 'index.html';
-      });
+          // Logout handler
+          document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+              await window.novaFetch('/auth/logout', { method: 'POST' });
+            } catch (e) { }
+            localStorage.removeItem('nova_user');
+            localStorage.removeItem('nova_user_token');
+            window.location.href = 'index.html';
+          });
 
-      // Initial boot
-      async function boot() {
-        await loadUser();
-        loadAddress();
-        await loadOrders();
-        await loadWishlist();
-      }
-      boot();
-    });
+          // Initial boot
+          async function boot() {
+            await loadUser();
+            loadAddress();
+            await loadOrders();
+            await loadWishlist();
+          }
+          boot();
+        });
   </script>
 
   <!-- ============================= -->
@@ -1752,14 +2080,16 @@
   <!-- ============================= -->
   <div class="mobile-bottom-nav">
     <a href="index.html" class="mobile-bottom-nav__item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
         <polyline points="9 22 9 12 15 12 15 22"></polyline>
       </svg>
       <span>HOME</span>
     </a>
     <a href="collection.html" class="mobile-bottom-nav__item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
         <rect x="3" y="3" width="7" height="7"></rect>
         <rect x="14" y="3" width="7" height="7"></rect>
         <rect x="14" y="14" width="7" height="7"></rect>
@@ -1768,7 +2098,8 @@
       <span>SHOP</span>
     </a>
     <a href="collection.html#categories" class="mobile-bottom-nav__item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
         <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
         <polyline points="2 17 12 22 22 17"></polyline>
         <polyline points="2 12 12 17 22 12"></polyline>
@@ -1777,15 +2108,19 @@
     </a>
     <a href="wishlist.html" class="mobile-bottom-nav__item">
       <div class="mobile-bottom-nav__icon-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path
+            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+          </path>
         </svg>
         <span class="mobile-bottom-nav__badge nav__wish-count" id="wishlistCountMobile">0</span>
       </div>
       <span>WISHLIST</span>
     </a>
     <a href="dashboard.html" class="mobile-bottom-nav__item is-active" id="mobileAccountLink">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
         <circle cx="12" cy="7" r="4"></circle>
       </svg>
@@ -1793,4 +2128,5 @@
     </a>
   </div>
 </body>
+
 </html>

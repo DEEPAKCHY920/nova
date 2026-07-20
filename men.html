@@ -1,795 +1,1954 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>NOVA — Defy Gravity</title>
-<meta name="description" content="Explore NOVA luxury performance footwear. Engineered for every move." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>NOVA — Defy Gravity</title>
+  <meta name="description" content="Explore NOVA luxury performance footwear. Engineered for every move." />
 
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.cdnfonts.com" />
-<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css" />
-<link rel="stylesheet" href="animations.css" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.cdnfonts.com" />
+  <link
+    href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="animations.css" />
 
-<style>
-  :root {
-    --hero-accent: #bdfc24;
-  }
+  <style>
+    :root {
+      --hero-accent: #bdfc24;
+    }
 
-  /* =========================================================
+    /* =========================================================
      HERO (Men's page specific slideshow layout)
      ========================================================= */
-  .hero { position: relative; }
-  .hero__pin {
-    position: relative; width: 100%; min-height: 720px; overflow: hidden; background: var(--void);
-    display: grid; grid-template-columns: minmax(280px, 1fr) minmax(320px, 620px) minmax(220px, 1fr);
-    grid-template-rows: 1fr auto; padding-top: calc(var(--nav-h) + 38px + 40px);
-  }
-  .hero__bg-slides {
-    position: absolute; inset: 0; z-index: 0;
-  }
-  .hero__bg-slide {
-    position: absolute; inset: 0;
-    background-size: cover; background-position: center;
-    opacity: 0; transition: opacity 1.2s ease-in-out;
-    z-index: 1;
-  }
-  .hero__bg-slide::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(8, 8, 10, 0.45) 0%, rgba(8, 8, 10, 0.9) 100%);
-    z-index: 2;
-  }
-  .hero__bg-slide.active {
-    opacity: 1; z-index: 2;
-  }
-  .stage__grain {
-    position: absolute; inset: 0; opacity: 0.05; mix-blend-mode: overlay; pointer-events: none; z-index: 3;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  .hero__left { position: relative; z-index: 2; grid-column: 1; grid-row: 1; align-self: center; padding: 0 0 0 clamp(24px, 5vw, 72px); max-width: 520px; }
-  .eyebrow {
-    display: flex; align-items: center; gap: 9px; font-family: var(--f-mono); font-size: 11.5px;
-    letter-spacing: 0.18em; text-transform: uppercase; color: var(--hero-accent); margin: 0 0 22px; font-weight: 600;
-  }
-  .eyebrow__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--hero-accent); box-shadow: 0 0 12px var(--hero-accent); }
-  .headline { margin: 0 0 22px; font-family: var(--f-display); font-weight: 700; line-height: 0.86; letter-spacing: -0.01em; }
-  .headline__line {
-    display: block; font-size: clamp(52px, 7vw, 92px); color: #fff;
-  }
-  .headline__line--accent { color: var(--hero-accent); }
-  .hero__copy { font-size: 15px; line-height: 1.6; color: var(--platinum-dim); max-width: 380px; margin: 0 0 32px; }
-  .hero__actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
-  .hero__social-proof { display: flex; align-items: center; gap: 14px; }
-  .avatar-stack { display: flex; }
-  .avatar-stack img, .avatar-stack .avatar-fallback {
-    width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--void); object-fit: cover;
-    margin-left: -10px; background: var(--panel-2); display: flex; align-items: center; justify-content: center;
-    font-family: var(--f-mono); font-size: 10px; color: var(--platinum-dim);
-  }
-  .avatar-stack img:first-child, .avatar-stack .avatar-fallback:first-child { margin-left: 0; }
-  .hero__social-text { display: flex; flex-direction: column; gap: 2px; }
-  .hero__social-count { font-size: 13px; font-weight: 500; color: var(--platinum); }
-  .hero__social-rating { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--platinum-dim); }
-  .hero__social-rating .stars { color: var(--hero-accent); font-size: 11px; letter-spacing: 1px; }
+    .hero {
+      position: relative;
+    }
 
-  .hero__right {
-    position: relative; z-index: 2; grid-column: 3; grid-row: 1; align-self: center; justify-self: end;
-    padding: 0 clamp(24px, 5vw, 64px) 0 0; display: flex; flex-direction: column; align-items: flex-end; gap: 30px;
-  }
-  .hero-slide-nav { display: flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: 11px; color: var(--platinum-faint); }
-  .hero-slide-nav__btn {
-    width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center;
-    justify-content: center; color: var(--platinum-dim); transition: background .3s, color .3s, border-color .3s;
-  }
-  .hero-slide-nav__btn:hover { background: var(--platinum); color: var(--void); border-color: var(--platinum); }
-  .hero-slide-nav__btn svg { width: 14px; height: 14px; }
-  .hero-slide-nav__count span { color: var(--hero-accent); }
-  .colorway { display: flex; flex-direction: column; gap: 14px; align-items: flex-end; }
-  .colorway__title {
-    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--platinum-faint); margin-bottom: 4px;
-  }
-  .colorway__swatch { display: flex; align-items: center; gap: 12px; justify-content: flex-end; padding: 6px; border-radius: 100px; opacity: 0.55; transition: opacity .3s, transform .3s; cursor: pointer; }
-  .colorway__swatch:hover { opacity: 0.9; }
-  .colorway__swatch.is-active { opacity: 1; }
-  .colorway__name { font-size: 12px; color: var(--platinum-dim); letter-spacing: 0.02em; }
-  .colorway__swatch.is-active .colorway__name { color: var(--platinum); }
-  .colorway__chip {
-    width: 26px; height: 26px; border-radius: 50%; display: block; border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.25), 0 4px 14px rgba(0, 0, 0, 0.4);
-    transition: transform .3s var(--ease-out), box-shadow .3s;
-  }
-  .colorway__swatch.is-active .colorway__chip {
-    transform: scale(1.12); box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 0 2px var(--void), 0 0 0 3px var(--platinum-faint), 0 4px 18px rgba(0, 0, 0, 0.5);
-  }
+    .hero__pin {
+      position: relative;
+      width: 100%;
+      min-height: 720px;
+      overflow: hidden;
+      background: var(--void);
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(320px, 620px) minmax(220px, 1fr);
+      grid-template-rows: 1fr auto;
+      padding-top: calc(var(--nav-h) + 38px + 40px);
+    }
 
-  .hero__bottom { position: relative; z-index: 2; grid-column: 1 / -1; grid-row: 2; display: flex; flex-direction: column; align-items: center; gap: 22px; padding: 40px clamp(24px, 5vw, 64px) clamp(24px, 4vh, 44px); }
-  .hero__shoe-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 560px; max-width: 90vw; z-index: 1; pointer-events: none; }
-  .hero__shoe-img { width: 100%; filter: drop-shadow(0 30px 50px rgba(0,0,0,0.7)); animation: heroFloat 6s ease-in-out infinite; }
-  @keyframes heroFloat { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-14px) rotate(0deg); } }
+    .hero__bg-slides {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
 
-  .specs { width: 100%; max-width: 1120px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); }
-  .specs__card { background: rgba(19, 19, 22, 0.55); padding: 18px 18px; display: flex; flex-direction: column; gap: 9px; }
-  .specs__icon { width: 22px; height: 22px; color: var(--hero-accent); }
-  .specs__icon svg { width: 100%; height: 100%; }
-  .specs__title { font-size: 12.5px; font-weight: 500; color: var(--platinum); }
-  .specs__sub { font-size: 11px; color: var(--platinum-faint); }
+    .hero__bg-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.2s ease-in-out;
+      z-index: 1;
+    }
 
-  /* =========================================================
+    .hero__bg-slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(8, 8, 10, 0.45) 0%, rgba(8, 8, 10, 0.9) 100%);
+      z-index: 2;
+    }
+
+    .hero__bg-slide.active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .stage__grain {
+      position: absolute;
+      inset: 0;
+      opacity: 0.05;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: 3;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .hero__left {
+      position: relative;
+      z-index: 2;
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+      padding: 0 0 0 clamp(24px, 5vw, 72px);
+      max-width: 520px;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--hero-accent);
+      margin: 0 0 22px;
+      font-weight: 600;
+    }
+
+    .eyebrow__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--hero-accent);
+      box-shadow: 0 0 12px var(--hero-accent);
+    }
+
+    .headline {
+      margin: 0 0 22px;
+      font-family: var(--f-display);
+      font-weight: 700;
+      line-height: 0.86;
+      letter-spacing: -0.01em;
+    }
+
+    .headline__line {
+      display: block;
+      font-size: clamp(52px, 7vw, 92px);
+      color: #fff;
+    }
+
+    .headline__line--accent {
+      color: var(--hero-accent);
+    }
+
+    .hero__copy {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--platinum-dim);
+      max-width: 380px;
+      margin: 0 0 32px;
+    }
+
+    .hero__actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .hero__social-proof {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .avatar-stack {
+      display: flex;
+    }
+
+    .avatar-stack img,
+    .avatar-stack .avatar-fallback {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid var(--void);
+      object-fit: cover;
+      margin-left: -10px;
+      background: var(--panel-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      color: var(--platinum-dim);
+    }
+
+    .avatar-stack img:first-child,
+    .avatar-stack .avatar-fallback:first-child {
+      margin-left: 0;
+    }
+
+    .hero__social-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .hero__social-count {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--platinum);
+    }
+
+    .hero__social-rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--platinum-dim);
+    }
+
+    .hero__social-rating .stars {
+      color: var(--hero-accent);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .hero__right {
+      position: relative;
+      z-index: 2;
+      grid-column: 3;
+      grid-row: 1;
+      align-self: center;
+      justify-self: end;
+      padding: 0 clamp(24px, 5vw, 64px) 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 30px;
+    }
+
+    .hero-slide-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--platinum-faint);
+    }
+
+    .hero-slide-nav__btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--platinum-dim);
+      transition: background .3s, color .3s, border-color .3s;
+    }
+
+    .hero-slide-nav__btn:hover {
+      background: var(--platinum);
+      color: var(--void);
+      border-color: var(--platinum);
+    }
+
+    .hero-slide-nav__btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-slide-nav__count span {
+      color: var(--hero-accent);
+    }
+
+    .colorway {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: flex-end;
+    }
+
+    .colorway__title {
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--platinum-faint);
+      margin-bottom: 4px;
+    }
+
+    .colorway__swatch {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: flex-end;
+      padding: 6px;
+      border-radius: 100px;
+      opacity: 0.55;
+      transition: opacity .3s, transform .3s;
+      cursor: pointer;
+    }
+
+    .colorway__swatch:hover {
+      opacity: 0.9;
+    }
+
+    .colorway__swatch.is-active {
+      opacity: 1;
+    }
+
+    .colorway__name {
+      font-size: 12px;
+      color: var(--platinum-dim);
+      letter-spacing: 0.02em;
+    }
+
+    .colorway__swatch.is-active .colorway__name {
+      color: var(--platinum);
+    }
+
+    .colorway__chip {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: block;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.25), 0 4px 14px rgba(0, 0, 0, 0.4);
+      transition: transform .3s var(--ease-out), box-shadow .3s;
+    }
+
+    .colorway__swatch.is-active .colorway__chip {
+      transform: scale(1.12);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 0 0 2px var(--void), 0 0 0 3px var(--platinum-faint), 0 4px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero__bottom {
+      position: relative;
+      z-index: 2;
+      grid-column: 1 / -1;
+      grid-row: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      padding: 40px clamp(24px, 5vw, 64px) clamp(24px, 4vh, 44px);
+    }
+
+    .hero__shoe-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 560px;
+      max-width: 90vw;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero__shoe-img {
+      width: 100%;
+      filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.7));
+      animation: heroFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes heroFloat {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-14px) rotate(0deg);
+      }
+    }
+
+    .specs {
+      width: 100%;
+      max-width: 1120px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+    }
+
+    .specs__card {
+      background: rgba(19, 19, 22, 0.55);
+      padding: 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .specs__icon {
+      width: 22px;
+      height: 22px;
+      color: var(--hero-accent);
+    }
+
+    .specs__icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .specs__title {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--platinum);
+    }
+
+    .specs__sub {
+      font-size: 11px;
+      color: var(--platinum-faint);
+    }
+
+    /* =========================================================
      TECHNOLOGY SECTION (Page specific breakdown)
      ========================================================= */
-  .tech-section { background: linear-gradient(180deg, var(--void) 0%, #0c0c0e 100%); padding: 90px 24px 0; border-bottom: 1px solid var(--line); }
-  .tech-flex { max-width: 1380px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 40px; align-items: center; }
-  .tech-intro__eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--platinum-faint); margin: 0 0 10px; }
-  .tech-intro__title { font-family: var(--f-display); font-weight: 700; font-size: 34px; line-height: 1.05; margin: 0 0 18px; letter-spacing: -0.01em; }
-  .tech-intro__desc { font-size: 14px; color: var(--platinum-dim); line-height: 1.6; max-width: 320px; margin: 0 0 28px; }
-  .tech-diagram { position: relative; width: 100%; max-width: 760px; height: 480px; margin: 0 auto; }
-  .tech-diagram__img-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; height: 380px; display: flex; align-items: center; justify-content: center; z-index: 2; }
-  .tech-diagram__img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8)); animation: floatShoe 6s ease-in-out infinite; }
-  .tech-col { position: absolute; top: 0; bottom: 0; width: 220px; display: flex; flex-direction: column; justify-content: space-around; z-index: 3; padding: 20px 0; box-sizing: border-box; }
-  .tech-col--left { left: 0; text-align: right; align-items: flex-end; }
-  .tech-col--right { right: 0; text-align: left; align-items: flex-start; }
-  .tech-card { display: flex; gap: 14px; width: 100%; align-items: flex-start; }
-  .tech-col--left .tech-card { flex-direction: row-reverse; }
-  .tech-card__icon { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.02); display: flex; align-items: center; justify-content: center; color: var(--hero-accent); flex-shrink: 0; }
-  .tech-card__icon svg { width: 16px; height: 16px; }
-  .tech-card__content { display: flex; flex-direction: column; gap: 3px; }
-  .tech-card__title { font-family: var(--f-display); font-size: 12.5px; font-weight: 600; text-transform: uppercase; color: #fff; margin: 0; letter-spacing: 0.04em; }
-  .tech-card__text { font-size: 11px; color: var(--platinum-dim); line-height: 1.4; margin: 0; max-width: 190px; }
-  @keyframes floatShoe { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-12px) rotate(1deg); } }
+    .tech-section {
+      background: linear-gradient(180deg, var(--void) 0%, #0c0c0e 100%);
+      padding: 90px 24px 0;
+      border-bottom: 1px solid var(--line);
+    }
 
-  /* =========================================================
+    .tech-flex {
+      max-width: 1380px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .tech-intro__eyebrow {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--platinum-faint);
+      margin: 0 0 10px;
+    }
+
+    .tech-intro__title {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 34px;
+      line-height: 1.05;
+      margin: 0 0 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .tech-intro__desc {
+      font-size: 14px;
+      color: var(--platinum-dim);
+      line-height: 1.6;
+      max-width: 320px;
+      margin: 0 0 28px;
+    }
+
+    .tech-diagram {
+      position: relative;
+      width: 100%;
+      max-width: 760px;
+      height: 480px;
+      margin: 0 auto;
+    }
+
+    .tech-diagram__img-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 380px;
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .tech-diagram__img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8));
+      animation: floatShoe 6s ease-in-out infinite;
+    }
+
+    .tech-col {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      z-index: 3;
+      padding: 20px 0;
+      box-sizing: border-box;
+    }
+
+    .tech-col--left {
+      left: 0;
+      text-align: right;
+      align-items: flex-end;
+    }
+
+    .tech-col--right {
+      right: 0;
+      text-align: left;
+      align-items: flex-start;
+    }
+
+    .tech-card {
+      display: flex;
+      gap: 14px;
+      width: 100%;
+      align-items: flex-start;
+    }
+
+    .tech-col--left .tech-card {
+      flex-direction: row-reverse;
+    }
+
+    .tech-card__icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--hero-accent);
+      flex-shrink: 0;
+    }
+
+    .tech-card__icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .tech-card__content {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .tech-card__title {
+      font-family: var(--f-display);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #fff;
+      margin: 0;
+      letter-spacing: 0.04em;
+    }
+
+    .tech-card__text {
+      font-size: 11px;
+      color: var(--platinum-dim);
+      line-height: 1.4;
+      margin: 0;
+      max-width: 190px;
+    }
+
+    @keyframes floatShoe {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0);
+      }
+
+      50% {
+        transform: translateY(-12px) rotate(1deg);
+      }
+    }
+
+    /* =========================================================
      RESPONSIVE OVERRIDES
      ========================================================= */
-  @media (max-width: 1180px) {
-    .hero__pin { grid-template-columns: minmax(240px, 1fr) minmax(260px, 480px) minmax(160px, 1fr); }
-  }
-  @media (max-width: 1024px) {
-    .tech-flex { grid-template-columns: 1fr; }
-    .tech-intro__desc { max-width: 100%; }
-    .tech-diagram { margin-top: 40px; }
-  }
-  @media (max-width: 940px) {
-    .hero__pin { grid-template-columns: 1fr; grid-template-rows: auto auto auto; padding-top: calc(var(--nav-h) + 20px); }
-    .hero__left { grid-column: 1; grid-row: 1; align-self: start; padding: 0 24px; max-width: 100%; }
-    .hero__right { grid-column: 1; grid-row: 2; align-self: start; align-items: flex-start; padding: 24px; flex-direction: row; justify-content: space-between; width: 100%; }
-    .colorway { align-items: flex-start; }
-    .specs { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 768px) {
-    .tech-diagram { height: auto; display: flex; flex-direction: column; gap: 24px; }
-    .tech-diagram__img-wrap { position: static; transform: none; width: 280px; height: 280px; margin: 0 auto; }
-    .tech-col { position: static; width: 100%; padding: 0; display: flex; flex-direction: column; gap: 20px; }
-    .tech-col--left, .tech-col--right { text-align: left; align-items: flex-start; }
-    .tech-col--left .tech-card { flex-direction: row; }
-  }
-  @media (max-width: 560px) {
-    .headline__line { font-size: 14vw; }
-    .specs { grid-template-columns: 1fr; }
-  }
-</style>
-<script src="preloader.js"></script>
+    @media (max-width: 1180px) {
+      .hero__pin {
+        grid-template-columns: minmax(240px, 1fr) minmax(260px, 480px) minmax(160px, 1fr);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .tech-flex {
+        grid-template-columns: 1fr;
+      }
+
+      .tech-intro__desc {
+        max-width: 100%;
+      }
+
+      .tech-diagram {
+        margin-top: 40px;
+      }
+    }
+
+    @media (max-width: 940px) {
+      .hero__pin {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        padding-top: calc(var(--nav-h) + 20px);
+      }
+
+      .hero__left {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: start;
+        padding: 0 24px;
+        max-width: 100%;
+      }
+
+      .hero__right {
+        grid-column: 1;
+        grid-row: 2;
+        align-self: start;
+        align-items: flex-start;
+        padding: 24px;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .colorway {
+        align-items: flex-start;
+      }
+
+      .specs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .tech-diagram {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .tech-diagram__img-wrap {
+        position: static;
+        transform: none;
+        width: 280px;
+        height: 280px;
+        margin: 0 auto;
+      }
+
+      .tech-col {
+        position: static;
+        width: 100%;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .tech-col--left,
+      .tech-col--right {
+        text-align: left;
+        align-items: flex-start;
+      }
+
+      .tech-col--left .tech-card {
+        flex-direction: row;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .headline__line {
+        font-size: 14vw;
+      }
+
+      .specs {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* =========================================================
+     PROMO BANNERS SECTION
+     ========================================================= */
+    .promo-banners {
+      padding: 80px 24px;
+      background: var(--void);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .promo-banners__inner {
+      max-width: 1380px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .promo-card {
+      position: relative;
+      min-height: 280px;
+      border-radius: 20px;
+      overflow: hidden;
+      padding: 40px;
+      display: flex;
+      align-items: flex-end;
+      border: 1px solid var(--line);
+      transition: transform 0.4s var(--ease-out), border-color 0.4s;
+    }
+
+    .promo-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .promo-card__content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      z-index: 2;
+    }
+
+    .promo-card__eyebrow {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--hero-accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .promo-card__title {
+      font-family: var(--f-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 12px 0;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    .promo-card__text {
+      font-size: 13px;
+      color: var(--platinum-dim);
+      margin: 0 0 24px 0;
+      max-width: 320px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .promo-banners__inner {
+        grid-template-columns: 1fr;
+      }
+
+      .promo-card {
+        padding: 30px;
+        min-height: 240px;
+      }
+
+      .promo-card__title {
+        font-size: 24px;
+      }
+    }
+
+    /* =========================================================
+     REVIEWS SECTION FIXES
+     ========================================================= */
+    .reviews-grid {
+      display: flex;
+      gap: 32px;
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+
+    .reviews-section .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .reviews-section .section-title {
+      font-family: var(--f-display);
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin: 0;
+      text-transform: none;
+    }
+
+    .reviews-section .view-all-link {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--hero-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s;
+      text-decoration: none;
+    }
+
+    .reviews-section .view-all-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.3s;
+    }
+
+    .reviews-section .view-all-link:hover {
+      color: #fff;
+    }
+
+    .reviews-section .view-all-link:hover svg {
+      transform: translateX(4px);
+    }
+
+    .user-name svg {
+      width: 14px;
+      height: 14px;
+      vertical-align: middle;
+      margin-left: 6px;
+      display: inline-block;
+      color: #bdfc24;
+    }
+
+    .review-card:nth-child(1) .user-avatar {
+      background: linear-gradient(135deg, #bdfc24, #6ef78e);
+      color: #050506;
+    }
+
+    .review-card:nth-child(2) .user-avatar {
+      background: linear-gradient(135deg, #7c3aed, #c4b5fd);
+      color: #fff;
+    }
+
+    .review-card:nth-child(3) .user-avatar {
+      background: linear-gradient(135deg, #e8442f, #f5b942);
+      color: #fff;
+    }
+
+    @media (max-width: 1024px) {
+      .reviews-grid {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .review-card {
+        flex: 1 1 auto;
+      }
+    }
+  </style>
+  <script src="preloader.js"></script>
 </head>
+
 <body>
 
-<!-- PROMO BAR -->
-<div class="promo-bar">
-  <div class="promo-bar__inner">
-    <div class="promo-item">
-      <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-      <div class="promo-text"><span class="promo-title">FREE SHIPPING</span><span class="promo-sub">On orders above ₹999</span></div>
-    </div>
-    <div class="promo-item">
-      <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01"></path></svg>
-      <div class="promo-text"><span class="promo-title">EXTRA 10% OFF</span><span class="promo-sub">On prepaid orders</span></div>
-    </div>
-    <div class="promo-item">
-      <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
-      <div class="promo-text"><span class="promo-title">7 DAYS RETURN</span><span class="promo-sub">Easy returns & exchanges</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- NAVBAR -->
-<header class="nav" id="nav">
-  <div class="nav__inner">
-    <a href="index.html" class="nav__logo" aria-label="NOVA home">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
-          stroke-linejoin="round" />
-      </svg>
-      <span>NOVA</span>
-    </a>
-
-    <nav class="nav__links" aria-label="Primary">
-      <a href="index.html" class="nav__link">Home</a>
-      <a href="collection.html" class="nav__link">Collection</a>
-      <a href="men.html" class="nav__link is-active">Men</a>
-      <a href="women.html" class="nav__link">Women</a>
-      <a href="about.html" class="nav__link">About</a>
-      <a href="contact.html" class="nav__link">Contact</a>
-    </nav>
-
-    <div class="nav__right">
-      <button class="nav__icon-btn" aria-label="Search" data-magnetic>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-          stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  <!-- PROMO BAR -->
+  <div class="promo-bar">
+    <div class="promo-bar__inner">
+      <div class="promo-item">
+        <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="1" y="3" width="15" height="13"></rect>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
         </svg>
-      </button>
-      <a href="login.html" class="nav__icon-btn" aria-label="Account" data-magnetic>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
+        <div class="promo-text"><span class="promo-title">FREE SHIPPING</span><span class="promo-sub">On orders above
+            ₹999</span></div>
+      </div>
+      <div class="promo-item">
+        <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01"></path>
         </svg>
-      </a>
-      <a href="wishlist.html" class="nav__icon-btn nav__wish-btn" aria-label="Wishlist" data-magnetic>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        <div class="promo-text"><span class="promo-title">EXTRA 10% OFF</span><span class="promo-sub">On prepaid
+            orders</span></div>
+      </div>
+      <div class="promo-item">
+        <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
         </svg>
-        <span class="nav__wish-count" id="wishlistCountGlobal">4</span>
-      </a>
-      <button class="nav__icon-btn nav__cart-btn" id="cartToggleBtn" aria-label="Cart" data-magnetic>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <path d="M16 10a4 4 0 0 1-8 0"></path>
-        </svg>
-        <span class="nav__cart-count" id="cartCount">0</span>
-      </button>
-    </div>
-
-    <button class="nav__burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span>
-    </button>
-  </div>
-</header>
-
-<main>
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero__pin">
-      <div class="hero__bg-slides">
-        <div class="hero__bg-slide active" style="background-image: linear-gradient(rgba(11, 11, 13, 0.45), rgba(5, 5, 7, 0.9)), url('assets/images/MEN_HERO_BG.png');"></div>
-        <div class="hero__bg-slide" style="background-image: linear-gradient(rgba(11, 11, 13, 0.45), rgba(5, 5, 7, 0.9)), url('assets/images/MEN_HERO_BG2.png');"></div>
-        <div class="hero__bg-slide" style="background-image: linear-gradient(rgba(11, 11, 13, 0.45), rgba(5, 5, 7, 0.9)), url('assets/images/MEN_BG3.png');"></div>
-        <div class="stage__grain"></div>
-      </div>
-
-      <div class="hero__left" data-reveal>
-        <span class="eyebrow"><span class="eyebrow__dot"></span>ENGINEERED FOR MEN</span>
-        <h1 class="headline">
-          <span class="headline__line">DEFY</span>
-          <span class="headline__line headline__line--accent">GRAVITY</span>
-        </h1>
-        <p class="hero__copy">Experience next-level performance with superior comfort, grip and style. Built to move. Designed to lead.</p>
-        <div class="hero__actions">
-          <a href="men.html" class="btn btn--solid btn--white" data-magnetic><span>Shop Men's Collection →</span></a>
-          <a href="#technology" class="btn btn--ghost" data-magnetic><span>View Technology ▶</span></a>
-        </div>
-        <div class="hero__social-proof">
-          <div class="avatar-stack">
-            <span class="avatar-fallback">RM</span>
-            <span class="avatar-fallback">AV</span>
-            <span class="avatar-fallback">KS</span>
-          </div>
-          <div class="hero__social-text">
-            <span class="hero__social-count">50K+ Happy Customers</span>
-            <span class="hero__social-rating">4.9 <span class="stars">★★★★★</span></span>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="hero__right" data-reveal>
-        <div class="hero-slide-nav">
-          <button class="hero-slide-nav__btn" id="heroPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-          <button class="hero-slide-nav__btn" id="heroNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
-          <span class="hero-slide-nav__count"><span id="heroSlideCurrent">01</span> / 03</span>
-        </div>
-
-      </div>
-
-      <div class="hero__bottom" data-reveal-up>
-        <div class="specs">
-          <div class="specs__card">
-            <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg></div>
-            <span class="specs__title">Free Shipping</span>
-            <span class="specs__sub">On orders above ₹999</span>
-          </div>
-          <div class="specs__card">
-            <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg></div>
-            <span class="specs__title">Easy Returns</span>
-            <span class="specs__sub">7 days return policy</span>
-          </div>
-          <div class="specs__card">
-            <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 11l2 2 4-4"/></svg></div>
-            <span class="specs__title">Premium Quality</span>
-            <span class="specs__sub">Built to last</span>
-          </div>
-          <div class="specs__card">
-            <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
-            <span class="specs__title">Secure Payment</span>
-            <span class="specs__sub">100% protected</span>
-          </div>
-          <div class="specs__card">
-            <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg></div>
-            <span class="specs__title">24/7 Support</span>
-            <span class="specs__sub">We're here for you</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SHOP BY CATEGORY -->
-  <section class="categories-section">
-    <div class="section-header">
-      <h2 class="section-title">Shop By Category</h2>
-      <a href="collection.html" class="view-all-link"><span>View All</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-    </div>
-    <div class="categories-grid">
-      <a class="category-card" href="collection.html?category=Running">
-        <div class="category-card__bg" style="background-image:url('assets/images/cat_running.png');"></div>
-        <div class="category-card__content"><h3 class="category-card__title">Running</h3><span class="category-card__cta">Explore →</span></div>
-      </a>
-      <a class="category-card" href="collection.html?category=Lifestyle">
-        <div class="category-card__bg" style="background-image:url('assets/images/cat_lifestyle.png');"></div>
-        <div class="category-card__content"><h3 class="category-card__title">Lifestyle</h3><span class="category-card__cta">Explore →</span></div>
-      </a>
-      <a class="category-card" href="collection.html?category=Training">
-        <div class="category-card__bg" style="background-image:url('assets/images/cat_training.png');"></div>
-        <div class="category-card__content"><h3 class="category-card__title">Training</h3><span class="category-card__cta">Explore →</span></div>
-      </a>
-      <a class="category-card" href="collection.html?category=Basketball">
-        <div class="category-card__bg" style="background-image:url('assets/images/cat_basketball.png');"></div>
-        <div class="category-card__content"><h3 class="category-card__title">Basketball</h3><span class="category-card__cta">Explore →</span></div>
-      </a>
-      <a class="category-card" href="collection.html?category=Hiking">
-        <div class="category-card__bg" style="background-image:url('assets/images/cat_hiking.png');"></div>
-        <div class="category-card__content"><h3 class="category-card__title">Hiking</h3><span class="category-card__cta">Explore →</span></div>
-      </a>
-      <a class="category-card" href="collection.html?category=Gym">
-        <div class="category-card__bg" style="background-image:url('assets/images/cat_gym.png');"></div>
-        <div class="category-card__content"><h3 class="category-card__title">Gym</h3><span class="category-card__cta">Explore →</span></div>
-      </a>
-    </div>
-  </section>
-
-  <!-- BEST SELLERS -->
-  <section class="products-section">
-    <div class="section-header">
-      <h2 class="section-title">Best Sellers</h2>
-      <a href="collection.html?tag=bestseller" class="view-all-link"><span>View All</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-    </div>
-    <div class="bestsellers-row">
-
-      <a href="collection.html?category=Running" class="product-card">
-        <div class="product-card__badges"><span class="badge badge--new">New</span></div>
-        <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-        <div class="product-card__img-wrap"><img src="assets/images/product_nova_x1.png" alt="Nova X1" class="product-card__img" /></div>
-        <div class="product-card__info">
-          <h4 class="product-card__title">Nova X1</h4>
-          <span class="product-card__category">Men's Running Shoes</span>
-          <div class="product-card__rating"><span class="stars">★★★★★</span><span class="count">(128)</span></div>
-          <div class="product-card__footer">
-            <div><span class="product-card__price">₹2,799</span><span class="product-card__price--old">₹4,499</span></div>
-            <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></button>
-          </div>
-        </div>
-      </a>
-
-      <a href="collection.html?category=Training" class="product-card">
-        <div class="product-card__badges"><span class="badge badge--sale">-20%</span></div>
-        <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-        <div class="product-card__img-wrap"><img src="assets/images/product_flex.png" alt="Nova Flex Pro" class="product-card__img" /></div>
-        <div class="product-card__info">
-          <h4 class="product-card__title">Nova Flex Pro</h4>
-          <span class="product-card__category">Men's Training Shoes</span>
-          <div class="product-card__rating"><span class="stars">★★★★★</span><span class="count">(256)</span></div>
-          <div class="product-card__footer">
-            <div><span class="product-card__price">₹2,399</span><span class="product-card__price--old">₹2,999</span></div>
-            <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></button>
-          </div>
-        </div>
-      </a>
-
-      <a href="collection.html?category=Lifestyle" class="product-card">
-        <div class="product-card__badges"><span class="badge badge--new">New</span></div>
-        <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-        <div class="product-card__img-wrap"><img src="assets/images/product_carbon.png" alt="Nova Street X" class="product-card__img" /></div>
-        <div class="product-card__info">
-          <h4 class="product-card__title">Nova Street X</h4>
-          <span class="product-card__category">Men's Sneakers</span>
-          <div class="product-card__rating"><span class="stars">★★★★★</span><span class="count">(98)</span></div>
-          <div class="product-card__footer">
-            <div><span class="product-card__price">₹2,299</span><span class="product-card__price--old">₹3,499</span></div>
-            <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></button>
-          </div>
-        </div>
-      </a>
-
-      <a href="collection.html?category=Lifestyle" class="product-card">
-        <div class="product-card__badges"><span class="badge badge--sale">-15%</span></div>
-        <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-        <div class="product-card__img-wrap"><img src="assets/images/product_drift.png" alt="Nova Daily" class="product-card__img" /></div>
-        <div class="product-card__info">
-          <h4 class="product-card__title">Nova Daily</h4>
-          <span class="product-card__category">Men's Casual Shoes</span>
-          <div class="product-card__rating"><span class="stars">★★★★★</span><span class="count">(176)</span></div>
-          <div class="product-card__footer">
-            <div><span class="product-card__price">₹1,949</span><span class="product-card__price--old">₹2,299</span></div>
-            <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></button>
-          </div>
-        </div>
-      </a>
-
-      <a href="collection.html?category=Sandals" class="product-card">
-        <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
-        <div class="product-card__img-wrap"><img src="assets/images/product_phantom.png" alt="Nova Comfort" class="product-card__img" /></div>
-        <div class="product-card__info">
-          <h4 class="product-card__title">Nova Comfort</h4>
-          <span class="product-card__category">Men's Sandals</span>
-          <div class="product-card__rating"><span class="stars">★★★★☆</span><span class="count">(64)</span></div>
-          <div class="product-card__footer">
-            <div><span class="product-card__price">₹1,499</span><span class="product-card__price--old">₹1,999</span></div>
-            <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></button>
-          </div>
-        </div>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ENGINEERED FOR MORE -->
-  <section class="tech-section" id="technology">
-    <div class="tech-flex">
-      <div class="tech-intro">
-        <p class="tech-intro__eyebrow">The NOVA Difference</p>
-        <h2 class="tech-intro__title">ENGINEERED<br/>FOR MORE</h2>
-        <p class="tech-intro__desc">Every detail of Nova shoes is crafted with purpose. Advanced technology meets athletic performance.</p>
-        <a href="#technology" class="btn btn--ghost" data-magnetic><span>Explore Technology →</span></a>
-      </div>
-
-      <div class="tech-diagram">
-        <div class="tech-diagram__img-wrap"><img class="tech-diagram__img" src="assets/images/exploded_shoe.png" alt="Nova shoe technology breakdown" /></div>
-        <div class="tech-col tech-col--left">
-          <div class="tech-card">
-            <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 10 10"></path><path d="M12 2v10l7 4"></path></svg></div>
-            <div class="tech-card__content"><h4 class="tech-card__title">Breathable Mesh Upper</h4><p class="tech-card__text">Keeps your feet cool and comfortable.</p></div>
-          </div>
-          <div class="tech-card">
-            <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-            <div class="tech-card__content"><h4 class="tech-card__title">Adaptive Fit</h4><p class="tech-card__text">Lock-in comfort for every move.</p></div>
-          </div>
-        </div>
-        <div class="tech-col tech-col--right">
-          <div class="tech-card">
-            <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg></div>
-            <div class="tech-card__content"><h4 class="tech-card__title">Air Zoom Cushion</h4><p class="tech-card__text">Maximum impact protection and energy return.</p></div>
-          </div>
-          <div class="tech-card">
-            <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l3 8 4-16 3 8h4"></path></svg></div>
-            <div class="tech-card__content"><h4 class="tech-card__title">Cushion Foam</h4><p class="tech-card__text">Premium cushioning for all-day comfort.</p></div>
-          </div>
-          <div class="tech-card">
-            <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M8 12h8M12 8v8"></path></svg></div>
-            <div class="tech-card__content"><h4 class="tech-card__title">Rubber Outsole</h4><p class="tech-card__text">Superior grip &amp; durability on every surface.</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="metrics-section">
-      <div class="metrics-grid">
-        <div class="metric-card"><div class="metric-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 10 10"></path></svg></div><span class="metric-card__num">218g</span><span class="metric-card__label">Ultra Lightweight</span></div>
-        <div class="metric-card"><div class="metric-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg></div><span class="metric-card__num">90%</span><span class="metric-card__label">Energy Return</span></div>
-        <div class="metric-card"><div class="metric-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><span class="metric-card__num">100K+</span><span class="metric-card__label">Happy Athletes</span></div>
-        <div class="metric-card"><div class="metric-card__icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.6-6.2 4.6 2.4-7.4-6.2-4.5h7.6z"/></svg></div><span class="metric-card__num">4.9★</span><span class="metric-card__label">Customer Rating</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROMO BANNERS -->
-  <section class="promo-banners">
-    <div class="promo-banners__inner">
-      <div class="promo-card" style="background: linear-gradient(135deg, rgba(27, 19, 34, 0.95), rgba(13, 13, 16, 0.98)), radial-gradient(circle at top right, var(--rim-soft), transparent 60%);">
-        <div class="promo-card__content">
-          <span class="promo-card__eyebrow">Limited Time Offer</span>
-          <h3 class="promo-card__title">UP TO<br/>40% OFF</h3>
-          <p class="promo-card__text">On Selected Men's Footwear</p>
-          <a href="collection.html?tag=sale" class="btn btn--ghost btn--small" data-magnetic><span>Shop Now →</span></a>
-        </div>
-      </div>
-      <div class="promo-card" style="background: linear-gradient(135deg, rgba(14, 30, 36, 0.95), rgba(8, 8, 10, 0.98)), radial-gradient(circle at top right, var(--key-soft), transparent 60%);">
-        <div class="promo-card__content">
-          <span class="promo-card__eyebrow">New Arrivals</span>
-          <h3 class="promo-card__title">PERFORMANCE<br/>REDEFINED</h3>
-          <p class="promo-card__text">Experience unmatched comfort and unstoppable performance.</p>
-          <a href="collection.html?tag=new" class="btn btn--ghost btn--small" data-magnetic><span>Explore Now →</span></a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- REVIEWS -->
-  <section class="reviews-section">
-    <div class="section-header">
-      <h2 class="section-title">What Our Athletes Say</h2>
-      <a href="#" class="view-all-link"><span>View All Reviews</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-    </div>
-    <div class="reviews-grid">
-      <div class="review-card">
-        <span class="review-card__stars">★★★★★</span>
-        <p class="review-card__text">"The grip, comfort and bounce are unbelievable. Perfect for my daily runs."</p>
-        <div class="review-card__user">
-          <span class="user-avatar">RM</span>
-          <div>
-            <h5 class="user-name">Rahul Mehta <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4L12 14.01l-3-3"></path><circle cx="12" cy="12" r="10"></circle></svg></h5>
-            <span class="user-tag">Verified Buyer</span>
-          </div>
-        </div>
-      </div>
-      <div class="review-card">
-        <span class="review-card__stars">★★★★★</span>
-        <p class="review-card__text">"Lightweight and super stylish. My go-to shoes for everything."</p>
-        <div class="review-card__user">
-          <span class="user-avatar">AV</span>
-          <div>
-            <h5 class="user-name">Amit Verma <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4L12 14.01l-3-3"></path><circle cx="12" cy="12" r="10"></circle></svg></h5>
-            <span class="user-tag">Verified Buyer</span>
-          </div>
-        </div>
-      </div>
-      <div class="review-card">
-        <span class="review-card__stars">★★★★★</span>
-        <p class="review-card__text">"Excellent build quality and premium feel. Totally worth it!"</p>
-        <div class="review-card__user">
-          <span class="user-avatar">KS</span>
-          <div>
-            <h5 class="user-name">Karan Singh <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4L12 14.01l-3-3"></path><circle cx="12" cy="12" r="10"></circle></svg></h5>
-            <span class="user-tag">Verified Buyer</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- INSTAGRAM GRID -->
-  <section class="insta-section">
-    <div class="insta-section__header">
-      <h2 class="section-title">#MoveWithNova</h2>
-      <a href="https://instagram.com" target="_blank" class="view-all-link"><span>Follow Us @novasport</span></a>
-    </div>
-    <div class="insta-grid">
-      <div class="insta-item"><img class="insta-img" src="assets/images/insta1.png" alt="Nova community post" /></div>
-      <div class="insta-item"><img class="insta-img" src="assets/images/insta2.png" alt="Nova community post" /></div>
-      <div class="insta-item"><img class="insta-img" src="assets/images/insta3.png" alt="Nova community post" /></div>
-      <div class="insta-item"><img class="insta-img" src="assets/images/insta4.png" alt="Nova community post" /></div>
-      <div class="insta-item"><img class="insta-img" src="assets/images/insta5.png" alt="Nova community post" /></div>
-      <div class="insta-item"><img class="insta-img" src="assets/images/insta6.png" alt="Nova community post" /></div>
-      <div class="insta-item"><img class="insta-img" src="assets/images/insta7.png" alt="Nova community post" /></div>
-      <div class="insta-item"><img class="insta-img" src="assets/images/insta8.png" alt="Nova community post" /></div>
-    </div>
-  </section>
-
-  <!-- TRUST BADGES -->
-  <section class="trust-banner">
-    <div class="trust-banner__inner">
-      <div class="trust-card">
-        <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-        <div><h3 class="trust-card__title">Free Delivery</h3><p class="trust-card__sub">On orders above ₹999</p></div>
-      </div>
-      <div class="trust-card">
-        <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
-        <div><h3 class="trust-card__title">7 Days Return</h3><p class="trust-card__sub">Easy returns &amp; exchanges</p></div>
-      </div>
-      <div class="trust-card">
-        <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-        <div><h3 class="trust-card__title">100% Original</h3><p class="trust-card__sub">Genuine products</p></div>
-      </div>
-      <div class="trust-card">
-        <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        <div><h3 class="trust-card__title">Secure Payments</h3><p class="trust-card__sub">Multiple safe payment options</p></div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<!-- CART DRAWER -->
-<div class="cart-drawer" id="cartDrawer">
-  <div class="cart-drawer__overlay" id="cartOverlay"></div>
-  <div class="cart-drawer__inner">
-    <div class="cart-drawer__header">
-      <h3>Your Bag (<span id="cartCountHeader">0</span>)</h3>
-      <button class="cart-close-btn" id="cartCloseBtn" aria-label="Close cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-    </div>
-    <div class="cart-drawer__content">
-      <div class="cart-empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-        <p>Your bag is empty.</p>
-        <a href="collection.html" class="btn btn--solid"><span>Shop Collection</span></a>
+        <div class="promo-text"><span class="promo-title">7 DAYS RETURN</span><span class="promo-sub">Easy returns &
+            exchanges</span></div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- FOOTER -->
-<footer class="footer" id="contact">
-  <div class="footer__inner">
-    <div class="footer-grid">
-      <div class="footer-col">
-        <a href="index.html" class="nav__logo" style="margin-bottom:20px;">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;"><path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span style="font-size:18px;">NOVA</span>
+  <!-- NAVBAR -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo" aria-label="NOVA home">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span>NOVA</span>
+      </a>
+
+      <nav class="nav__links" aria-label="Primary">
+        <a href="index.html" class="nav__link">Home</a>
+        <a href="collection.html" class="nav__link">Collection</a>
+        <a href="men.html" class="nav__link is-active">Men</a>
+        <a href="women.html" class="nav__link">Women</a>
+        <a href="about.html" class="nav__link">About</a>
+        <a href="contact.html" class="nav__link">Contact</a>
+      </nav>
+
+      <div class="nav__right">
+        <button class="nav__icon-btn" aria-label="Search" data-magnetic>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <a href="login.html" class="nav__icon-btn" aria-label="Account" data-magnetic>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
         </a>
-        <p class="footer-brand-text">Pushing boundaries. Redefining performance. Built for those who move forward.</p>
-        <div class="social-links">
-          <a href="https://instagram.com" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-          <a href="https://facebook.com" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
-          <a href="https://youtube.com" target="_blank" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
-          <a href="https://twitter.com" target="_blank" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+        <a href="wishlist.html" class="nav__icon-btn nav__wish-btn" aria-label="Wishlist" data-magnetic>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+            </path>
+          </svg>
+          <span class="nav__wish-count" id="wishlistCountGlobal">4</span>
+        </a>
+        <button class="nav__icon-btn nav__cart-btn" id="cartToggleBtn" aria-label="Cart" data-magnetic>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="nav__cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+
+      <button class="nav__burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero__pin">
+        <div class="hero__bg-slides">
+          <div class="hero__bg-slide active"
+            style="background-image: linear-gradient(rgba(11, 11, 13, 0.45), rgba(5, 5, 7, 0.9)), url('assets/images/MEN_HERO_BG.png');">
+          </div>
+          <div class="hero__bg-slide"
+            style="background-image: linear-gradient(rgba(11, 11, 13, 0.45), rgba(5, 5, 7, 0.9)), url('assets/images/MEN_HERO_BG2.png');">
+          </div>
+          <div class="hero__bg-slide"
+            style="background-image: linear-gradient(rgba(11, 11, 13, 0.45), rgba(5, 5, 7, 0.9)), url('assets/images/MEN_BG3.png');">
+          </div>
+          <div class="stage__grain"></div>
+        </div>
+
+        <div class="hero__left" data-reveal>
+          <span class="eyebrow"><span class="eyebrow__dot"></span>ENGINEERED FOR MEN</span>
+          <h1 class="headline">
+            <span class="headline__line">DEFY</span>
+            <span class="headline__line headline__line--accent">GRAVITY</span>
+          </h1>
+          <p class="hero__copy">Experience next-level performance with superior comfort, grip and style. Built to move.
+            Designed to lead.</p>
+          <div class="hero__actions">
+            <a href="men.html" class="btn btn--solid btn--white" data-magnetic><span>Shop Men's Collection →</span></a>
+            <a href="#technology" class="btn btn--ghost" data-magnetic><span>View Technology ▶</span></a>
+          </div>
+          <div class="hero__social-proof">
+            <div class="avatar-stack">
+              <span class="avatar-fallback">RM</span>
+              <span class="avatar-fallback">AV</span>
+              <span class="avatar-fallback">KS</span>
+            </div>
+            <div class="hero__social-text">
+              <span class="hero__social-count">50K+ Happy Customers</span>
+              <span class="hero__social-rating">4.9 <span class="stars">★★★★★</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__right" data-reveal>
+          <div class="hero-slide-nav">
+            <button class="hero-slide-nav__btn" id="heroPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg></button>
+            <button class="hero-slide-nav__btn" id="heroNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg></button>
+            <span class="hero-slide-nav__count"><span id="heroSlideCurrent">01</span> / 03</span>
+          </div>
+        </div>
+
+        <div class="hero__bottom" data-reveal-up>
+          <div class="specs">
+            <div class="specs__card">
+              <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="1" y="3" width="15" height="13"></rect>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                </svg></div>
+              <span class="specs__title">Free Shipping</span>
+              <span class="specs__sub">On orders above ₹999</span>
+            </div>
+            <div class="specs__card">
+              <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                </svg></div>
+              <span class="specs__title">Easy Returns</span>
+              <span class="specs__sub">7 days return policy</span>
+            </div>
+            <div class="specs__card">
+              <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <path d="M9 11l2 2 4-4" />
+                </svg></div>
+              <span class="specs__title">Premium Quality</span>
+              <span class="specs__sub">Built to last</span>
+            </div>
+            <div class="specs__card">
+              <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg></div>
+              <span class="specs__title">Secure Payment</span>
+              <span class="specs__sub">100% protected</span>
+            </div>
+            <div class="specs__card">
+              <div class="specs__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M3 11l18-5v12L3 14v-3z"></path>
+                  <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path>
+                </svg></div>
+              <span class="specs__title">24/7 Support</span>
+              <span class="specs__sub">We're here for you</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOP BY CATEGORY -->
+    <section class="categories-section">
+      <div class="section-header">
+        <h2 class="section-title">Shop By Category</h2>
+        <a href="collection.html" class="view-all-link"><span>View All</span><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg></a>
+      </div>
+      <div class="categories-grid">
+        <a class="category-card" href="collection.html?category=Running">
+          <div class="category-card__bg" style="background-image:url('assets/images/cat_running.png');"></div>
+          <div class="category-card__content">
+            <h3 class="category-card__title">Running</h3><span class="category-card__cta">Explore →</span>
+          </div>
+        </a>
+        <a class="category-card" href="collection.html?category=Lifestyle">
+          <div class="category-card__bg" style="background-image:url('assets/images/cat_lifestyle.png');"></div>
+          <div class="category-card__content">
+            <h3 class="category-card__title">Lifestyle</h3><span class="category-card__cta">Explore →</span>
+          </div>
+        </a>
+        <a class="category-card" href="collection.html?category=Training">
+          <div class="category-card__bg" style="background-image:url('assets/images/cat_training.png');"></div>
+          <div class="category-card__content">
+            <h3 class="category-card__title">Training</h3><span class="category-card__cta">Explore →</span>
+          </div>
+        </a>
+        <a class="category-card" href="collection.html?category=Basketball">
+          <div class="category-card__bg" style="background-image:url('assets/images/cat_basketball.png');"></div>
+          <div class="category-card__content">
+            <h3 class="category-card__title">Basketball</h3><span class="category-card__cta">Explore →</span>
+          </div>
+        </a>
+        <a class="category-card" href="collection.html?category=Hiking">
+          <div class="category-card__bg" style="background-image:url('assets/images/cat_hiking.png');"></div>
+          <div class="category-card__content">
+            <h3 class="category-card__title">Hiking</h3><span class="category-card__cta">Explore →</span>
+          </div>
+        </a>
+        <a class="category-card" href="collection.html?category=Gym">
+          <div class="category-card__bg" style="background-image:url('assets/images/cat_gym.png');"></div>
+          <div class="category-card__content">
+            <h3 class="category-card__title">Gym</h3><span class="category-card__cta">Explore →</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- BEST SELLERS -->
+    <section class="products-section">
+      <div class="section-header">
+        <h2 class="section-title">Best Sellers</h2>
+        <a href="collection.html?tag=bestseller" class="view-all-link"><span>View All</span><svg viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg></a>
+      </div>
+      <div class="bestsellers-row">
+
+        <a href="collection.html?category=Running" class="product-card">
+          <div class="product-card__badges"><span class="badge badge--new">New</span></div>
+          <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
+            </svg></button>
+          <div class="product-card__img-wrap"><img src="assets/images/product_nova_x1.png" alt="Nova X1"
+              class="product-card__img" /></div>
+          <div class="product-card__info">
+            <h4 class="product-card__title">Nova X1</h4>
+            <span class="product-card__category">Men's Running Shoes</span>
+            <div class="product-card__rating"><span class="stars">★★★★★</span><span class="count">(128)</span></div>
+            <div class="product-card__footer">
+              <div><span class="product-card__price">₹2,799</span><span class="product-card__price--old">₹4,499</span>
+              </div>
+              <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg></button>
+            </div>
+          </div>
+        </a>
+
+        <a href="collection.html?category=Training" class="product-card">
+          <div class="product-card__badges"><span class="badge badge--sale">-20%</span></div>
+          <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
+            </svg></button>
+          <div class="product-card__img-wrap"><img src="assets/images/product_flex.png" alt="Nova Flex Pro"
+              class="product-card__img" /></div>
+          <div class="product-card__info">
+            <h4 class="product-card__title">Nova Flex Pro</h4>
+            <span class="product-card__category">Men's Training Shoes</span>
+            <div class="product-card__rating"><span class="stars">★★★★★</span><span class="count">(256)</span></div>
+            <div class="product-card__footer">
+              <div><span class="product-card__price">₹2,399</span><span class="product-card__price--old">₹2,999</span>
+              </div>
+              <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg></button>
+            </div>
+          </div>
+        </a>
+
+        <a href="collection.html?category=Lifestyle" class="product-card">
+          <div class="product-card__badges"><span class="badge badge--new">New</span></div>
+          <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
+            </svg></button>
+          <div class="product-card__img-wrap"><img src="assets/images/product_carbon.png" alt="Nova Street X"
+              class="product-card__img" /></div>
+          <div class="product-card__info">
+            <h4 class="product-card__title">Nova Street X</h4>
+            <span class="product-card__category">Men's Sneakers</span>
+            <div class="product-card__rating"><span class="stars">★★★★★</span><span class="count">(98)</span></div>
+            <div class="product-card__footer">
+              <div><span class="product-card__price">₹2,299</span><span class="product-card__price--old">₹3,499</span>
+              </div>
+              <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg></button>
+            </div>
+          </div>
+        </a>
+
+        <a href="collection.html?category=Lifestyle" class="product-card">
+          <div class="product-card__badges"><span class="badge badge--sale">-15%</span></div>
+          <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
+            </svg></button>
+          <div class="product-card__img-wrap"><img src="assets/images/product_drift.png" alt="Nova Daily"
+              class="product-card__img" /></div>
+          <div class="product-card__info">
+            <h4 class="product-card__title">Nova Daily</h4>
+            <span class="product-card__category">Men's Casual Shoes</span>
+            <div class="product-card__rating"><span class="stars">★★★★★</span><span class="count">(176)</span></div>
+            <div class="product-card__footer">
+              <div><span class="product-card__price">₹1,949</span><span class="product-card__price--old">₹2,299</span>
+              </div>
+              <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg></button>
+            </div>
+          </div>
+        </a>
+
+        <a href="collection.html?category=Sandals" class="product-card">
+          <button class="wishlist-btn" aria-label="Add to Wishlist" onclick="event.preventDefault();"><svg
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
+            </svg></button>
+          <div class="product-card__img-wrap"><img src="assets/images/product_phantom.png" alt="Nova Comfort"
+              class="product-card__img" /></div>
+          <div class="product-card__info">
+            <h4 class="product-card__title">Nova Comfort</h4>
+            <span class="product-card__category">Men's Sandals</span>
+            <div class="product-card__rating"><span class="stars">★★★★☆</span><span class="count">(64)</span></div>
+            <div class="product-card__footer">
+              <div><span class="product-card__price">₹1,499</span><span class="product-card__price--old">₹1,999</span>
+              </div>
+              <button class="product-card__cart-btn" aria-label="Add to cart" onclick="event.preventDefault();"><svg
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg></button>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ENGINEERED FOR MORE -->
+    <section class="tech-section" id="technology">
+      <div class="tech-flex">
+        <div class="tech-intro">
+          <p class="tech-intro__eyebrow">The NOVA Difference</p>
+          <h2 class="tech-intro__title">ENGINEERED<br />FOR MORE</h2>
+          <p class="tech-intro__desc">Every detail of Nova shoes is crafted with purpose. Advanced technology meets
+            athletic performance.</p>
+          <a href="#technology" class="btn btn--ghost" data-magnetic><span>Explore Technology →</span></a>
+        </div>
+
+        <div class="tech-diagram">
+          <div class="tech-diagram__img-wrap"><img class="tech-diagram__img" src="assets/images/exploded_shoe.png"
+              alt="Nova shoe technology breakdown" /></div>
+          <div class="tech-col tech-col--left">
+            <div class="tech-card">
+              <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8">
+                  <path d="M12 2a10 10 0 1 0 10 10"></path>
+                  <path d="M12 2v10l7 4"></path>
+                </svg></div>
+              <div class="tech-card__content">
+                <h4 class="tech-card__title">Breathable Mesh Upper</h4>
+                <p class="tech-card__text">Keeps your feet cool and comfortable.</p>
+              </div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg></div>
+              <div class="tech-card__content">
+                <h4 class="tech-card__title">Adaptive Fit</h4>
+                <p class="tech-card__text">Lock-in comfort for every move.</p>
+              </div>
+            </div>
+          </div>
+          <div class="tech-col tech-col--right">
+            <div class="tech-card">
+              <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7v5l3 3"></path>
+                </svg></div>
+              <div class="tech-card__content">
+                <h4 class="tech-card__title">Air Zoom Cushion</h4>
+                <p class="tech-card__text">Maximum impact protection and energy return.</p>
+              </div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8">
+                  <path d="M3 12h4l3 8 4-16 3 8h4"></path>
+                </svg></div>
+              <div class="tech-card__content">
+                <h4 class="tech-card__title">Cushion Foam</h4>
+                <p class="tech-card__text">Premium cushioning for all-day comfort.</p>
+              </div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M8 12h8M12 8v8"></path>
+                </svg></div>
+              <div class="tech-card__content">
+                <h4 class="tech-card__title">Rubber Outsole</h4>
+                <p class="tech-card__text">Superior grip &amp; durability on every surface.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="footer-col">
-        <h4 class="footer-heading">Shop</h4>
-        <ul class="footer-links">
-          <li><a href="collection.html?gender=men">Men</a></li>
-          <li><a href="collection.html?gender=women">Women</a></li>
-          <li><a href="collection.html?gender=kids">Kids</a></li>
-          <li><a href="collection.html">Collections</a></li>
-          <li><a href="collection.html?tag=sale">Sale</a></li>
-        </ul>
+      <div class="metrics-section">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8">
+                <path d="M12 2a10 10 0 1 0 10 10"></path>
+              </svg></div><span class="metric-card__num">218g</span><span class="metric-card__label">Ultra
+              Lightweight</span>
+          </div>
+          <div class="metric-card">
+            <div class="metric-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg></div><span class="metric-card__num">90%</span><span class="metric-card__label">Energy Return</span>
+          </div>
+          <div class="metric-card">
+            <div class="metric-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg></div><span class="metric-card__num">100K+</span><span class="metric-card__label">Happy
+              Athletes</span>
+          </div>
+          <div class="metric-card">
+            <div class="metric-card__icon"><svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.6-6.2 4.6 2.4-7.4-6.2-4.5h7.6z" />
+              </svg></div><span class="metric-card__num">4.9★</span><span class="metric-card__label">Customer
+              Rating</span>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="footer-col">
-        <h4 class="footer-heading">Help</h4>
-        <ul class="footer-links">
-          <li><a href="#">Track Order</a></li>
-          <li><a href="#">Returns</a></li>
-          <li><a href="#">Size Guide</a></li>
-          <li><a href="#">FAQs</a></li>
-          <li><a href="#contact">Contact Us</a></li>
-        </ul>
+    <!-- PROMO BANNERS -->
+    <section class="promo-banners">
+      <div class="promo-banners__inner">
+        <div class="promo-card"
+          style="background: linear-gradient(135deg, rgba(27, 19, 34, 0.95), rgba(13, 13, 16, 0.98)), radial-gradient(circle at top right, var(--rim-soft), transparent 60%);">
+          <div class="promo-card__content">
+            <span class="promo-card__eyebrow">Limited Time Offer</span>
+            <h3 class="promo-card__title">UP TO<br />40% OFF</h3>
+            <p class="promo-card__text">On Selected Men's Footwear</p>
+            <a href="collection.html?tag=sale" class="btn btn--ghost btn--small" data-magnetic><span>Shop Now
+                →</span></a>
+          </div>
+        </div>
+        <div class="promo-card"
+          style="background: linear-gradient(135deg, rgba(14, 30, 36, 0.95), rgba(8, 8, 10, 0.98)), radial-gradient(circle at top right, var(--key-soft), transparent 60%);">
+          <div class="promo-card__content">
+            <span class="promo-card__eyebrow">New Arrivals</span>
+            <h3 class="promo-card__title">PERFORMANCE<br />REDEFINED</h3>
+            <p class="promo-card__text">Experience unmatched comfort and unstoppable performance.</p>
+            <a href="collection.html?tag=new" class="btn btn--ghost btn--small" data-magnetic><span>Explore Now
+                →</span></a>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="footer-col">
-        <h4 class="footer-heading">Company</h4>
-        <ul class="footer-links">
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#about">Careers</a></li>
-          <li><a href="#about">Press</a></li>
-          <li><a href="#about">Sustainability</a></li>
-          <li><a href="#about">Blog</a></li>
-        </ul>
+    <!-- REVIEWS -->
+    <section class="reviews-section">
+      <div class="section-header">
+        <h2 class="section-title">What Our Athletes Say</h2>
+        <a href="#" class="view-all-link"><span>View All Reviews</span><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg></a>
       </div>
-
-      <div class="footer-col">
-        <h4 class="footer-heading">Newsletter</h4>
-        <p class="footer-newsletter-text">Subscribe and get 10% off on your first order</p>
-        <form class="footer-newsletter-form" onsubmit="return false;">
-          <input type="email" class="footer-newsletter-input" placeholder="Enter your email" required />
-          <button type="submit" class="footer-newsletter-btn" aria-label="Subscribe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
-        </form>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <span class="review-card__stars">★★★★★</span>
+          <p class="review-card__text">"The grip, comfort and bounce are unbelievable. Perfect for my daily runs."</p>
+          <div class="review-card__user">
+            <span class="user-avatar">RM</span>
+            <div>
+              <h5 class="user-name">Rahul Mehta <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg></h5>
+              <span class="user-tag">Verified Buyer</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <span class="review-card__stars">★★★★★</span>
+          <p class="review-card__text">"Lightweight and super stylish. My go-to shoes for everything."</p>
+          <div class="review-card__user">
+            <span class="user-avatar">AV</span>
+            <div>
+              <h5 class="user-name">Amit Verma <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg></h5>
+              <span class="user-tag">Verified Buyer</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <span class="review-card__stars">★★★★★</span>
+          <p class="review-card__text">"Excellent build quality and premium feel. Totally worth it!"</p>
+          <div class="review-card__user">
+            <span class="user-avatar">KS</span>
+            <div>
+              <h5 class="user-name">Karan Singh <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                  <circle cx="12" cy="12" r="10"></circle>
+                </svg></h5>
+              <span class="user-tag">Verified Buyer</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="footer-bottom">
-      <p class="copyright-text">© 2026 Nova Sports. All Rights Reserved.</p>
-      <div class="payment-icons" style="display: flex; gap: 8px; align-items: center;">
-        <img class="payment-icon" src="assets/images/visa.png" alt="Visa" style="height: 20px; width: auto; background: #fff; padding: 2px 6px; border-radius: 3px; display: block; object-fit: contain;">
-        <img class="payment-icon" src="assets/images/mastercard.png" alt="Mastercard" style="height: 20px; width: auto; background: #fff; padding: 2px 6px; border-radius: 3px; display: block; object-fit: contain;">
-        <img class="payment-icon" src="assets/images/upi.png" alt="UPI" style="height: 20px; width: auto; background: #fff; padding: 2px 6px; border-radius: 3px; display: block; object-fit: contain;">
+    <!-- INSTAGRAM GRID -->
+    <section class="insta-section">
+      <div class="insta-section__header">
+        <h2 class="section-title">#MoveWithNova</h2>
+        <a href="https://instagram.com" target="_blank" class="view-all-link"><span>Follow Us @novasport</span></a>
+      </div>
+      <div class="insta-grid">
+        <div class="insta-item"><img class="insta-img" src="assets/images/insta1.png" alt="Nova community post" /></div>
+        <div class="insta-item"><img class="insta-img" src="assets/images/insta2.png" alt="Nova community post" /></div>
+        <div class="insta-item"><img class="insta-img" src="assets/images/insta3.png" alt="Nova community post" /></div>
+        <div class="insta-item"><img class="insta-img" src="assets/images/insta4.png" alt="Nova community post" /></div>
+        <div class="insta-item"><img class="insta-img" src="assets/images/insta5.png" alt="Nova community post" /></div>
+        <div class="insta-item"><img class="insta-img" src="assets/images/insta6.png" alt="Nova community post" /></div>
+        <div class="insta-item"><img class="insta-img" src="assets/images/insta7.png" alt="Nova community post" /></div>
+        <div class="insta-item"><img class="insta-img" src="assets/images/insta8.png" alt="Nova community post" /></div>
+      </div>
+    </section>
+
+    <!-- TRUST BADGES -->
+    <section class="trust-banner">
+      <div class="trust-banner__inner">
+        <div class="trust-card">
+          <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          <div>
+            <h3 class="trust-card__title">Free Delivery</h3>
+            <p class="trust-card__sub">On orders above ₹999</p>
+          </div>
+        </div>
+        <div class="trust-card">
+          <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+          <div>
+            <h3 class="trust-card__title">7 Days Return</h3>
+            <p class="trust-card__sub">Easy returns &amp; exchanges</p>
+          </div>
+        </div>
+        <div class="trust-card">
+          <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <div>
+            <h3 class="trust-card__title">100% Original</h3>
+            <p class="trust-card__sub">Genuine products</p>
+          </div>
+        </div>
+        <div class="trust-card">
+          <svg class="trust-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <div>
+            <h3 class="trust-card__title">Secure Payments</h3>
+            <p class="trust-card__sub">Multiple safe payment options</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CART DRAWER -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer__overlay" id="cartOverlay"></div>
+    <div class="cart-drawer__inner">
+      <div class="cart-drawer__header">
+        <h3>Your Bag (<span id="cartCountHeader">0</span>)</h3>
+        <button class="cart-close-btn" id="cartCloseBtn" aria-label="Close cart"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg></button>
+      </div>
+      <div class="cart-drawer__content">
+        <div class="cart-empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <p>Your bag is empty.</p>
+          <a href="collection.html" class="btn btn--solid"><span>Shop Collection</span></a>
+        </div>
       </div>
     </div>
   </div>
-</footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Nav scroll state
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('is-scrolled', window.scrollY > 40);
-  });
+  <!-- FOOTER -->
+  <footer class="footer" id="contact">
+    <div class="footer__inner desktop-footer">
+      <div class="footer-grid">
+        <!-- Description column -->
+        <div class="footer-col footer-col--brand">
+          <a href="index.html" class="nav__logo" style="margin-bottom:20px;">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;">
+              <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span style="font-size:18px;">NOVA</span>
+          </a>
+          <p class="footer-brand-text">Pushing boundaries. Redefining performance. Built for those who never slow down.
+          </p>
+          <div class="social-links">
+            <a href="https://instagram.com" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg></a>
+            <a href="https://facebook.com" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg></a>
+            <a href="https://youtube.com" target="_blank" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z">
+                </path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg></a>
+            <a href="https://twitter.com" target="_blank" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+                </path>
+              </svg></a>
+          </div>
+        </div>
 
-  // Mobile burger
-  const burger = document.getElementById('navBurger');
-  if (burger) {
-    burger.addEventListener('click', () => {
-      const expanded = burger.getAttribute('aria-expanded') === 'true';
-      burger.setAttribute('aria-expanded', String(!expanded));
-      document.querySelector('.nav__links').style.display = expanded ? '' : 'flex';
+        <!-- Shop links -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Shop</h4>
+          <ul class="footer-links">
+            <li><a href="collection.html">All Shoes</a></li>
+            <li><a href="collection.html?gender=men">Men</a></li>
+            <li><a href="collection.html?gender=women">Women</a></li>
+            <li><a href="collection.html?tag=new">New Arrivals</a></li>
+            <li><a href="collection.html?tag=bestseller">Best Sellers</a></li>
+          </ul>
+        </div>
+
+        <!-- Company links -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Company</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#about">About Us</a></li>
+            <li><a href="index.html#technology">Technology</a></li>
+            <li><a href="index.html#about">Sustainability</a></li>
+            <li><a href="index.html#about">Careers</a></li>
+            <li><a href="index.html#about">Blog</a></li>
+          </ul>
+        </div>
+
+        <!-- Support links -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Support</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#about">Help Center</a></li>
+            <li><a href="index.html#about">Shipping</a></li>
+            <li><a href="index.html#about">Returns</a></li>
+            <li><a href="index.html#about">Size Guide</a></li>
+            <li><a href="index.html#about">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Policies links -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Policies</h4>
+          <ul class="footer-links">
+            <li><a href="index.html#about">Terms of Service</a></li>
+            <li><a href="index.html#about">Privacy Policy</a></li>
+            <li><a href="index.html#about">Refund Policy</a></li>
+            <li><a href="index.html#about">Warranty</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom copyrights and payment methods -->
+      <div class="footer-bottom">
+        <p class="copyright-text">© 2026 Nova Shoes. All rights reserved.</p>
+        <div class="payment-methods">
+          <span class="payment-title">Secure Payments</span>
+          <div class="payment-icons" style="display: flex; gap: 8px; align-items: center;">
+            <img class="payment-icon" src="assets/images/visa.png" alt="Visa"
+              style="height: 30px; width: auto; background: #fff; padding: 3px 8px; border-radius: 4px; display: block; object-fit: contain;">
+            <img class="payment-icon" src="assets/images/mastercard.png" alt="Mastercard"
+              style="height: 30px; width: auto; background: #fff; padding: 3px 8px; border-radius: 4px; display: block; object-fit: contain;">
+            <img class="payment-icon" src="assets/images/upi.png" alt="UPI"
+              style="height: 30px; width: auto; background: #fff; padding: 3px 8px; border-radius: 4px; display: block; object-fit: contain;">
+          </div>
+      </div>
+    </div>
+
+    <!-- Mobile Footer Content -->
+    <div class="mobile-footer">
+      <div class="mobile-footer__inner">
+        <!-- Brand & Socials -->
+        <div class="m-footer-brand">
+          <a href="index.html" class="m-footer-logo">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>NOVA</span>
+          </a>
+          <p class="m-footer-desc">
+            Engineered for performance.<br>
+            Designed for champions.<br>
+            Move with Nova.
+          </p>
+          <div class="m-footer-socials">
+            <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+            <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            </a>
+            <a href="https://twitter.com" target="_blank" aria-label="Twitter">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+            </a>
+            <a href="https://youtube.com" target="_blank" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Links Columns Grid -->
+        <div class="m-footer-links-grid">
+          <!-- Column 1: Quick Links -->
+          <div class="m-footer-col">
+            <h4 class="m-footer-heading">Quick Links</h4>
+            <ul class="m-footer-links">
+              <li><a href="about.html">About Us <span class="arrow-icon"></span></a></li>
+              <li><a href="dashboard.html">Track Your Order <span class="arrow-icon"></span></a></li>
+              <li><a href="about.html">Size Guide <span class="arrow-icon"></span></a></li>
+              <li><a href="about.html">Returns & Refunds <span class="arrow-icon"></span></a></li>
+              <li><a href="about.html">FAQs <span class="arrow-icon"></span></a></li>
+              <li><a href="contact.html">Contact Us <span class="arrow-icon"></span></a></li>
+            </ul>
+          </div>
+
+          <!-- Column 2: Shop -->
+          <div class="m-footer-col">
+            <h4 class="m-footer-heading">Shop</h4>
+            <ul class="m-footer-links">
+              <li><a href="men.html">Men <span class="arrow-icon"></span></a></li>
+              <li><a href="women.html">Women <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?category=Running">Running <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?category=Training">Training <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?category=Lifestyle">Lifestyle <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?category=Outdoor">Outdoor <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?tag=new">New Arrivals <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html?tag=bestseller">Best Sellers <span class="arrow-icon"></span></a></li>
+              <li><a href="collection.html">All Products <span class="arrow-icon"></span></a></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Customer Care -->
+          <div class="m-footer-col">
+            <h4 class="m-footer-heading">Customer Care</h4>
+            <ul class="m-footer-links no-arrows">
+              <li><a href="about.html">Help Center</a></li>
+              <li><a href="about.html">Shipping Policy</a></li>
+              <li><a href="about.html">Return Policy</a></li>
+              <li><a href="about.html">Terms & Conditions</a></li>
+              <li><a href="about.html">Privacy Policy</a></li>
+              <li><a href="about.html">Payment Methods</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Trust Badges Container -->
+        <div class="m-footer-trust-box">
+          <div class="m-footer-trust-grid">
+            <div class="m-footer-trust-item">
+              <svg class="m-footer-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+              <div class="m-footer-trust-content">
+                <h5>FREE SHIPPING</h5>
+                <p>On orders above ₹999</p>
+              </div>
+            </div>
+            <div class="m-footer-trust-item">
+              <svg class="m-footer-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              <div class="m-footer-trust-content">
+                <h5>EASY RETURNS</h5>
+                <p>14 days easy returns</p>
+              </div>
+            </div>
+            <div class="m-footer-trust-item">
+              <svg class="m-footer-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="M9 11l2 2 4-4" />
+              </svg>
+              <div class="m-footer-trust-content">
+                <h5>100% ORIGINAL</h5>
+                <p>Authentic Products</p>
+              </div>
+            </div>
+            <div class="m-footer-trust-item">
+              <svg class="m-footer-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <div class="m-footer-trust-content">
+                <h5>SUPPORT 24/7</h5>
+                <p>We're here to help you</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsletter Subscription Box -->
+        <div class="m-footer-newsletter-box">
+          <div class="m-footer-newsletter-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
+          </div>
+          <div class="m-footer-newsletter-content">
+            <h5>JOIN THE NOVA COMMUNITY</h5>
+            <p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
+            <form class="m-footer-newsletter-form">
+              <input type="email" placeholder="Enter your email" required>
+              <button type="submit" aria-label="Subscribe">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- We Accept Section -->
+        <div class="m-footer-accept-section">
+          <h4 class="m-footer-heading">We Accept</h4>
+          <div class="m-footer-payments-row">
+            <div class="m-footer-payment-card">
+              <img src="assets/images/visa.png" alt="Visa">
+            </div>
+            <div class="m-footer-payment-card">
+              <img src="assets/images/mastercard.png" alt="Mastercard">
+            </div>
+            <div class="m-footer-payment-card">
+              <img src="assets/images/upi.png" alt="UPI">
+            </div>
+            <div class="m-footer-payment-card">
+              <span class="paytm-text-logo">paytm</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright Info -->
+        <div class="m-footer-copyright">
+          <div class="m-footer-logo-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 30 L18 14 L26 24 L34 12 L42 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <p class="copyright-line">© 2025 NOVA. All rights reserved.</p>
+          <p class="built-line">Built with <span class="heart-icon">💚</span> for performance.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Lenis Smooth Scroll
+      let lenis = null;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reducedMotion) {
+        lenis = new Lenis({
+          duration: 1.1,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+        });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      // Reveal animations
+      function runRevealAnimation() {
+        if (window.gsap) {
+          const tl = gsap.timeline({ delay: 0.15 });
+          tl.to('[data-reveal]', {
+            opacity: 1,
+            y: 0,
+            duration: 1.1,
+            ease: 'power3.out',
+            stagger: 0.09,
+          }).to('[data-reveal-up]', {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: 'power3.out',
+            stagger: 0.07,
+          }, '-=0.6');
+        } else {
+          // Fallback if GSAP is blocked or fails
+          document.querySelectorAll('[data-reveal], [data-reveal-up]').forEach((el) => {
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+          });
+        }
+      }
+
+      if (sessionStorage.getItem('nova_preloader_seen')) {
+        runRevealAnimation();
+      } else {
+        window.addEventListener('assetsLoaded', runRevealAnimation);
+      }
+
+      // Nav scroll state
+      const nav = document.getElementById('nav');
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('is-scrolled', window.scrollY > 40);
+      });
+
+      // Mobile burger
+      const burger = document.getElementById('navBurger');
+      if (burger) {
+        burger.addEventListener('click', () => {
+          const expanded = burger.getAttribute('aria-expanded') === 'true';
+          burger.setAttribute('aria-expanded', String(!expanded));
+          document.querySelector('.nav__links').style.display = expanded ? '' : 'flex';
+        });
+      }
+
+      // Cart drawer
+      const cartDrawer = document.getElementById('cartDrawer');
+      const cartToggleBtn = document.getElementById('cartToggleBtn');
+      const cartCloseBtn = document.getElementById('cartCloseBtn');
+      const cartOverlay = document.getElementById('cartOverlay');
+      cartToggleBtn?.addEventListener('click', () => cartDrawer.classList.add('is-open'));
+      cartCloseBtn?.addEventListener('click', () => cartDrawer.classList.remove('is-open'));
+      cartOverlay?.addEventListener('click', () => cartDrawer.classList.remove('is-open'));
+
+
+
+      // Hero Slideshow with arrow controls and indicator
+      const slides = document.querySelectorAll('.hero__bg-slide');
+      const accents = ['#bdfc24', '#ff7b00', '#00e5ff']; // Lime-green, Rust-orange, Neon-cyan
+      const slideLabel = document.getElementById('heroSlideCurrent');
+      const prevBtn = document.getElementById('heroPrev');
+      const nextBtn = document.getElementById('heroNext');
+      let currentSlide = 0;
+
+      function changeSlide(next = true) {
+        if (slides.length === 0) return;
+        slides[currentSlide].classList.remove('active');
+        currentSlide = next
+          ? (currentSlide + 1) % slides.length
+          : (currentSlide - 1 + slides.length) % slides.length;
+        slides[currentSlide].classList.add('active');
+
+        // Update CSS accent color
+        document.documentElement.style.setProperty('--hero-accent', accents[currentSlide]);
+
+        // Update slide number readout
+        if (slideLabel) {
+          slideLabel.textContent = String(currentSlide + 1).padStart(2, '0');
+        }
+      }
+
+      let slideshowInterval = setInterval(changeSlide, 5000);
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          clearInterval(slideshowInterval);
+          changeSlide(false);
+          slideshowInterval = setInterval(changeSlide, 5000);
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          clearInterval(slideshowInterval);
+          changeSlide(true);
+          slideshowInterval = setInterval(changeSlide, 5000);
+        });
+      }
     });
-  }
-
-  // Cart drawer
-  const cartDrawer = document.getElementById('cartDrawer');
-  const cartToggleBtn = document.getElementById('cartToggleBtn');
-  const cartCloseBtn = document.getElementById('cartCloseBtn');
-  const cartOverlay = document.getElementById('cartOverlay');
-  cartToggleBtn?.addEventListener('click', () => cartDrawer.classList.add('is-open'));
-  cartCloseBtn?.addEventListener('click', () => cartDrawer.classList.remove('is-open'));
-  cartOverlay?.addEventListener('click', () => cartDrawer.classList.remove('is-open'));
-
-  // Colorway swatches
-  const swatches = document.querySelectorAll('.colorway__swatch');
-  const heroShoeImg = document.getElementById('heroShoeImg');
-  swatches.forEach((swatch) => {
-    swatch.addEventListener('click', () => {
-      swatches.forEach((s) => s.classList.remove('is-active'));
-      swatch.classList.add('is-active');
-      const img = swatch.dataset.img;
-      if (img && heroShoeImg) heroShoeImg.src = img;
-    });
-  });
-
-  // Hero Slideshow with arrow controls and indicator
-  const slides = document.querySelectorAll('.hero__bg-slide');
-  const accents = ['#bdfc24', '#ff7b00', '#00e5ff']; // Lime-green, Rust-orange, Neon-cyan
-  const slideLabel = document.getElementById('heroSlideCurrent');
-  const prevBtn = document.getElementById('heroPrev');
-  const nextBtn = document.getElementById('heroNext');
-  let currentSlide = 0;
-
-  function changeSlide(next = true) {
-    if (slides.length === 0) return;
-    slides[currentSlide].classList.remove('active');
-    currentSlide = next
-      ? (currentSlide + 1) % slides.length
-      : (currentSlide - 1 + slides.length) % slides.length;
-    slides[currentSlide].classList.add('active');
-    
-    // Update CSS accent color
-    document.documentElement.style.setProperty('--hero-accent', accents[currentSlide]);
-    
-    // Update slide number readout
-    if (slideLabel) {
-      slideLabel.textContent = String(currentSlide + 1).padStart(2, '0');
-    }
-  }
-
-  let slideshowInterval = setInterval(changeSlide, 5000);
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      clearInterval(slideshowInterval);
-      changeSlide(false);
-      slideshowInterval = setInterval(changeSlide, 5000);
-    });
-  }
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      clearInterval(slideshowInterval);
-      changeSlide(true);
-      slideshowInterval = setInterval(changeSlide, 5000);
-    });
-  }
-});
-</script>
-<script src="api-config.js"></script>
-<script src="products-bridge.js"></script>
+  </script>
+  <script src="api-config.js"></script>
+  <script src="products-bridge.js"></script>
   <!-- ============================= -->
   <!-- MOBILE BOTTOM NAVIGATION      -->
   <!-- ============================= -->
   <div class="mobile-bottom-nav">
     <a href="index.html" class="mobile-bottom-nav__item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
         <polyline points="9 22 9 12 15 12 15 22"></polyline>
       </svg>
       <span>HOME</span>
     </a>
     <a href="collection.html" class="mobile-bottom-nav__item is-active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
         <rect x="3" y="3" width="7" height="7"></rect>
         <rect x="14" y="3" width="7" height="7"></rect>
         <rect x="14" y="14" width="7" height="7"></rect>
@@ -798,7 +1957,8 @@ document.addEventListener('DOMContentLoaded', () => {
       <span>SHOP</span>
     </a>
     <a href="collection.html#categories" class="mobile-bottom-nav__item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
         <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
         <polyline points="2 17 12 22 22 17"></polyline>
         <polyline points="2 12 12 17 22 12"></polyline>
@@ -807,15 +1967,19 @@ document.addEventListener('DOMContentLoaded', () => {
     </a>
     <a href="wishlist.html" class="mobile-bottom-nav__item">
       <div class="mobile-bottom-nav__icon-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path
+            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+          </path>
         </svg>
         <span class="mobile-bottom-nav__badge nav__wish-count" id="wishlistCountMobile">0</span>
       </div>
       <span>WISHLIST</span>
     </a>
     <a href="dashboard.html" class="mobile-bottom-nav__item" id="mobileAccountLink">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
         <circle cx="12" cy="7" r="4"></circle>
       </svg>
@@ -825,4 +1989,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <script src="wishlist-sync.js"></script>
 </body>
+
 </html>

@@ -5,3 +5,14 @@ Desktop.ini
 
 # Log files
 *.log
+
+# Node dependency directories
+node_modules/
+jspm_packages/
+
+# Project zip files or large images
+*.zip
+*.png
+.gemini/
+.agents/
+.vscode/
