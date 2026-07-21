@@ -4939,7 +4939,7 @@ button {
   background: #0c0c0e;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: none;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
   z-index: 1000;
   padding-bottom: env(safe-area-inset-bottom);
