@@ -7,7 +7,7 @@ html {
   overflow-x: hidden !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 940px) {
 
   *,
   *::before,
@@ -376,13 +376,11 @@ html {
 
   /* ── BEST SELLERS ── */
   .m-products-row {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 2px;
-    scrollbar-width: none;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    width: 100% !important;
+    overflow-x: visible !important;
   }
 
   .m-products-row::-webkit-scrollbar {
@@ -390,7 +388,10 @@ html {
   }
 
   .m-prod-card {
-    flex: 0 0 150px;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    flex: none !important;
     scroll-snap-align: start;
     background: #141416;
     border-radius: 14px;
@@ -425,7 +426,7 @@ html {
 
   .m-prod-card__img-area {
     background: #1e1e20;
-    height: 120px;
+    height: 135px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -434,7 +435,7 @@ html {
 
   .m-prod-card__img {
     max-width: 100%;
-    max-height: 96px;
+    max-height: 110px;
     object-fit: contain;
     display: block;
   }
@@ -579,89 +580,129 @@ html {
     line-height: 1.3;
   }
 
-  /* ── PROMO BANNER ── */
+  /* ── PROMO BANNER (Modern Premium UI) ── */
   .m-promo {
-    margin: 16px;
-    border-radius: 16px;
+    margin: 20px 16px;
+    border-radius: 20px;
     overflow: hidden;
     position: relative;
-    min-height: 160px;
+    min-height: 175px;
     display: flex;
     align-items: center;
-    background: linear-gradient(125deg, #1a0800 0%, #3d1200 35%, #220800 70%, #100400 100%);
-    border: 1px solid rgba(255, 80, 0, 0.12);
+    background: linear-gradient(135deg, #180902 0%, #0d0502 50%, #150904 100%) !important;
+    border: 1px solid rgba(255, 90, 0, 0.28) !important;
+    box-shadow: 0 10px 30px rgba(255, 60, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
   }
 
-  /* Subtle fire radial overlay */
   .m-promo::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 70% 50%, rgba(255, 80, 0, 0.2) 0%, transparent 60%);
+    background: radial-gradient(circle at 15% 50%, rgba(255, 90, 0, 0.22) 0%, transparent 65%);
     z-index: 1;
+    pointer-events: none;
+  }
+
+  .m-promo__bg-wrap {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 54%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .m-promo__bg-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: linear-gradient(90deg, #0d0502 0%, rgba(13, 5, 2, 0.7) 20%, transparent 60%, #150904 100%);
   }
 
   .m-promo__bg {
-    position: absolute;
-    right: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 140px;
-    width: auto;
-    object-fit: contain;
-    opacity: 0.95;
-    z-index: 2;
-    filter: drop-shadow(0 4px 20px rgba(255, 80, 0, 0.4));
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transform: scale(1.05);
+    filter: brightness(0.92) contrast(1.08);
   }
 
   .m-promo__content {
     position: relative;
-    z-index: 3;
-    padding: 20px 18px;
+    z-index: 4;
+    padding: 22px 20px;
     flex: 1;
+    max-width: 60%;
   }
 
   .m-promo__eyebrow {
-    font-size: 9px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9.5px;
     font-weight: 700;
-    color: #ff6a00;
+    color: #ff7714;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    margin: 0 0 6px;
+    letter-spacing: 0.12em;
+    background: rgba(255, 106, 0, 0.15);
+    border: 1px solid rgba(255, 106, 0, 0.3);
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin: 0 0 8px;
+    width: fit-content;
   }
 
   .m-promo__title {
-    font-family: var(--f-display, sans-serif);
-    font-size: 28px;
+    font-family: var(--f-display, 'Clash Display', sans-serif);
+    font-size: 24px;
     font-weight: 900;
-    color: #fff;
-    line-height: 1;
-    margin: 0 0 4px;
-    letter-spacing: -0.03em;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
   }
 
   .m-promo__title .accent {
     color: #ff6a00;
+    font-weight: 900;
+    text-shadow: 0 0 15px rgba(255, 106, 0, 0.4);
   }
 
   .m-promo__sub {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.5);
-    margin: 0 0 16px;
+    font-size: 10.5px;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 14px;
+    line-height: 1.3;
   }
 
   .m-promo__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 18px;
-    background: #fff;
-    color: #050506;
-    font-size: 11px;
-    font-weight: 700;
-    border-radius: 100px;
-    text-decoration: none;
-    letter-spacing: 0.04em;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 10px 18px !important;
+    background: #ffffff !important;
+    color: #050507 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    border-radius: 100px !important;
+    text-decoration: none !important;
+    letter-spacing: 0.05em !important;
+    white-space: nowrap !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    transition: transform 0.25s ease, background-color 0.25s ease !important;
+    width: fit-content !important;
+  }
+
+  .m-promo__btn svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
   }
 
   /* ── REVIEWS ── */

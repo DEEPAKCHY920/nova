@@ -969,9 +969,7 @@
     burger.addEventListener("click", () => {
       const expanded = burger.getAttribute("aria-expanded") === "true";
       burger.setAttribute("aria-expanded", String(!expanded));
-      document.querySelector(".nav__links").style.display = expanded
-        ? ""
-        : "flex";
+      document.body.classList.toggle("nav-open", !expanded);
     });
   }
 

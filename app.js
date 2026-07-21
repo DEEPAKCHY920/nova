@@ -171,11 +171,13 @@
   });
 
   const burger = document.getElementById('navBurger');
-  burger.addEventListener('click', () => {
-    const expanded = burger.getAttribute('aria-expanded') === 'true';
-    burger.setAttribute('aria-expanded', String(!expanded));
-    document.querySelector('.nav__links').style.display = expanded ? '' : 'flex';
-  });
+  if (burger) {
+    burger.addEventListener('click', () => {
+      const expanded = burger.getAttribute('aria-expanded') === 'true';
+      burger.setAttribute('aria-expanded', String(!expanded));
+      document.body.classList.toggle('nav-open', !expanded);
+    });
+  }
 
   /* ---------------------------------------------------------
      TEXT / CARD REVEAL (on load, once)
@@ -196,22 +198,26 @@
     const pinEl = document.getElementById('heroPin');
     const frameCurrentEl = document.getElementById('frameCurrent');
 
-    ScrollTrigger.create({
-      trigger: pinEl,
-      start: 'top top',
-      end: () => `+=${window.innerHeight * 4}`,
-      pin: true,
-      scrub: 0.6,
-      anticipatePin: 1,
-      onUpdate: (self) => {
-        RIG.progress = self.progress;
-        const frameNum = clamp(Math.round(self.progress * (RIG.totalFrames - 1)) + 1, 1, RIG.totalFrames);
-        frameCurrentEl.textContent = pad(frameNum, 3);
-        renderFrame(self.progress);
-      },
-    });
+    const mm = gsap.matchMedia();
 
-    renderFrame(0);
+    mm.add("(min-width: 769px)", () => {
+      ScrollTrigger.create({
+        trigger: pinEl,
+        start: 'top top',
+        end: () => `+=${window.innerHeight * 10}`,
+        pin: true,
+        scrub: 0.6,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          RIG.progress = self.progress;
+          const frameNum = clamp(Math.round(self.progress * (RIG.totalFrames - 1)) + 1, 1, RIG.totalFrames);
+          frameCurrentEl.textContent = pad(frameNum, 3);
+          renderFrame(self.progress);
+        },
+      });
+
+      renderFrame(0);
+    });
   }
 
   /* ---------------------------------------------------------

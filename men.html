@@ -19,6 +19,7 @@
   <style>
     :root {
       --hero-accent: #bdfc24;
+      --nav-h: 70px;
     }
 
     /* =========================================================
@@ -37,7 +38,7 @@
       display: grid;
       grid-template-columns: minmax(280px, 1fr) minmax(320px, 620px) minmax(220px, 1fr);
       grid-template-rows: 1fr auto;
-      padding-top: calc(var(--nav-h) + 38px + 40px);
+      padding-top: calc(var(--nav-h, 70px) + 32px);
     }
 
     .hero__bg-slides {
@@ -564,6 +565,113 @@
     /* =========================================================
      RESPONSIVE OVERRIDES
      ========================================================= */
+    /* Category Swatches - Circular Thumbnails (Mobile Only) */
+    .cat-swatches-section {
+      display: none;
+      background: #050507;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 20px 24px;
+    }
+
+    .cat-swatches-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .cat-swatches-header {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cat-swatches-count {
+      font-family: var(--f-display);
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.02em;
+    }
+
+    .cat-swatches-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 22px;
+      overflow-x: auto;
+      padding: 4px 4px 12px 4px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .cat-swatches-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+      text-decoration: none;
+    }
+
+    .cat-swatch:hover {
+      transform: translateY(-3px);
+    }
+
+    .cat-swatch__circle {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #1e1e26 0%, #101015 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      transition: all 0.3s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .cat-swatch__img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .cat-swatch:hover .cat-swatch__img {
+      transform: scale(1.08) rotate(-4deg);
+    }
+
+    .cat-swatch__label {
+      font-family: var(--f-display);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.02em;
+      transition: color 0.3s ease;
+    }
+
+    .cat-swatch.active .cat-swatch__circle {
+      border-color: var(--hero-accent);
+      box-shadow: 0 0 16px rgba(189, 252, 36, 0.45), inset 0 0 10px rgba(189, 252, 36, 0.2);
+    }
+
+    .cat-swatch.active .cat-swatch__label {
+      color: var(--hero-accent);
+      font-weight: 600;
+    }
+
     @media (max-width: 1180px) {
       .hero__pin {
         grid-template-columns: minmax(240px, 1fr) minmax(260px, 480px) minmax(160px, 1fr);
@@ -583,43 +691,131 @@
         margin-top: 40px;
       }
     }
-
     @media (max-width: 940px) {
       .hero__pin {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-        padding-top: calc(var(--nav-h) + 20px);
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto !important;
+        min-height: auto !important;
+        height: auto !important;
+        padding: calc(var(--nav-h, 70px) + 12px) 16px 20px 16px !important;
+        gap: 12px !important;
       }
 
       .hero__left {
-        grid-column: 1;
-        grid-row: 1;
-        align-self: start;
-        padding: 0 24px;
-        max-width: 100%;
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        align-self: start !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        text-align: left !important;
+        align-items: flex-start !important;
       }
 
-      .hero__right {
-        grid-column: 1;
-        grid-row: 2;
-        align-self: start;
-        align-items: flex-start;
-        padding: 24px;
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
-      }
-
-      .colorway {
-        align-items: flex-start;
-      }
-
-      .specs {
-        grid-template-columns: repeat(2, 1fr);
+      .hero__right,
+      .hero__bottom,
+      .specs,
+      .hero__social-proof {
+        display: none !important;
       }
     }
 
     @media (max-width: 768px) {
+      .hero__pin {
+        padding: calc(var(--nav-h, 70px) + 24px) 18px 32px 18px !important;
+        min-height: 380px !important;
+        height: auto !important;
+      }
+
+      .hero__bg-slide {
+        background-size: cover !important;
+        background-position: 76% center !important;
+      }
+
+      .hero__bg-slide::after {
+        background: linear-gradient(180deg, rgba(8, 8, 10, 0.8) 0%, rgba(8, 8, 10, 0.5) 45%, rgba(8, 8, 10, 0.95) 100%) !important;
+      }
+
+      .hero__left {
+        text-align: left !important;
+        align-items: flex-start !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .eyebrow {
+        font-size: 10px !important;
+        letter-spacing: 0.14em !important;
+        margin-bottom: 8px !important;
+        gap: 6px !important;
+      }
+
+      .headline {
+        margin-bottom: 8px !important;
+      }
+
+      .headline__line {
+        font-size: 30px !important;
+        line-height: 1.08 !important;
+        text-align: left !important;
+      }
+
+      .headline__line--accent {
+        -webkit-text-stroke: 1.2px var(--hero-accent) !important;
+        color: transparent !important;
+      }
+
+      .hero__copy {
+        font-size: 12px !important;
+        line-height: 1.45 !important;
+        max-width: 100% !important;
+        margin: 0 0 16px 0 !important;
+        color: rgba(255, 255, 255, 0.78) !important;
+        text-align: left !important;
+      }
+
+      .hero__actions {
+        display: flex !important;
+        justify-content: flex-start !important;
+        gap: 10px !important;
+        flex-wrap: wrap !important;
+        margin-bottom: 0 !important;
+        width: auto !important;
+      }
+
+      .hero__actions .btn {
+        padding: 9px 16px !important;
+        font-size: 11.5px !important;
+        border-radius: 30px !important;
+        white-space: nowrap !important;
+      }
+
+      .hero__actions .btn--white {
+        background: var(--hero-accent) !important;
+        color: #000 !important;
+        border-color: var(--hero-accent) !important;
+        font-weight: 600 !important;
+      }
+
+      .cat-swatches-section {
+        display: block !important;
+        padding: 16px 18px !important;
+      }
+
+      .cat-swatches-container {
+        gap: 16px;
+      }
+
+      .cat-swatch__circle {
+        width: 58px;
+        height: 58px;
+        padding: 6px;
+      }
+
+      .cat-swatch__label {
+        font-size: 11px;
+      }
+
       .tech-diagram {
         height: auto;
         display: flex;
@@ -655,13 +851,43 @@
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 480px) {
+      .hero__pin {
+        padding: calc(var(--nav-h, 65px) + 20px) 14px 28px 14px !important;
+        min-height: 350px !important;
+      }
+
       .headline__line {
-        font-size: 14vw;
+        font-size: 26px !important;
+      }
+
+      .hero__copy {
+        font-size: 11.5px !important;
+        line-height: 1.42 !important;
+        margin-bottom: 14px !important;
+      }
+
+      .hero__actions .btn {
+        padding: 8px 14px !important;
+        font-size: 11px !important;
       }
 
       .specs {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px 8px;
+      }
+
+      .specs__card {
+        padding: 5px 7px;
+        gap: 6px;
+      }
+
+      .specs__title {
+        font-size: 9px;
+      }
+
+      .specs__sub {
+        font-size: 8px;
       }
     }
 
@@ -839,6 +1065,20 @@
 
       .review-card {
         flex: 1 1 auto;
+      }
+    }
+
+    /* Mobile Footer Force Display */
+    @media (max-width: 940px) {
+      .footer {
+        display: block !important;
+      }
+      .desktop-footer {
+        display: none !important;
+      }
+      .mobile-footer {
+        display: block !important;
+        padding-bottom: 100px !important;
       }
     }
   </style>
@@ -1041,6 +1281,59 @@
         </div>
       </div>
     </section>
+
+    <!-- CATEGORY SWATCHES -->
+    <div class="cat-swatches-section" id="catalog-controls">
+      <div class="cat-swatches-inner">
+        <div class="cat-swatches-header">
+          <span class="cat-swatches-count"><span id="productCountHeader">340</span> Products</span>
+        </div>
+        <div class="cat-swatches-container">
+          <a class="cat-swatch active" href="collection.html?gender=men">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_running.png" alt="All" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">All</span>
+          </a>
+          <a class="cat-swatch" href="collection.html?category=Running&gender=men">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_running.png" alt="Running" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Running</span>
+          </a>
+          <a class="cat-swatch" href="collection.html?category=Training&gender=men">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_training.png" alt="Training" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Training</span>
+          </a>
+          <a class="cat-swatch" href="collection.html?category=Lifestyle&gender=men">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_lifestyle.png" alt="Lifestyle" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Lifestyle</span>
+          </a>
+          <a class="cat-swatch" href="collection.html?category=Basketball&gender=men">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_basketball.png" alt="Basketball" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Basketball</span>
+          </a>
+          <a class="cat-swatch" href="collection.html?category=Hiking&gender=men">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_hiking.png" alt="Hiking" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Hiking</span>
+          </a>
+          <a class="cat-swatch" href="collection.html?category=Gym&gender=men">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_gym.png" alt="Gym" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Gym</span>
+          </a>
+        </div>
+      </div>
+    </div>
 
     <!-- SHOP BY CATEGORY -->
     <section class="categories-section">
@@ -1874,7 +2167,7 @@
         burger.addEventListener('click', () => {
           const expanded = burger.getAttribute('aria-expanded') === 'true';
           burger.setAttribute('aria-expanded', String(!expanded));
-          document.querySelector('.nav__links').style.display = expanded ? '' : 'flex';
+          document.body.classList.toggle('nav-open', !expanded);
         });
       }
 

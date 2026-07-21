@@ -565,13 +565,15 @@
 
       <!-- PROMO BANNER -->
       <div class="m-promo">
-        <img src="assets/images/product_nova_x1.png" alt="Sale Shoes" class="m-promo__bg" loading="lazy" />
+        <div class="m-promo__bg-wrap">
+          <img src="assets/images/product_nova_x1.png" alt="Sale Shoes" class="m-promo__bg" loading="lazy" />
+        </div>
         <div class="m-promo__content">
-          <p class="m-promo__eyebrow">🔥 Limited Time Offer</p>
-          <h3 class="m-promo__title">UP TO <span class="accent">40%</span><br>OFF</h3>
-          <p class="m-promo__sub">On selected items</p>
+          <span class="m-promo__eyebrow">🔥 Limited Time Offer</span>
+          <h3 class="m-promo__title">UP TO <span class="accent">40%</span> OFF</h3>
+          <p class="m-promo__sub">On selected performance items</p>
           <a href="collection.html" class="m-promo__btn">
-            SHOP THE DEAL
+            <span>Shop The Deal</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />
@@ -1770,7 +1772,7 @@
       const mobilePage = document.querySelector('.mobile-home-page');
       if (!mobilePage) return;
       function checkWidth() {
-        if (window.innerWidth <= 768) {
+        if (window.innerWidth <= 940) {
           mobilePage.style.display = 'block';
         } else {
           mobilePage.style.display = 'none';

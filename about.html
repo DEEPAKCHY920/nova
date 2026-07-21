@@ -751,6 +751,108 @@
       z-index: 3;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
+
+    /* =========================================================
+       MOBILE ABOUT HERO SECTION (<= 940px)
+       ========================================================= */
+    @media (max-width: 940px) {
+      .about-hero-section {
+        padding: calc(var(--nav-h, 60px) + 24px) 20px 48px 20px !important;
+        min-height: auto !important;
+      }
+
+      .about-hero {
+        grid-template-columns: 1fr !important;
+        gap: 28px !important;
+        min-height: auto !important;
+        text-align: center !important;
+      }
+
+      .about-hero__left {
+        align-items: center !important;
+        text-align: center !important;
+        gap: 18px !important;
+      }
+
+      .about-hero__badge {
+        font-size: 10px !important;
+        padding: 5px 14px !important;
+        letter-spacing: 0.12em !important;
+        box-shadow: 0 0 15px rgba(147, 51, 234, 0.25) !important;
+      }
+
+      .about-hero__title {
+        font-size: clamp(28px, 7vw, 36px) !important;
+        line-height: 1.15 !important;
+        margin: 0 !important;
+        letter-spacing: -0.02em !important;
+      }
+
+      .about-hero__desc {
+        font-size: 14px !important;
+        line-height: 1.55 !important;
+        color: rgba(243, 241, 234, 0.78) !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+      }
+
+      .about-hero__actions {
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 320px !important;
+        gap: 12px !important;
+        margin-top: 6px !important;
+      }
+
+      .about-hero__actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 12px 20px !important;
+        font-size: 13px !important;
+        border-radius: 100px !important;
+      }
+
+      .about-hero__social {
+        flex-direction: column !important;
+        gap: 8px !important;
+        margin-top: 8px !important;
+      }
+
+      .hero__bg-slide {
+        background-position: center 60% !important;
+      }
+
+      /* Compact Choose Cards on Mobile */
+      .choose-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
+
+      .choose-card {
+        aspect-ratio: 0.82 !important;
+        max-height: 250px !important;
+        border-radius: 16px !important;
+      }
+
+      .choose-card__content {
+        padding: 12px 12px 14px !important;
+        gap: 4px !important;
+      }
+
+      .choose-card__title {
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        line-height: 1.25 !important;
+        margin: 0 !important;
+      }
+
+      .choose-card__desc {
+        font-size: 10.5px !important;
+        line-height: 1.35 !important;
+        color: rgba(243, 241, 234, 0.75) !important;
+        margin: 0 !important;
+      }
+    }
   </style>
 </head>
 
@@ -1640,11 +1742,13 @@
 
     // Mobile Burger navigation menu toggle
     const burger = document.getElementById('navBurger');
-    burger.addEventListener('click', () => {
-      const expanded = burger.getAttribute('aria-expanded') === 'true';
-      burger.setAttribute('aria-expanded', String(!expanded));
-      document.querySelector('.nav__links').style.display = expanded ? '' : 'flex';
-    });
+    if (burger) {
+      burger.addEventListener('click', () => {
+        const expanded = burger.getAttribute('aria-expanded') === 'true';
+        burger.setAttribute('aria-expanded', String(!expanded));
+        document.body.classList.toggle('nav-open', !expanded);
+      });
+    }
 
     // About Hero background slideshow
     const aboutSlides = document.querySelectorAll('.hero__bg-slide');

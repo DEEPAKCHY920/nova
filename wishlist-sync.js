@@ -307,25 +307,44 @@
   });
   window.addEventListener('cartUpdated', updateGlobalNavbarBadges);
 
-  // Global add-to-cart handler (for pages that don't load collection.js, e.g. index.html)
-  // collection.js has its own handler; this one covers all other pages.
+  // Global add-to-cart handler (works across all pages & product cards)
   document.addEventListener('click', async (e) => {
-    const btn = e.target.closest('.add-to-cart-btn');
+    const btn = e.target.closest('.add-to-cart-btn, .m-prod-card__add, .m-prod-card__add-btn, .quick-add-btn, .btn--add-to-cart');
     if (!btn) return;
-    // Skip if collection.js is already handling this (it defines cartState as an IIFE-scoped var)
-    if (window._collectionJsLoaded) return;
+    if (window._collectionJsLoaded && btn.closest('.catalog-grid')) return;
     e.preventDefault();
-    // Auth guard
-    if (typeof window.requireLogin === 'function') {
-      if (!window.requireLogin('Sign in to add items to your cart and start shopping.')) return;
+
+    const card = btn.closest('.product-card, .m-prod-card, .catalog-card, .bestseller-card');
+    let id = btn.dataset.id;
+    let name = btn.dataset.name;
+    let price = btn.dataset.price;
+    let img = btn.dataset.img;
+
+    if (!name && card) {
+      const nameEl = card.querySelector('.product-card__title, .m-prod-card__name, h3');
+      const priceEl = card.querySelector('.product-card__price, .m-prod-card__price, .price');
+      const imgEl = card.querySelector('.product-card__img, .m-prod-card__img, img');
+      name = nameEl ? nameEl.textContent.trim() : 'Nova Performance Shoe';
+      id = card.dataset.id || name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      price = priceEl ? Number(priceEl.textContent.replace(/[^0-9]/g, '')) || 7999 : 7999;
+      img = imgEl ? imgEl.getAttribute('src') : 'assets/images/product_nova_x1.png';
     }
-    // Add to cart
-    await cartState.add(btn.dataset.id, btn.dataset.name, btn.dataset.price, btn.dataset.img, 9);
-    // Animate button
-    btn.style.transform = 'scale(0.85)';
-    setTimeout(() => { btn.style.transform = ''; }, 150);
-    // Show toast feedback
-    showToast(`Added "${btn.dataset.name || 'item'}" to your cart!`);
+
+    if (name) {
+      await cartState.add(id || 'nova-item', name, Number(price) || 7999, img || 'assets/images/product_nova_x1.png', 9);
+      
+      btn.style.transform = 'scale(0.88)';
+      setTimeout(() => { btn.style.transform = ''; }, 150);
+      
+      showToast(`Added "${name}" to your Shopping Bag!`);
+      
+      const existingDrawer = document.getElementById('cartDrawer');
+      if (existingDrawer) {
+        existingDrawer.classList.add('is-open');
+      } else if (typeof window.openGlobalCart === 'function') {
+        window.openGlobalCart();
+      }
+    }
   });
 
   // Initialize Navbar badges and heart icon states on page load
@@ -598,6 +617,16 @@
           document.body.classList.remove('nav-open');
           newBurger.setAttribute('aria-expanded', 'false');
         });
+      });
+
+      // Close menu when clicking outside left drawer on backdrop
+      document.addEventListener('click', (e) => {
+        if (document.body.classList.contains('nav-open')) {
+          if (!links.contains(e.target) && !newBurger.contains(e.target)) {
+            document.body.classList.remove('nav-open');
+            newBurger.setAttribute('aria-expanded', 'false');
+          }
+        }
       });
     }
 

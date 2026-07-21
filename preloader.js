@@ -508,18 +508,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Global cart button handler — works on ALL pages
-    const cartBtn = e.target.closest('[aria-label="Cart"]');
+    const cartBtn = e.target.closest('[aria-label="Cart"], .nav__cart-btn, #cartToggleBtn');
     if (cartBtn) {
       e.preventDefault();
-      // Auth guard — must be logged in to use cart
-      if (!window.requireLogin('Sign in to view your cart and manage your shopping bag.')) return;
-      // If collection.js already manages a cartDrawer on this page, use it
       const existingDrawer = document.getElementById('cartDrawer');
       if (existingDrawer) {
         existingDrawer.classList.add('is-open');
         return;
       }
-      // Otherwise inject and open the global mini cart
       openGlobalCart();
     }
   });
@@ -922,7 +918,7 @@ function openGlobalCart() {
   injectGlobalCart();
   renderGlobalCart();
   const drawer = document.getElementById('globalCartDrawer');
-  drawer.classList.add('is-open');
+  if (drawer) drawer.classList.add('is-open');
   document.documentElement.style.overflow = 'hidden';
 }
 
@@ -931,6 +927,9 @@ function closeGlobalCart() {
   if (drawer) drawer.classList.remove('is-open');
   document.documentElement.style.overflow = '';
 }
+
+window.openGlobalCart = openGlobalCart;
+window.closeGlobalCart = closeGlobalCart;
 
 function injectSearchOverlay() {
   if (document.getElementById('searchOverlay')) return;

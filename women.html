@@ -18,17 +18,14 @@
 
   <style>
     :root {
-      --hero-accent: #a26aff;
+      --hero-accent: #ff4d94;
+      --nav-h: 70px;
     }
 
-    MEN'S PAGE HERO BANNER (SLIDESHOW)
-=========================================================*/ :root {
-      --hero-accent: #a26aff;
-    }
-
+    /* WOMEN'S PAGE HERO BANNER (SLIDESHOW) */
     .women-hero {
       position: relative;
-      padding: calc(var(--nav-h) + 38px + 40px) 24px 80px 24px;
+      padding: calc(var(--nav-h, 70px) + 32px) 24px 60px 24px;
       overflow: hidden;
       border-bottom: 1px solid var(--line);
       background: #050507;
@@ -113,8 +110,9 @@
     }
 
     .title-outline {
-      -webkit-text-stroke: 1.2px #fff;
+      -webkit-text-stroke: 1.5px var(--hero-accent);
       color: transparent;
+      transition: -webkit-text-stroke 0.8s ease-in-out;
     }
 
     .women-hero__desc {
@@ -131,14 +129,14 @@
     }
 
     .btn--white {
-      background: #fff;
-      color: #000;
-      border-color: #fff;
+      background: var(--hero-accent);
+      color: #fff;
+      border-color: var(--hero-accent);
     }
 
     .btn--white:hover {
-      background: rgba(255, 255, 255, 0.9);
-      color: #000;
+      background: rgba(255, 77, 148, 0.85);
+      color: #fff;
     }
 
     .women-hero__center {
@@ -202,65 +200,131 @@
       margin: 2px 0 0 0;
     }
 
-    /* Category Swatches */
+    /* Category Swatches - Circular Thumbnails (Mobile Only) */
     .cat-swatches-section {
-      background: #08080a;
-      border-bottom: 1px solid var(--line);
-      padding: 24px;
+      display: none;
+      background: #050507;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 20px 24px;
+    }
+
+    .cat-swatches-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .cat-swatches-header {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cat-swatches-count {
+      font-family: var(--f-display);
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.02em;
     }
 
     .cat-swatches-container {
-      max-width: 1440px;
-      margin: 0 auto;
       display: flex;
-      gap: 16px;
+      align-items: flex-start;
+      gap: 22px;
       overflow-x: auto;
-      padding-bottom: 4px;
+      padding: 4px 4px 12px 4px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
     .cat-swatches-container::-webkit-scrollbar {
-      height: 4px;
-    }
-
-    .cat-swatches-container::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 2px;
+      display: none;
     }
 
     .cat-swatch {
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 10px;
-      padding: 12px 24px;
-      background: rgba(255, 255, 255, 0.01);
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      color: var(--platinum-dim);
-      font-family: var(--f-display);
-      font-size: 12px;
-      font-weight: 500;
+      background: transparent;
+      border: none;
+      padding: 0;
       cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.3s var(--ease-out);
-    }
-
-    .cat-swatch__icon {
-      width: 16px;
-      height: 16px;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
     }
 
     .cat-swatch:hover {
-      background: rgba(255, 255, 255, 0.03);
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
     }
 
-    .cat-swatch.active {
-      background: var(--hero-accent);
-      color: #000;
+    .cat-swatch__circle {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #1e1e26 0%, #101015 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      transition: all 0.3s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .cat-swatch__img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+      transition: transform 0.3s var(--ease-out);
+    }
+
+    .cat-swatch:hover .cat-swatch__img {
+      transform: scale(1.08) rotate(-4deg);
+    }
+
+    .cat-swatch__label {
+      font-family: var(--f-display);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.02em;
+      transition: color 0.3s ease;
+    }
+
+    /* Active State (Pink Ring Glow & Pink Label) */
+    .cat-swatch.active .cat-swatch__circle {
       border-color: var(--hero-accent);
+      box-shadow: 0 0 16px rgba(255, 77, 148, 0.45), inset 0 0 10px rgba(255, 77, 148, 0.2);
+    }
+
+    .cat-swatch.active .cat-swatch__label {
+      color: var(--hero-accent);
       font-weight: 600;
-      transition: background 0.8s ease-in-out, border-color 0.8s ease-in-out;
+    }
+
+    @media (max-width: 768px) {
+      .cat-swatches-section {
+        padding: 16px;
+      }
+
+      .cat-swatches-container {
+        gap: 16px;
+      }
+
+      .cat-swatch__circle {
+        width: 60px;
+        height: 60px;
+        padding: 6px;
+      }
+
+      .cat-swatch__label {
+        font-size: 11.5px;
+      }
     }
 
     /* Promo Banners Row */
@@ -334,27 +398,191 @@
       border-radius: 20px;
     }
 
-    /* Adjustments */
+    /* Hero & Page Layout Mobile Adjustments */
     @media (max-width: 1024px) {
+      .women-hero {
+        padding: calc(var(--nav-h, 70px) + 24px) 24px 40px 24px;
+      }
+
       .women-hero__inner {
         grid-template-columns: 1fr;
-        gap: 32px;
-        text-align: center;
+        gap: 24px;
+        text-align: left;
+      }
+
+      .women-hero__center {
+        display: none;
       }
 
       .women-hero__left {
-        align-items: center;
+        align-items: flex-start;
       }
 
       .women-hero__right {
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: center;
-        gap: 32px;
+        justify-content: flex-start;
+        gap: 24px;
+        max-width: 100%;
       }
 
       .women-promo-banners__inner {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .women-hero {
+        padding: calc(var(--nav-h, 70px) + 8px) 16px 14px 16px !important;
+        min-height: auto !important;
+      }
+
+      .women-hero__bg-slide {
+        background-size: cover !important;
+        background-position: 80% center !important;
+      }
+
+      .women-hero__inner {
+        gap: 10px;
+        text-align: left;
+      }
+
+      .women-hero__eyebrow {
+        font-size: 9.5px;
+        letter-spacing: 0.12em;
+        margin-bottom: 6px;
+        gap: 4px;
+      }
+
+      .women-hero__title {
+        font-size: 25px;
+        line-height: 1.05;
+        margin: 0 0 8px 0;
+        gap: 1px;
+      }
+
+      .title-outline {
+        -webkit-text-stroke: 1.1px var(--hero-accent);
+      }
+
+      .women-hero__desc {
+        font-size: 11.5px;
+        line-height: 1.4;
+        max-width: 100%;
+        margin: 0 0 12px 0;
+        color: rgba(255, 255, 255, 0.75);
+      }
+
+      .women-hero__desc br {
+        display: none;
+      }
+
+      .women-hero__actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        width: 100%;
+        margin-bottom: 0;
+      }
+
+      .women-hero__actions .btn {
+        padding: 7.5px 14px;
+        font-size: 11px;
+        border-radius: 30px;
+        white-space: nowrap;
+      }
+
+      .women-hero__right {
+        display: none;
+      }
+
+      .cat-swatches-section {
+        display: block;
+        padding: 14px 16px;
+      }
+
+      .women-spec-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(15, 12, 20, 0.45);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        padding: 7px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .women-spec-icon {
+        width: 28px;
+        height: 28px;
+        border-width: 1px;
+      }
+
+      .women-spec-icon svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .women-spec-title {
+        font-size: 10px;
+        letter-spacing: 0.03em;
+        line-height: 1.1;
+      }
+
+      .women-spec-text {
+        font-size: 9px;
+        margin-top: 1px;
+        line-height: 1.1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .women-hero {
+        padding: calc(var(--nav-h, 65px) + 8px) 12px 20px 12px;
+      }
+
+      .women-hero__title {
+        font-size: 26px;
+      }
+
+      .women-hero__desc {
+        font-size: 11px;
+        line-height: 1.4;
+        margin-bottom: 12px;
+      }
+
+      .women-hero__actions .btn {
+        padding: 8px 12px;
+        font-size: 10.5px;
+      }
+
+      .women-hero__right {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px 8px;
+      }
+
+      .women-spec-item {
+        padding: 6px 8px;
+        gap: 6px;
+      }
+
+      .women-spec-icon {
+        width: 24px;
+        height: 24px;
+      }
+
+      .women-spec-icon svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .women-spec-title {
+        font-size: 9px;
+      }
+
+      .women-spec-text {
+        font-size: 8px;
       }
     }
 
@@ -1152,7 +1380,21 @@
       }
 
       .best-sellers-scroll {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    /* Mobile Footer Force Display */
+    @media (max-width: 940px) {
+      .footer {
+        display: block !important;
+      }
+      .desktop-footer {
+        display: none !important;
+      }
+      .mobile-footer {
+        display: block !important;
+        padding-bottom: 100px !important;
       }
     }
   </style>
@@ -1160,40 +1402,7 @@
 </head>
 
 <body>
-  <div class="promo-bar">
-    <div class="promo-bar__inner">
-      <div class="promo-item">
-        <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <rect x="1" y="3" width="15" height="13"></rect>
-          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-          <circle cx="5.5" cy="18.5" r="2.5"></circle>
-          <circle cx="18.5" cy="18.5" r="2.5"></circle>
-        </svg>
-        <div class="promo-text">
-          <span class="promo-title">FREE SHIPPING</span>
-          <span class="promo-sub">On orders above ₹999</span>
-        </div>
-      </div>
-      <div class="promo-item">
-        <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82zM7 7h.01"></path>
-        </svg>
-        <div class="promo-text">
-          <span class="promo-title">EXTRA 10% OFF</span>
-          <span class="promo-sub">On prepaid orders</span>
-        </div>
-      </div>
-      <div class="promo-item">
-        <svg class="promo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
-        </svg>
-        <div class="promo-text">
-          <span class="promo-title">7 DAYS RETURN</span>
-          <span class="promo-sub">Easy returns & exchanges</span>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- ============================= -->
   <!-- TOP PROMO BAR                 -->
@@ -1400,56 +1609,60 @@
     <!-- CATEGORY SWATCHES             -->
     <!-- ============================= -->
     <div class="cat-swatches-section" id="catalog-controls">
-      <div class="cat-swatches-container">
-        <button class="cat-swatch active" data-category="all">
-          <svg class="cat-swatch__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M3 18h18M3 14h18M3 10h18M3 6h18" stroke-linecap="round" />
-          </svg>
-          <span>ALL SHOES</span>
-        </button>
-        <button class="cat-swatch" data-category="Running">
-          <svg class="cat-swatch__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M18 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4 20h3l3-7 3 2v5h3v-7l-3-3h-4L6 14l-2 6" />
-          </svg>
-          <span>RUNNING</span>
-        </button>
-        <button class="cat-swatch" data-category="Training">
-          <svg class="cat-swatch__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span>TRAINING</span>
-        </button>
-        <button class="cat-swatch" data-category="Gym">
-          <svg class="cat-swatch__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M6.5 6.5h11M6.5 17.5h11" stroke-linecap="round" />
-          </svg>
-          <span>GYM</span>
-        </button>
-        <button class="cat-swatch" data-category="Casual">
-          <svg class="cat-swatch__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z" />
-          </svg>
-          <span>CASUAL</span>
-        </button>
-        <button class="cat-swatch" data-category="Sports">
-          <svg class="cat-swatch__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-          </svg>
-          <span>SPORTS</span>
-        </button>
-        <button class="cat-swatch" data-category="Sandals">
-          <svg class="cat-swatch__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M17 18H7a4 4 0 0 1-4-4V6h18v8a4 4 0 0 1-4 4z" />
-          </svg>
-          <span>SANDALS</span>
-        </button>
-        <button class="cat-swatch" data-category="Slides">
-          <svg class="cat-swatch__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 2L2 7l10 5 10-5-10-5z" />
-          </svg>
-          <span>SLIDES</span>
-        </button>
+      <div class="cat-swatches-inner">
+        <div class="cat-swatches-header">
+          <span class="cat-swatches-count"><span id="productCountHeader">324</span> Products</span>
+        </div>
+        <div class="cat-swatches-container">
+          <button class="cat-swatch active" data-category="all">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_lifestyle_women.png" alt="All" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">All</span>
+          </button>
+          <button class="cat-swatch" data-category="Running">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_running_women.png" alt="Running" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Running</span>
+          </button>
+          <button class="cat-swatch" data-category="Training">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_training_women.png" alt="Training" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Training</span>
+          </button>
+          <button class="cat-swatch" data-category="Lifestyle">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_lifestyle_women.png" alt="Lifestyle" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Lifestyle</span>
+          </button>
+          <button class="cat-swatch" data-category="Outdoor">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_trail_women.png" alt="Outdoor" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Outdoor</span>
+          </button>
+          <button class="cat-swatch" data-category="Gym">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_gym.png" alt="Gym" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Gym</span>
+          </button>
+          <button class="cat-swatch" data-category="Casual">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_walking_women.png" alt="Casual" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Casual</span>
+          </button>
+          <button class="cat-swatch" data-category="Sports">
+            <div class="cat-swatch__circle">
+              <img src="assets/images/cat_yoga_women.png" alt="Sports" class="cat-swatch__img" />
+            </div>
+            <span class="cat-swatch__label">Sports</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -2347,7 +2560,7 @@
 
       // Hero Slideshow with arrow controls and indicator
       const slides = document.querySelectorAll('.women-hero__bg-slide');
-      const accents = ['#a26aff', '#ff4b91', '#00e5ff'];
+      const accents = ['#ff4d94', '#a26aff', '#ff4b91'];
       const indicatorFill = document.querySelector('.indicator-fill');
       const prevBtn = document.querySelector('.prev-slide-btn');
       const nextBtn = document.querySelector('.next-slide-btn');
