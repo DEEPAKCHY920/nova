@@ -273,6 +273,138 @@
       sku: "NOVA-FX-012",
       desc: "Unisex Training Shoes",
     },
+    {
+      id: "nova-apex-x2",
+      name: "Nova Apex X2",
+      category: "Running",
+      gender: "unisex",
+      size: [8, 9, 10, 11],
+      price: 9499,
+      oldPrice: null,
+      img: "assets/images/product_surge.png",
+      stars: 5,
+      reviews: 147,
+      new: false,
+      bestseller: true,
+      discount: 0,
+      color: "orange",
+      features: ["air", "lightweight", "breathable"],
+      status: "Active",
+      stock: 15,
+      featured: true,
+      sku: "NOVA-APX-013",
+      desc: "Unisex Elite Running Shoes",
+    },
+    {
+      id: "nova-quantum",
+      name: "Nova Quantum",
+      category: "Training",
+      gender: "men",
+      size: [7, 8, 9, 10],
+      price: 8799,
+      oldPrice: null,
+      img: "assets/images/product_air_pro.png",
+      stars: 5,
+      reviews: 83,
+      new: true,
+      bestseller: false,
+      discount: 0,
+      color: "white",
+      features: ["air", "breathable", "grip"],
+      status: "Active",
+      stock: 12,
+      featured: false,
+      sku: "NOVA-QT-014",
+      desc: "Men's Performance Training Shoes",
+    },
+    {
+      id: "nova-horizon",
+      name: "Nova Horizon",
+      category: "Lifestyle",
+      gender: "women",
+      size: [6, 7, 8, 9],
+      price: 6499,
+      oldPrice: null,
+      img: "assets/images/product_drift.png",
+      stars: 5,
+      reviews: 69,
+      new: false,
+      bestseller: false,
+      discount: 0,
+      color: "green",
+      features: ["lightweight", "breathable"],
+      status: "Active",
+      stock: 20,
+      featured: false,
+      sku: "NOVA-HZ-015",
+      desc: "Women's Comfort Lifestyle Sneakers",
+    },
+    {
+      id: "nova-glide",
+      name: "Nova Glide",
+      category: "Running",
+      gender: "women",
+      size: [6, 7, 8, 9],
+      price: 7299,
+      oldPrice: null,
+      img: "assets/images/product_motion.png",
+      stars: 5,
+      reviews: 95,
+      new: false,
+      bestseller: false,
+      discount: 0,
+      color: "red",
+      features: ["air", "lightweight"],
+      status: "Active",
+      stock: 18,
+      featured: false,
+      sku: "NOVA-GL-016",
+      desc: "Women's Cushion Running Shoes",
+    },
+    {
+      id: "nova-zenith",
+      name: "Nova Zenith",
+      category: "Basketball",
+      gender: "unisex",
+      size: [9, 10, 11, 12],
+      price: 9999,
+      oldPrice: null,
+      img: "assets/images/product_edge.png",
+      stars: 5,
+      reviews: 112,
+      new: false,
+      bestseller: true,
+      discount: 0,
+      color: "red",
+      features: ["grip"],
+      status: "Active",
+      stock: 8,
+      featured: true,
+      sku: "NOVA-ZN-017",
+      desc: "Unisex Pro Basketball Shoes",
+    },
+    {
+      id: "nova-swift",
+      name: "Nova Swift",
+      category: "Lifestyle",
+      gender: "unisex",
+      size: [6, 7, 8, 9, 10],
+      price: 5199,
+      oldPrice: null,
+      img: "assets/images/product_flow.png",
+      stars: 5,
+      reviews: 43,
+      new: true,
+      bestseller: false,
+      discount: 0,
+      color: "yellow",
+      features: ["lightweight", "breathable"],
+      status: "Active",
+      stock: 24,
+      featured: false,
+      sku: "NOVA-SW-018",
+      desc: "Unisex Daily Casual Sneakers",
+    },
   ];
 
   /** Seed localStorage once if empty, then always read from it */
@@ -286,7 +418,15 @@
         );
         return [...CANONICAL_PRODUCTS];
       }
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (parsed.length < CANONICAL_PRODUCTS.length) {
+        localStorage.setItem(
+          "nova_admin_products",
+          JSON.stringify(CANONICAL_PRODUCTS),
+        );
+        return [...CANONICAL_PRODUCTS];
+      }
+      return parsed;
     } catch (e) {
       return [...CANONICAL_PRODUCTS];
     }
@@ -332,6 +472,9 @@
   /* ---------------------------------------------------------
      UI INITIALIZATION
   --------------------------------------------------------- */
+  let currentPage = 1;
+  const PRODUCTS_PER_PAGE = 6;
+
   let activeFilters = {
     category: [],
     gender: [],
@@ -392,7 +535,7 @@
   }
 
   // Render Product Cards
-  function renderProducts(products) {
+  function renderProducts(products, totalCountVal, startIndex, endIndex) {
     if (!catalogGrid) return;
 
     if (products.length === 0) {
@@ -427,6 +570,9 @@
       let priceHtml = `<span class="product-card__price">₹${prod.price.toLocaleString()}</span>`;
       if (prod.oldPrice) {
         priceHtml += `<span class="product-card__price--old">₹${prod.oldPrice.toLocaleString()}</span>`;
+        if (prod.discount > 0) {
+          priceHtml += `<span class="product-card__discount">${prod.discount}% OFF</span>`;
+        }
       }
 
       const card = document.createElement("div");
@@ -450,7 +596,8 @@
           <div class="product-card__footer">
             <div class="product-card__prices">${priceHtml}</div>
             <button class="product-card__cart-btn add-to-cart-btn" data-id="${prod.id}" data-name="${prod.name}" data-price="${prod.price}" data-img="${prod.img}" aria-label="Add to cart">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <svg class="cart-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <svg class="plus-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </button>
           </div>
         </div>
@@ -458,8 +605,73 @@
       catalogGrid.appendChild(card);
     });
 
-    displayedCount.textContent = `1–${products.length}`;
-    totalCount.textContent = products.length;
+    displayedCount.textContent = `${startIndex + 1}–${endIndex}`;
+    totalCount.textContent = totalCountVal;
+  }
+
+  // Update pagination controls dynamically
+  function updatePaginationControls(totalPages) {
+    const paginationContainer = document.querySelector('.pagination');
+    if (!paginationContainer) return;
+
+    paginationContainer.innerHTML = "";
+
+    // If there is only 1 page, hide/empty the pagination list to look clean, or just render disabled arrows
+    if (totalPages <= 1) {
+      paginationContainer.style.display = "none";
+      return;
+    } else {
+      paginationContainer.style.display = "flex";
+    }
+
+    // Prev Arrow
+    const prevBtn = document.createElement("button");
+    prevBtn.className = `pagination__arrow ${currentPage === 1 ? 'disabled' : ''}`;
+    prevBtn.setAttribute("aria-label", "Previous page");
+    prevBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    `;
+    if (currentPage > 1) {
+      prevBtn.addEventListener("click", () => {
+        currentPage--;
+        filterAndSortProducts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+    paginationContainer.appendChild(prevBtn);
+
+    // Numbered page buttons
+    for (let i = 1; i <= totalPages; i++) {
+      const numBtn = document.createElement("button");
+      numBtn.className = `pagination__num ${currentPage === i ? 'active' : ''}`;
+      numBtn.textContent = i;
+      numBtn.addEventListener("click", () => {
+        currentPage = i;
+        filterAndSortProducts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      paginationContainer.appendChild(numBtn);
+    }
+
+    // Next Arrow
+    const nextBtn = document.createElement("button");
+    nextBtn.className = `pagination__arrow ${currentPage === totalPages ? 'disabled' : ''}`;
+    nextBtn.setAttribute("aria-label", "Next page");
+    nextBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    `;
+    if (currentPage < totalPages) {
+      nextBtn.addEventListener("click", () => {
+        currentPage++;
+        filterAndSortProducts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+    paginationContainer.appendChild(nextBtn);
   }
 
   // Filter and Sort Handler
@@ -535,7 +747,17 @@
       filtered.sort((a, b) => b.reviews - a.reviews);
     } // 'featured' keeps original array order
 
-    renderProducts(filtered);
+    const totalMatching = filtered.length;
+    const totalPages = Math.ceil(totalMatching / PRODUCTS_PER_PAGE) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    const endIndex = Math.min(startIndex + PRODUCTS_PER_PAGE, totalMatching);
+    const paginatedProducts = filtered.slice(startIndex, endIndex);
+
+    renderProducts(paginatedProducts, totalMatching, startIndex, endIndex);
+    updatePaginationControls(totalPages);
   }
 
   // Reset all filters
@@ -563,6 +785,7 @@
     const newUrl = window.location.pathname;
     window.history.pushState({ path: newUrl }, "", newUrl);
 
+    currentPage = 1;
     filterAndSortProducts();
   }
 
@@ -712,12 +935,16 @@
     if (!prod || !quickviewModal || !modalContent) return;
 
     const starsHtml = "★".repeat(prod.stars) + "☆".repeat(5 - prod.stars);
+    
+    // Check wishlist initial state
+    const wishlist = JSON.parse(localStorage.getItem('nova_wishlist')) || [];
+    const inWishlist = wishlist.some(item => item.id === prod.id);
 
     // Size selectors
     let sizesHtml = "";
     prod.size.forEach((sz, idx) => {
       sizesHtml += `
-        <label class="size-btn">
+        <label class="size-btn ${idx === 1 ? 'is-active' : ''}">
           <input type="radio" name="modal-size" value="${sz}" ${idx === 1 ? "checked" : ""} />
           <span>${sz}</span>
         </label>
@@ -725,6 +952,7 @@
     });
 
     modalContent.innerHTML = `
+      <div class="drag-handle-mobile"></div>
       <div class="quickview-grid">
         <div class="quickview-img-panel">
           <img src="${prod.img}" alt="${prod.name}" />
@@ -741,20 +969,32 @@
           
           <div class="quickview-size-selector">
             <div class="selector-title">Select Size (UK)</div>
-            <div class="quickview-sizes">${sizesHtml}</div>
-          </div>
-
-          <div class="quickview-actions">
-            <button class="btn btn--solid quickview-add-btn modal-add-to-cart-btn" data-id="${prod.id}" data-name="${prod.name}" data-price="${prod.price}" data-img="${prod.img}">
-              <span>Add to Bag</span>
-            </button>
-            <button class="quickview-wish-btn" aria-label="Add to Wishlist">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            </button>
+            <div class="quickview-sizes-row">
+              <div class="quickview-sizes">${sizesHtml}</div>
+              <div class="quickview-actions">
+                <button class="btn btn--solid quickview-add-btn modal-add-to-cart-btn" data-id="${prod.id}" data-name="${prod.name}" data-price="${prod.price}" data-img="${prod.img}">
+                  <span>Add to Bag</span>
+                </button>
+                <button class="quickview-wish-btn wishlist-btn ${inWishlist ? 'is-active' : ''}" data-id="${prod.id}" data-name="${prod.name}" data-price="${prod.price}" data-img="${prod.img}" aria-label="Add to Wishlist">
+                  <svg viewBox="0 0 24 24" fill="${inWishlist ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     `;
+
+    // Size selector click handler to guarantee active toggling on mobile
+    const sizeBtns = modalContent.querySelectorAll(".size-btn");
+    sizeBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        sizeBtns.forEach(b => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        const inp = btn.querySelector("input");
+        if (inp) inp.checked = true;
+      });
+    });
 
     quickviewModal.classList.add("is-open");
 
@@ -840,6 +1080,7 @@
     // Checkbox and range edits trigger apply automatically for real-time
     filtersForm.addEventListener("change", () => {
       updateFilterState();
+      currentPage = 1;
       filterAndSortProducts();
     });
   }
@@ -876,6 +1117,7 @@
   if (applyFiltersBtn) {
     applyFiltersBtn.addEventListener("click", () => {
       updateFilterState();
+      currentPage = 1;
       filterAndSortProducts();
       // On mobile, close sidebar drawer
       document.getElementById("filtersSidebar").classList.remove("is-open");
@@ -892,27 +1134,12 @@
   if (sortBy) {
     sortBy.addEventListener("change", (e) => {
       activeSort = e.target.value;
+      currentPage = 1;
       filterAndSortProducts();
     });
   }
 
-  // Grid/List switchers
-  const viewGrid = document.getElementById("viewGrid");
-  const viewList = document.getElementById("viewList");
-  if (viewGrid && viewList) {
-    viewGrid.addEventListener("click", () => {
-      viewGrid.classList.add("active");
-      viewList.classList.remove("active");
-      catalogGrid.classList.remove("list-view");
-      activeView = "grid";
-    });
-    viewList.addEventListener("click", () => {
-      viewList.classList.add("active");
-      viewGrid.classList.remove("active");
-      catalogGrid.classList.add("list-view");
-      activeView = "list";
-    });
-  }
+
 
   // Mobile Filters drawer toggle
   const mobileFiltersToggle = document.getElementById("mobileFiltersToggle");
@@ -976,6 +1203,7 @@
   // Global search interface hook
   window.updateCollectionSearch = (query) => {
     activeFilters.searchQuery = query;
+    currentPage = 1;
     filterAndSortProducts();
   };
 
@@ -985,4 +1213,13 @@
   parseQueryParams();
   filterAndSortProducts();
   renderCartDrawer();
+
+  // Auto-trigger quick view from URL query param
+  const urlParams = new URLSearchParams(window.location.search);
+  const qvId = urlParams.get("quickview");
+  if (qvId) {
+    setTimeout(() => {
+      openQuickView(qvId);
+    }, 150);
+  }
 })();

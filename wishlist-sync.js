@@ -228,14 +228,21 @@
     if (!buttons.length) return;
     const list = await wishlistState.get();
     buttons.forEach(btn => {
-      const card = btn.closest('.product-card');
-      if (!card) return;
-      const titleEl = card.querySelector('.product-card__title');
-      if (!titleEl) return;
-      const name = titleEl.textContent.trim();
+      let name = btn.dataset.name;
+      if (!name) {
+        const card = btn.closest('.product-card, .m-prod-card');
+        if (card) {
+          const titleEl = card.querySelector('.product-card__title, .m-prod-card__name');
+          if (titleEl) {
+            name = titleEl.textContent.trim();
+          }
+        }
+      }
       
-      const inWishlist = list.some(item => item.name === name);
-      btn.classList.toggle('is-active', inWishlist);
+      if (name) {
+        const inWishlist = list.some(item => item.name === name);
+        btn.classList.toggle('is-active', inWishlist);
+      }
     });
   }
 
@@ -252,26 +259,47 @@
       if (!window.requireLogin('Sign in to save items to your wishlist and access them anytime.')) return;
     }
 
-    const card = btn.closest('.product-card');
+    const card = btn.closest('.product-card, .m-prod-card, .quickview-grid');
     if (!card) return;
 
-    const titleEl = card.querySelector('.product-card__title');
-    const catEl = card.querySelector('.product-card__category');
-    const imgEl = card.querySelector('.product-card__img');
-    const priceEl = card.querySelector('.product-card__price');
-    const badgeEl = card.querySelector('.product-card__badges .badge');
+    let name = btn.dataset.name;
+    let id = btn.dataset.id;
+    let category = btn.dataset.category;
+    let img = btn.dataset.img;
+    let priceRaw = btn.dataset.price;
 
-    if (!titleEl) return;
+    // Fallback to DOM elements if dataset attributes are missing
+    if (!name) {
+      const titleEl = card.querySelector('.product-card__title, .m-prod-card__name, .quickview-title');
+      if (!titleEl) return;
+      name = titleEl.textContent.trim();
+    }
+    if (!id) {
+      id = card.dataset.id || name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    }
+    if (!category) {
+      const catEl = card.querySelector('.product-card__category, .m-prod-card__cat, .quickview-cat');
+      category = catEl ? catEl.textContent.trim() : 'Performance Shoes';
+    }
+    if (!img) {
+      const imgEl = card.querySelector('.product-card__img, .m-prod-card__img, .quickview-img-panel img');
+      img = imgEl ? imgEl.getAttribute('src') : 'assets/images/product_nova_x1.png';
+    }
+    if (!priceRaw) {
+      const priceEl = card.querySelector('.product-card__price, .m-prod-card__price, .quickview-price');
+      priceRaw = priceEl ? priceEl.textContent.trim() : '₹2,500';
+    }
 
-    const name = titleEl.textContent.trim();
-    const id = card.dataset.id || name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const category = catEl ? catEl.textContent.trim() : 'Performance Shoes';
-    const img = imgEl ? imgEl.getAttribute('src') : 'assets/images/product_nova_x1.png';
-    const priceRaw = priceEl ? priceEl.textContent.trim() : '₹2,500';
-    
+    // Format price prefix if needed
+    if (priceRaw && !priceRaw.toString().startsWith('₹')) {
+      const num = parseInt(priceRaw.toString().replace(/[^0-9]/g, ''));
+      priceRaw = isNaN(num) ? priceRaw : '₹' + num.toLocaleString('en-IN');
+    }
+
     // Map badge class
     let badge = '';
     let badgeClass = 'wishlist-item-badge--comfort';
+    const badgeEl = card.querySelector('.product-card__badges .badge, .m-prod-card__disc');
     if (badgeEl) {
       badge = badgeEl.textContent.trim();
       const lower = badge.toLowerCase();
@@ -281,7 +309,7 @@
       } else if (lower.includes('new')) {
         badgeClass = 'wishlist-item-badge--new';
         badge = 'New Arrival';
-      } else if (lower.includes('sale') || lower.includes('%')) {
+      } else if (lower.includes('sale') || lower.includes('%') || lower.includes('off')) {
         badgeClass = 'wishlist-item-badge--trend';
         badge = 'Trending';
       }

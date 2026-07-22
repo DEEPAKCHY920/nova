@@ -30,6 +30,31 @@
     const userToken = localStorage.getItem('nova_user_token');
     const token = adminToken || userToken;
     
+    // Intercept mock-demo-token requests to auth endpoints
+    if (token === 'mock-demo-token-12345') {
+      if (endpoint.startsWith('/auth/me')) {
+        const userRaw = localStorage.getItem('nova_user');
+        const user = userRaw ? JSON.parse(userRaw) : {
+          id: 'demo-user-id',
+          name: 'Demo User',
+          email: 'user@nova.in',
+          role: 'customer'
+        };
+        if (options.method === 'PUT') {
+          const body = JSON.parse(options.body || '{}');
+          if (body.name) user.name = body.name;
+          if (body.phone) user.phone = body.phone;
+          localStorage.setItem('nova_user', JSON.stringify(user));
+        }
+        return { success: true, user };
+      }
+      if (endpoint.startsWith('/auth/logout')) {
+        localStorage.removeItem('nova_user_token');
+        localStorage.removeItem('nova_user');
+        return { success: true, message: 'Logged out' };
+      }
+    }
+
     if (token) {
       options.headers['Authorization'] = `Bearer ${token}`;
     }

@@ -713,7 +713,7 @@ body {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="api-config.js"></script>
+<script src="api-config.js?v=1.0.4"></script>
 
 <script>
 // ===== FLIP LOGIC =====
@@ -784,6 +784,19 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
+      
+      // Local demo credentials override
+      if (email.toLowerCase() === 'user@nova.in' && password === 'user@123') {
+        localStorage.setItem('nova_user_token', 'mock-demo-token-12345');
+        localStorage.setItem('nova_user', JSON.stringify({
+          id: 'demo-user-id',
+          name: 'Demo User',
+          email: 'user@nova.in',
+          role: 'customer'
+        }));
+        window.location.href = 'dashboard.html';
+        return;
+      }
       
       try {
         const data = await window.novaFetch('/auth/login', {
