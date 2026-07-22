@@ -2450,7 +2450,7 @@ button {
 .cart-drawer {
   position: fixed;
   inset: 0;
-  z-index: 900;
+  z-index: 1100;
   opacity: 0;
   visibility: hidden;
   transition: opacity .4s, visibility .4s;
@@ -3324,7 +3324,7 @@ button {
 .quickview-modal {
   position: fixed;
   inset: 0;
-  z-index: 950;
+  z-index: 1100;
   opacity: 0;
   visibility: hidden;
   transition: opacity .4s, visibility .4s;
@@ -3574,12 +3574,12 @@ button {
     right: 0;
     bottom: 0;
     left: auto;
-    width: 100%;
-    max-width: 360px;
+    width: 40%;
+    max-width: 40%;
     z-index: 910;
     background: var(--panel);
     border-left: 1px solid var(--line);
-    padding: 32px;
+    padding: 20px 16px;
     box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
     transform: translateX(100%);
     transition: transform 0.5s var(--ease-out);
@@ -3883,6 +3883,85 @@ button {
   .footer-bottom {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .filters-sidebar {
+    width: 40% !important;
+    max-width: 40% !important;
+    padding: 16px 12px !important;
+  }
+  .filters-sidebar__header {
+    padding-bottom: 8px !important;
+    margin-bottom: 8px !important;
+  }
+  .filters-sidebar__header h3 {
+    font-size: 14px !important;
+  }
+  .close-filters-btn {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  .close-filters-btn svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  .filter-group {
+    margin-bottom: 12px !important;
+  }
+  .filter-group__trigger {
+    font-size: 11px !important;
+    padding: 6px 0 !important;
+  }
+  .filter-group__trigger .chevron {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  .filter-checkbox {
+    font-size: 10px !important;
+    gap: 6px !important;
+    margin-bottom: 6px !important;
+  }
+  .checkbox-box {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  .checkbox-count {
+    font-size: 8px !important;
+    margin-left: auto !important;
+  }
+  .size-btn span {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 9px !important;
+  }
+  .size-grid {
+    gap: 4px !important;
+  }
+  .color-swatch-chip {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  .color-swatch-list {
+    gap: 4px !important;
+  }
+  .price-slider-wrap {
+    padding: 8px 0 !important;
+  }
+  .price-labels {
+    font-size: 9px !important;
+  }
+  .filter-actions {
+    flex-direction: column !important;
+    gap: 6px !important;
+    margin-top: 12px !important;
+  }
+  .filter-apply-btn {
+    font-size: 10px !important;
+    padding: 8px 12px !important;
+    width: 100% !important;
+  }
+  .clear-all-link {
+    font-size: 9px !important;
   }
 
   .catalog-grid {
@@ -6152,4 +6231,9 @@ button {
     display: block !important;
     padding-bottom: 100px !important;
   }
+}
+
+/* Ensure child elements of cart buttons do not intercept click events */
+.add-to-cart-btn * {
+  pointer-events: none !important;
 }

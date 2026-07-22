@@ -467,7 +467,13 @@
   /* ---------------------------------------------------------
      STATE MANAGEMENT
   --------------------------------------------------------- */
-  const cartState = window.novaCartState;
+  const cartState = {
+    get add() { return (...args) => window.novaCartState?.add(...args); },
+    get remove() { return (...args) => window.novaCartState?.remove(...args); },
+    get get() { return (...args) => window.novaCartState?.get(...args); },
+    get save() { return (...args) => window.novaCartState?.save(...args); },
+    get updateQty() { return (...args) => window.novaCartState?.updateQty(...args); }
+  };
 
   /* ---------------------------------------------------------
      UI INITIALIZATION
