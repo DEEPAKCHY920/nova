@@ -3964,13 +3964,16 @@ button {
     font-size: 9px !important;
   }
 
-  .catalog-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 0 10px;
+  .catalog-grid,
+  .bestsellers-row,
+  .new-arrivals-row,
+  .women-bestsellers-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 0 10px !important;
   }
 
-  .catalog-grid .product-card {
+  .product-card {
     background: #141416;
     border: 1.2px solid rgba(255, 255, 255, 0.07);
     border-radius: 14px;
@@ -3984,7 +3987,7 @@ button {
     padding: 0;
   }
 
-  .catalog-grid .product-card__img-wrap {
+  .product-card__img-wrap {
     background: #1e1e20;
     height: 135px;
     display: flex;
@@ -3995,11 +3998,11 @@ button {
     border-radius: 10px;
   }
 
-  .catalog-grid .product-card__img-wrap::before {
+  .product-card__img-wrap::before {
     display: none !important;
   }
 
-  .catalog-grid .product-card__img {
+  .product-card__img {
     max-width: 100%;
     max-height: 110px;
     object-fit: contain;
@@ -4007,7 +4010,7 @@ button {
     margin: 0 auto;
   }
 
-  .catalog-grid .product-card__info {
+  .product-card__info {
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -4015,7 +4018,7 @@ button {
     flex: 1;
   }
 
-  .catalog-grid .product-card__title {
+  .product-card__title {
     font-size: 12px;
     font-weight: 700;
     color: #f3f1ea;
@@ -4025,31 +4028,31 @@ button {
     text-overflow: ellipsis;
   }
 
-  .catalog-grid .product-card__category {
+  .product-card__category {
     font-size: 10px;
     color: rgba(243, 241, 234, 0.4);
     margin: 0;
   }
 
-  .catalog-grid .product-card__rating {
+  .product-card__rating {
     display: flex;
     align-items: center;
     gap: 2px;
     margin: 2px 0 0 0;
   }
 
-  .catalog-grid .product-card__rating .stars {
+  .product-card__rating .stars {
     color: #f5b942;
     font-size: 10px;
   }
 
-  .catalog-grid .product-card__rating .count {
+  .product-card__rating .count {
     color: rgba(243, 241, 234, 0.35);
     font-size: 9px;
     margin: 0;
   }
 
-  .catalog-grid .product-card__footer {
+  .product-card__footer {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -4059,20 +4062,20 @@ button {
     border: none;
   }
 
-  .catalog-grid .product-card__prices {
+  .product-card__prices {
     display: flex;
     flex-direction: column;
     gap: 1px;
   }
 
-  .catalog-grid .product-card__price {
+  .product-card__price {
     font-size: 13px;
     font-weight: 700;
     color: #f3f1ea;
     display: block;
   }
 
-  .catalog-grid .product-card__price--old {
+  .product-card__price--old {
     font-size: 10px;
     color: rgba(243, 241, 234, 0.3);
     text-decoration: line-through;
@@ -4080,7 +4083,7 @@ button {
     display: inline-block;
   }
 
-  .catalog-grid .product-card__discount {
+  .product-card__discount {
     font-size: 9px;
     color: #4ade80;
     font-weight: 700;
@@ -4088,7 +4091,7 @@ button {
     display: block;
   }
 
-  .catalog-grid .product-card__cart-btn {
+  .product-card__cart-btn {
     width: 28px;
     height: 28px;
     border-radius: 50%;
@@ -4107,11 +4110,11 @@ button {
     box-shadow: none;
   }
 
-  .catalog-grid .product-card__cart-btn .cart-svg {
+  .product-card__cart-btn .cart-svg {
     display: none !important;
   }
 
-  .catalog-grid .product-card__cart-btn .plus-svg {
+  .product-card__cart-btn .plus-svg {
     display: block !important;
     width: 14px;
     height: 14px;
@@ -4119,7 +4122,7 @@ button {
     stroke-width: 3.5;
   }
 
-  .catalog-grid .wishlist-btn {
+  .wishlist-btn {
     position: absolute;
     top: 12px;
     right: 12px;
@@ -4134,19 +4137,19 @@ button {
     justify-content: center;
   }
 
-  .catalog-grid .wishlist-btn svg {
+  .wishlist-btn svg {
     width: 14px;
     height: 14px;
     stroke: rgba(255, 255, 255, 0.75);
   }
 
-  .catalog-grid .product-card__badges {
+  .product-card__badges {
     top: 12px;
     left: 12px;
     gap: 4px;
   }
 
-  .catalog-grid .badge {
+  .badge {
     font-size: 8px;
     padding: 3px 8px;
   }
