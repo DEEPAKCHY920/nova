@@ -1521,6 +1521,10 @@
           </svg>
         </a>
       </div>
+
+      <button class="nav__burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
     </div>
   </header>
 
@@ -1647,7 +1651,7 @@
   ==================================================== -->
   <footer class="dash-footer">
     <div class="dash-footer__glow"></div>
-    <div class="desktop-footer">
+    <div class="desktop-footer dash-footer__top">
       <div class="dfooter-brand">
         <a href="index.html" class="dfooter-logo">
           <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1752,9 +1756,6 @@
           <li><a href="contact.html">Mon–Sat, 10am–7pm IST</a></li>
           <li><a href="contact.html">Indiranagar, Bangalore</a></li>
         </ul>
-      </div>
-    </div>
-
       </div>
     </div>
 
@@ -1966,9 +1967,19 @@
         const update = (now) => {
           const elapsed = now - start;
           const progress = Math.min(elapsed / duration, 1);
-          // User session details loader
-          let user = null;
-          async function loadUser() {
+          if (el) {
+            el.textContent = Math.floor(progress * target).toLocaleString();
+          }
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          }
+        };
+        requestAnimationFrame(update);
+      }
+
+      // User session details loader
+      let user = null;
+      async function loadUser() {
             const token = localStorage.getItem('nova_user_token');
             if (!token) {
               window.location.href = 'login.html';
@@ -2216,6 +2227,18 @@
             await loadWishlist();
           }
           boot();
+
+          // Navbar Scrolled style toggle
+          const navEl = document.getElementById('nav');
+          if (navEl) {
+            window.addEventListener('scroll', () => {
+              if (window.scrollY > 40) {
+                navEl.classList.add('is-scrolled');
+              } else {
+                navEl.classList.remove('is-scrolled');
+              }
+            });
+          }
         });
   </script>
 
