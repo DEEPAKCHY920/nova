@@ -23,8 +23,9 @@
   --shoe-b: #141416;
 
   /* type */
-  --f-display: 'Clash Display', 'General Sans', sans-serif;
-  --f-body: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --f-display: 'Plus Jakarta Sans', sans-serif;
+  --f-body: 'DM Sans', sans-serif;
+  --f-ui: 'Manrope', sans-serif;
   --f-mono: 'JetBrains Mono', monospace;
 
   /* scale */
@@ -47,6 +48,18 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   padding-top: 38px;
+}
+
+button,
+.btn,
+.nav__link,
+.nav__logo,
+.promo-title,
+.promo-sub,
+.nav__link-text,
+.loader__mark,
+.loader__label {
+  font-family: var(--f-ui);
 }
 
 img,
@@ -300,6 +313,25 @@ button {
   font-weight: 600;
   font-size: 16px;
   letter-spacing: 0.18em;
+}
+
+.logo-image {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.nav__drawer-logo .logo-image {
+  height: 34px;
+}
+
+.footer-col--brand .logo-image {
+  height: 44px;
+}
+
+.m-footer-logo .logo-image {
+  height: 34px;
 }
 
 .nav__links {
