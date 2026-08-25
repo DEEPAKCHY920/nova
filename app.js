@@ -491,14 +491,14 @@
   });
 
 
-  /* ---------------------------------------------------------
-     WATCH FILM — smooth-scrolls into the next chapter
-  --------------------------------------------------------- */
-  document.getElementById('watchFilmBtn').addEventListener('click', () => {
-    const target = document.getElementById('collection');
-    if (lenis) lenis.scrollTo(target, { duration: 1.4 });
-    else target.scrollIntoView({ behavior: 'smooth' });
-  });
+  const watchFilmBtn = document.getElementById('watchFilmBtn');
+  if (watchFilmBtn) {
+    watchFilmBtn.addEventListener('click', () => {
+      const target = document.getElementById('collection');
+      if (lenis) lenis.scrollTo(target, { duration: 1.4 });
+      else target.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
 
   /* ---------------------------------------------------------
      PRODUCT CARD CLICK REDIRECT
